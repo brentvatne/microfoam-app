@@ -12,10 +12,16 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "FLIPPER_DISABLE": "1"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "FLIPPER_DISABLE": "1"
+      }
     }
   },
   "submit": {
