@@ -7,7 +7,7 @@ const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Logs" component={LogStack} />
+      <Tab.Screen name="Pours" component={LogStack} />
       <Tab.Screen name="Reference" component={ReferenceScreen} />
     </Tab.Navigator>
   );

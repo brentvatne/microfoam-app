@@ -11,7 +11,7 @@ export default function LogStack() {
         component={LogListScreen}
         name="LogList"
         options={({ navigation }) => ({
-          title: "Logs",
+          title: "Pours",
           headerRight: () => (
             <Button
               onPress={() => navigation.navigate("LogForm")}
