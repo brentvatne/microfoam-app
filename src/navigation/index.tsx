@@ -14,7 +14,11 @@ function RootNavigator() {
         <Stack.Screen component={TabNavigator} name="Tabs" />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen component={LogFormScreen} name="LogForm" />
+        <Stack.Screen
+          component={LogFormScreen}
+          name="LogForm"
+          options={{ title: "Log a new pour" }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

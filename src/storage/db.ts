@@ -70,3 +70,6 @@ function _createSchema() {
     console.error(message);
   }
 }
+
+// Init DB immediately so we can query at top level in other app code
+init();

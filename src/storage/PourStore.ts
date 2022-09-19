@@ -13,6 +13,7 @@
  * PourStore.update(id, pour)
  */
 
+import { useSyncExternalStore, useCallback } from "react";
 import { exec } from "./db";
 
 type PourRecord = {
@@ -53,13 +54,39 @@ export function create(data: Omit<PourRecord, "id">) {
     throw new Error(message);
   }
 
-  // todo: trigger something to force usePours to update
+  store.setState(() => all()._array)
 
   return rows[0];
 }
 
+/** "yikes" below */
+
+const createStore = () => {
+  let state = all()._array;
+  const getState = () => state;
+  const listeners = new Set();
+  const setState = (fn) => {
+    state = fn(state);
+    // @ts-ignore
+    listeners.forEach((l) => l());
+  }
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  }
+  return {getState, setState, subscribe}
+}
+
+const useStore = (selector) => {
+  return useSyncExternalStore(
+    store.subscribe,
+    useCallback(() => selector(store.getState(), [store, selector]), [])
+  );
+};
+
+const store = createStore();
+
 export function usePours() {
-  // todo: useSyncExternalStore
-  const items = all();
-  return items._array;
+  let state = useStore(state => state);
+  return state;
 }

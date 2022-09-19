@@ -1,9 +1,13 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import { usePours } from "../storage/PourStore";
 
 function Row({ item }) {
   return (
-    <View>
+    <View style={{ flexDirection: "row" }}>
+      <Image
+        source={{ uri: item.photo_url }}
+        style={{ width: 100, height: 100, marginRight: 50 }}
+      />
       <Text>
         {item.date_time}: {item.rating}
       </Text>
@@ -11,6 +15,7 @@ function Row({ item }) {
   );
 }
 
+// Default to a grid maybe?
 export default function LogListScreen() {
   const pours = usePours();
 

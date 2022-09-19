@@ -1,10 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import Navigation from "./src/navigation";
-import { init as initSqlite } from "./src/storage/db";
-
-// Open and ensure database is ready
-initSqlite();
+import * as db from "./src/storage/db";
 
 export default function App() {
   return (
