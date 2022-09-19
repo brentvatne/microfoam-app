@@ -14,13 +14,13 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "FLIPPER_DISABLE": "1"
+        "RELEASE": "1"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "FLIPPER_DISABLE": "1"
+        "RELEASE": "1"
       }
     }
   },
