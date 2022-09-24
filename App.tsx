@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import Navigation from "./src/navigation";
+
+// Side effect
 import * as db from "./src/storage/db";
 
 export default function App() {

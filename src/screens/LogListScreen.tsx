@@ -20,7 +20,7 @@ function Row({ item }) {
         );
       }}
     >
-      <View className="flex-row mb-3">
+      <View className="flex-row mb-10">
         <Image
           source={{ uri: item.photo_url }}
           className="h-[100] w-[100] mr-4 bg-gray-200 rounded-lg"
@@ -34,7 +34,7 @@ function Row({ item }) {
           </View>
           <View>
             <Text className="color-gray-500 text-lg">
-              {new Date(item.date_time).toDateString()}
+              {new Date(parseInt(item.date_time, 10)).toDateString()}
             </Text>
           </View>
         </View>
