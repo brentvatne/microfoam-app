@@ -16,7 +16,7 @@ import { BorderlessButton } from "react-native-gesture-handler";
 
 type Data = {
   photoUri: string;
-  dateTime: string;
+  dateTime: Date;
   rating: number;
 };
 
@@ -80,7 +80,7 @@ export default function LogFormScreen({
 
         <BorderlessButton
           onPress={() => {
-            onCreate({ dateTime: dateTime.toString(), rating, photoUri });
+            onCreate({ dateTime, rating, photoUri });
           }}
 					
         >

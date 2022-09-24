@@ -58,7 +58,7 @@ function _createSchema() {
   let { status, message } = exec(`
     CREATE TABLE pours (
       id INTEGER PRIMARY KEY,
-      date_time TEXT NOT NULL,
+      date_time INTEGER NOT NULL,
       photo_url TEXT,
       video_url TEXT,
       rating INTEGER NOT NULL,

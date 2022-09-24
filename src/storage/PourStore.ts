@@ -18,7 +18,7 @@ import { exec } from "./db";
 
 type PourRecord = {
   id: number;
-  date_time: string;
+  date_time: number;
   photo_url?: string;
   video_url?: string;
   rating: number;
@@ -32,7 +32,7 @@ type Pour = {
 };
 
 export function all() {
-  const { status, message, rows } = exec(`SELECT * FROM pours;`);
+  const { status, message, rows } = exec(`SELECT * FROM pours ORDER BY ID DESC;`);
 
   if (status === 1) {
     throw new Error(message);
