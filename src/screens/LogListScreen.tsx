@@ -20,14 +20,24 @@ function Row({ item }) {
         );
       }}
     >
-      <View style={{ flexDirection: "row" }}>
+      <View className="flex-row mb-3">
         <Image
           source={{ uri: item.photo_url }}
-          style={{ width: 100, height: 100, marginRight: 50 }}
+          className="h-[100] w-[100] mr-4 bg-gray-200 rounded-lg"
         />
-        <Text>
-          {item.date_time}: {item.rating}
-        </Text>
+        <View className="flex-col">
+          <View>
+            <Text className="text-lg">
+              <Text>Rating:</Text>{" "}
+              <Text className="font-bold">{item.rating} / 5</Text>
+            </Text>
+          </View>
+          <View>
+            <Text className="color-gray-500 text-lg">
+              {new Date(item.date_time).toDateString()}
+            </Text>
+          </View>
+        </View>
       </View>
     </Pressable>
   );
@@ -39,6 +49,12 @@ export default function LogListScreen() {
 
   // todo: change to flashlist
   return (
-    <FlatList data={pours} renderItem={Row} keyExtractor={(item) => item.id} />
+    <FlatList
+      data={pours}
+      renderItem={Row}
+      keyExtractor={(item) => item.id}
+      className="bg-white"
+      contentContainerStyle={{ padding: 10 }}
+    />
   );
 }
