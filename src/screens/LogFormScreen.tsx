@@ -51,7 +51,7 @@ export default function LogFormScreen({ navigation }) {
 function PhotoPickerForm({ onChange, photoUri }) {
   const launchPickerAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      // allowsEditing: true,
+      allowsEditing: true,
       selectionLimit: 1,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });

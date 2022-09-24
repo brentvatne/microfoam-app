@@ -54,9 +54,19 @@ export function create(data: Omit<PourRecord, "id">) {
     throw new Error(message);
   }
 
-  store.setState(() => all()._array)
+  store.setState(() => all()._array);
 
   return rows[0];
+}
+
+export function remove(data: Pick<PourRecord, "id">) {
+  const { status, message } = exec(`DELETE FROM pours WHERE id = ?;`, [data.id]);
+
+  if (status === 1) {
+    throw new Error(message);
+  }
+
+  store.setState(() => all()._array);
 }
 
 /** "yikes" below */
@@ -69,13 +79,13 @@ const createStore = () => {
     state = fn(state);
     // @ts-ignore
     listeners.forEach((l) => l());
-  }
+  };
   const subscribe = (listener) => {
     listeners.add(listener);
     return () => listeners.delete(listener);
-  }
-  return {getState, setState, subscribe}
-}
+  };
+  return { getState, setState, subscribe };
+};
 
 const useStore = (selector) => {
   return useSyncExternalStore(
@@ -87,6 +97,6 @@ const useStore = (selector) => {
 const store = createStore();
 
 export function usePours() {
-  let state = useStore(state => state);
+  let state = useStore((state) => state);
   return state;
 }
