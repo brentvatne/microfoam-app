@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import * as FileSystem from "expo-file-system";
-import { NativeStack } from "expo-router";
+import { useLink, NativeStack } from "expo-router";
 
 import * as PourStore from "../../storage/PourStore";
 import NewLogForm from "../../components/NewLogForm";
@@ -25,7 +25,9 @@ async function copyPhotoToDocumentsAsync(uri) {
   return newPath;
 }
 
-export default function LogFormScreen({ navigation }) {
+export default function LogFormScreen() {
+  const link = useLink();
+
   return (
     <>
       <NativeStack.Screen options={{ title: "Log a new pour" }} />
@@ -41,7 +43,7 @@ export default function LogFormScreen({ navigation }) {
           });
 
           // Go back to tabs from the modal
-          navigation.navigate("index");
+          link.push("/");
         }}
       />
 
