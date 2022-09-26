@@ -19,7 +19,10 @@
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.brents.microfoam"
+      "bundleIdentifier": "com.brents.microfoam",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
