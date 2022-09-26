@@ -17,6 +17,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "usesIcloudStorage": true,
       "supportsTablet": true,
       "bundleIdentifier": "com.brents.microfoam"
     },

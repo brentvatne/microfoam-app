@@ -3222,6 +3222,14 @@ expo-dev-menu@1.2.1:
     expo-dev-menu-interface "0.7.2"
     semver "^7.3.5"
 
+expo-document-picker@~10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-10.3.0.tgz#6a88fe69f6dcf6b8f2e65158de94c00695ae4972"
+  integrity sha512-wo6PrZwTE8h5xTO5xKkR6bodBuimacyp5fhIho6vwzBDrBH/Mp6xEbsth6yP8jgcCFUGa1oWWPCSqBxBv+ZZIA==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+    uuid "^3.3.2"
+
 expo-eas-client@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/expo-eas-client/-/expo-eas-client-0.3.0.tgz#21383fc95a52e71e13c7276456db20388fefcf95"
@@ -3335,6 +3343,11 @@ expo-router@^0.0.9:
     react-native-reanimated "~2.9.1"
     react-native-safe-area-context "4.3.1"
     react-native-screens "~3.15.0"
+
+expo-sharing@~10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-10.3.0.tgz#4e8e2a50d1c22ea510699664bb6ce827cb06738e"
+  integrity sha512-j3kn43WCOykj7mlGTb5Q3Z56DG8raFdTk0A+rauA7lsmJ5Vakb2qGyTFZ7uwqwrML10EQIPAzNEcEYgpIzHKIw==
 
 expo-splash-screen@~0.16.2:
   version "0.16.2"

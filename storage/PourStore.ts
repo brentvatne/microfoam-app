@@ -31,6 +31,55 @@ type Pour = {
   date_time: Date;
 };
 
+export function toJSON() {
+  return JSON.stringify(
+    all()._array.map((item) => ({
+      ...item,
+      photo_url: null, // TODO: upload to some object store and then fail toJSON if not uploaded
+    }))
+  );
+}
+
+function toRow(pour) {
+  return [
+    pour.id,
+    pour.date_time,
+    pour.photo_url,
+    pour.video_url,
+    pour.rating,
+    pour.notes,
+  ];
+}
+
+export function loadFromJSON(json: string) {
+  // gross?
+  const rows = JSON.parse(json).map((item) =>
+    toRow({
+      ...item,
+      date_time: parseInt(item.date_time, 10),
+    })
+  );
+
+  // ok now clear it
+  destroyAll();
+
+  rows.forEach((row) => {
+    const { status, message } = exec(
+      `
+    INSERT INTO pours (id, date_time, photo_url, video_url, rating, notes)
+      VALUES (?, ?, ?, ?, ?, ?);
+  `,
+      row
+    );
+
+    if (status === 1) {
+      throw new Error(message);
+    }
+  });
+
+  store.setState(() => all()._array);
+}
+
 export function all() {
   const { status, message, rows } = exec(
     `SELECT * FROM pours ORDER BY ID DESC;`
