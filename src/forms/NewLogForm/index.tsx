@@ -76,18 +76,17 @@ export default function LogFormScreen({
           </View>
         </BorderlessButton>
 
-				<View className="mb-4" />
+        <View className="mb-4" />
 
         <BorderlessButton
           onPress={() => {
             onCreate({ dateTime, rating, photoUri });
           }}
-					
         >
-					<View className="w-full mt-4 p-3 bg-blue-100 rounded-md items-center">
-						<Text className="text-xl text-blue-500">Save</Text>
-					</View>
-				</BorderlessButton>
+          <View className="w-full mt-4 p-3 bg-blue-100 rounded-md items-center">
+            <Text className="text-xl text-blue-500">Save</Text>
+          </View>
+        </BorderlessButton>
       </View>
     </ScrollView>
   );

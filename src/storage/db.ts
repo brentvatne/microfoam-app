@@ -5,28 +5,28 @@ const DATABASE_NAME = "microfoam.db";
 /** Wrapper around executeSql for convenience */
 export function exec(query: string, params = []) {
   const result = QuickSQLite.executeSql(DATABASE_NAME, query, params);
-	return result;
+  return result;
 }
 /** Open DB and init schema if needed */
 export function init() {
-	_open();
+  _open();
 
-	if (!_schemaIsValid()) {
-		_createSchema();
-		console.log('initialized schema')
-	}
+  if (!_schemaIsValid()) {
+    _createSchema();
+    console.log("initialized schema");
+  }
 }
 
 /** Drop all tables and re-init */
 export function clear() {
   exec(`DROP TABLE pours;`);
-	init();
+  init();
 }
 
 /**
- * 
+ *
  * Helpers
- * 
+ *
  */
 
 function _open() {
@@ -35,8 +35,8 @@ function _open() {
   if (status === 1) {
     throw new Error(message);
   } else {
-		console.log(`opened ${DATABASE_NAME}`);
-	}
+    console.log(`opened ${DATABASE_NAME}`);
+  }
 }
 
 function _close() {
@@ -45,12 +45,12 @@ function _close() {
   if (status === 1) {
     throw new Error(message);
   } else {
-		console.log(`closed ${DATABASE_NAME}`);
-	}
+    console.log(`closed ${DATABASE_NAME}`);
+  }
 }
 
 function _schemaIsValid() {
-  const { metadata } = exec(`SELECT * FROM pours;`); 
+  const { metadata } = exec(`SELECT * FROM pours;`);
   return metadata !== undefined;
 }
 

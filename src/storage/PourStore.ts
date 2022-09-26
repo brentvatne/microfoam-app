@@ -32,7 +32,9 @@ type Pour = {
 };
 
 export function all() {
-  const { status, message, rows } = exec(`SELECT * FROM pours ORDER BY ID DESC;`);
+  const { status, message, rows } = exec(
+    `SELECT * FROM pours ORDER BY ID DESC;`
+  );
 
   if (status === 1) {
     throw new Error(message);
@@ -60,7 +62,9 @@ export function create(data: Omit<PourRecord, "id">) {
 }
 
 export function remove(data: Pick<PourRecord, "id">) {
-  const { status, message } = exec(`DELETE FROM pours WHERE id = ?;`, [data.id]);
+  const { status, message } = exec(`DELETE FROM pours WHERE id = ?;`, [
+    data.id,
+  ]);
 
   if (status === 1) {
     throw new Error(message);
