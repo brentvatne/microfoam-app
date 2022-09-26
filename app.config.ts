@@ -15,6 +15,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.android,
     package: process.env.RELEASE
       ? "com.brents.microfoam"
-      : "com.brents.microfoam-dev",
+      : "com.brents.microfoam.dev", // Android
   },
 });

@@ -5,6 +5,7 @@
   },
   "build": {
     "development": {
+      "channel": "development",
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -12,12 +13,14 @@
       }
     },
     "preview": {
+      "channel": "preview",
       "distribution": "internal",
       "env": {
         "RELEASE": "1"
       }
     },
     "production": {
+      "channel": "production",
       "autoIncrement": true,
       "env": {
         "RELEASE": "1"
