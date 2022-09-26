@@ -1,5 +1,14 @@
-import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
-import * as PourStore from "../storage/PourStore";
+import {
+  Alert,
+  Button,
+  Pressable,
+  FlatList,
+  Image,
+  Text,
+  View,
+} from "react-native";
+import { Tabs } from "expo-router";
+import * as PourStore from "../../../src/storage/PourStore";
 
 function Row({ item }) {
   return (
@@ -44,17 +53,26 @@ function Row({ item }) {
 }
 
 // Default to a grid maybe?
-export default function LogListScreen() {
+export default function LogListScreen({ navigation }) {
   const pours = PourStore.usePours();
 
   // todo: change to flashlist
   return (
-    <FlatList
-      data={pours}
-      renderItem={Row}
-      keyExtractor={(item) => item.id}
-      className="bg-white"
-      contentContainerStyle={{ padding: 10 }}
-    />
+    <>
+      <Tabs.Screen
+        options={{
+          headerRight: () => (
+            <Button title="New" onPress={() => navigation.navigate("new")} />
+          ),
+        }}
+      />
+      <FlatList
+        data={pours}
+        renderItem={Row}
+        keyExtractor={(item) => item.id}
+        className="bg-white"
+        contentContainerStyle={{ padding: 10 }}
+      />
+    </>
   );
 }

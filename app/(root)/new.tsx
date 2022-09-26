@@ -1,7 +1,9 @@
-import * as PourStore from "../storage/PourStore";
 import { StatusBar } from "expo-status-bar";
-import NewLogForm from "../forms/NewLogForm";
 import * as FileSystem from "expo-file-system";
+import { NativeStack } from "expo-router";
+
+import * as PourStore from "../../src/storage/PourStore";
+import NewLogForm from "../../src/forms/NewLogForm";
 
 async function ensureDirectoryExistsAsync(directory) {
   const info = await FileSystem.getInfoAsync(directory);
@@ -26,6 +28,7 @@ async function copyPhotoToDocumentsAsync(uri) {
 export default function LogFormScreen({ navigation }) {
   return (
     <>
+      <NativeStack.Screen options={{ title: "Log a new pour" }} />
       <NewLogForm
         onCreate={async (data) => {
           const photoUri = await copyPhotoToDocumentsAsync(data.photoUri);
