@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Button, Text, Image, TextInput, ScrollView, View } from "react-native";
+import { Button, Text, Image, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton } from "react-native-gesture-handler";
+import {
+  TailwindColor,
+  FontSize,
+  Padding,
+  Margin,
+} from "../../constants/styles";
 
 /**
  * Form with:
@@ -31,8 +37,8 @@ export default function LogFormScreen({
   const [photoUri, setPhotoUri] = useState<string | undefined>();
 
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="p-4">
+    <ScrollView style={{ flex: 1, backgroundColor: TailwindColor.white }}>
+      <View style={{ padding: Padding[4] }}>
         <PhotoPickerForm
           onChange={(data) => {
             setPhotoUri(data.uri);
@@ -40,9 +46,18 @@ export default function LogFormScreen({
           photoUri={photoUri}
         />
 
-        <View className="mt-4" />
+        <View style={{ marginTop: Margin[4] }} />
 
-        <Text className="text-xl font-bold pt-1 pb-4">Rating</Text>
+        <Text
+          style={{
+            fontSize: FontSize.xl,
+            fontWeight: "bold",
+            paddingTop: Padding[1],
+            paddingBottom: Padding[2],
+          }}
+        >
+          Rating
+        </Text>
 
         <View>
           <SegmentedControl
@@ -54,9 +69,17 @@ export default function LogFormScreen({
           />
         </View>
 
-        <View className="mb-6" />
+        <View style={{ marginBottom: Margin[6] }} />
 
-        <Text className="text-xl font-bold pb-1">When</Text>
+        <Text
+          style={{
+            fontSize: FontSize.xl,
+            fontWeight: "bold",
+            paddingBottom: Padding[1],
+          }}
+        >
+          When
+        </Text>
         <DatePicker
           modal
           mode="datetime"
@@ -72,19 +95,34 @@ export default function LogFormScreen({
         />
         <BorderlessButton onPress={() => setDateTimePickerVisible(true)}>
           <View>
-            <Text className="text-l">{dateTime.toString()}</Text>
+            <Text style={{ fontSize: FontSize.lg }}>{dateTime.toString()}</Text>
           </View>
         </BorderlessButton>
 
-        <View className="mb-4" />
+        <View style={{ marginBottom: Margin[4] }} />
 
         <BorderlessButton
           onPress={() => {
             onCreate({ dateTime, rating, photoUri });
           }}
         >
-          <View className="w-full mt-4 p-3 bg-blue-100 rounded-md items-center">
-            <Text className="text-xl text-blue-500">Save</Text>
+          <View
+            style={{
+              width: "100%",
+              padding: Padding[4],
+              backgroundColor: TailwindColor["blue-200"],
+              borderRadius: 10,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: TailwindColor["blue-500"],
+                fontSize: FontSize.xl,
+              }}
+            >
+              Save
+            </Text>
           </View>
         </BorderlessButton>
       </View>
@@ -110,14 +148,34 @@ function PhotoPickerForm({ onChange, photoUri }) {
     }
   };
   return (
-    <View className="flex-1 border-radius-5 pt-5 m-2 items-center bg-gray-100">
+    <View
+      style={{
+        flex: 1,
+        borderRadius: 10,
+        paddingTop: Padding[5],
+        margin: Margin[2],
+        alignItems: "center",
+        backgroundColor: TailwindColor["gray-100"],
+      }}
+    >
       {photoUri ? (
         <Image
           source={{ uri: photoUri }}
-          className="h-[200] w-[200] bg-gray-200 resize-contain"
+          style={{
+            width: 200,
+            height: 200,
+            borderRadius: 10,
+            resizeMode: "contain",
+          }}
         />
       ) : (
-        <View className="h-[200] w-[200] bg-gray-200" />
+        <View
+          style={{
+            width: 200,
+            height: 200,
+            backgroundColor: TailwindColor["gray-200"],
+          }}
+        />
       )}
       <Button title="Select a photo" onPress={() => launchPickerAsync()} />
     </View>

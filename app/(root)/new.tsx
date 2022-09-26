@@ -2,8 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import * as FileSystem from "expo-file-system";
 import { NativeStack } from "expo-router";
 
-import * as PourStore from "../../src/storage/PourStore";
-import NewLogForm from "../../src/forms/NewLogForm";
+import * as PourStore from "../../storage/PourStore";
+import NewLogForm from "../../components/NewLogForm";
 
 async function ensureDirectoryExistsAsync(directory) {
   const info = await FileSystem.getInfoAsync(directory);

@@ -8,7 +8,8 @@ import {
   View,
 } from "react-native";
 import { Tabs } from "expo-router";
-import * as PourStore from "../../../src/storage/PourStore";
+import { TailwindColor, FontSize, Margin, Padding } from "../../../constants/styles";
+import * as PourStore from "../../../storage/PourStore";
 
 function Row({ item }) {
   return (
@@ -29,20 +30,31 @@ function Row({ item }) {
         );
       }}
     >
-      <View className="flex-row mb-10">
+      <View style={{ flexDirection: "row", marginBottom: Margin[4] }}>
         <Image
           source={{ uri: item.photo_url }}
-          className="h-[100] w-[100] mr-4 bg-gray-200 rounded-lg"
+          style={{
+            height: 100,
+            width: 100,
+            marginRight: Margin[3],
+            backgroundColor: TailwindColor["gray-200"],
+            borderRadius: 10,
+          }}
         />
-        <View className="flex-col">
+        <View style={{ flexDirection: "column", paddingTop: Padding[2] }}>
           <View>
-            <Text className="text-lg">
+            <Text style={{ fontSize: FontSize.lg }}>
               <Text>Rating:</Text>{" "}
-              <Text className="font-bold">{item.rating} / 5</Text>
+              <Text style={{ fontWeight: "bold" }}>{item.rating} / 5</Text>
             </Text>
           </View>
           <View>
-            <Text className="color-gray-500 text-lg">
+            <Text
+              style={{
+                fontSize: FontSize.lg,
+                color: TailwindColor["gray-500"],
+              }}
+            >
               {new Date(parseInt(item.date_time, 10)).toDateString()}
             </Text>
           </View>
@@ -70,8 +82,8 @@ export default function LogListScreen({ navigation }) {
         data={pours}
         renderItem={Row}
         keyExtractor={(item) => item.id}
-        className="bg-white"
-        contentContainerStyle={{ padding: 10 }}
+        style={{ backgroundColor: TailwindColor.white }}
+        contentContainerStyle={{ padding: Padding[3] }}
       />
     </>
   );

@@ -1,9 +1,16 @@
 import { Button, View } from "react-native";
-import * as PourStore from "../../../src/storage/PourStore";
+import * as PourStore from "../../../storage/PourStore";
 
 export default function Settings() {
   return (
-    <View className="flex-1 bg-white items-center justify-center">
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white",
+      }}
+    >
       <Button title="Clear data" onPress={() => PourStore.destroyAll()} />
     </View>
   );
