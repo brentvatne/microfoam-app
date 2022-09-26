@@ -9,7 +9,7 @@
     "prebuild:ios": "expo prebuild -p ios --clean",
     "prebuild:android": "expo prebuild -p android --clean",
     "web": "expo start --web",
-    "prettier:fix": "prettier app src index.tsx -w"
+    "prettier:fix": "prettier app components constants storage index.js -w"
   },
   "dependencies": {
     "@react-native-community/slider": "4.2.3",
