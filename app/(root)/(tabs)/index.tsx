@@ -23,7 +23,7 @@ function Row({ item }) {
               text: "Cancel",
               style: "cancel",
             },
-            { text: "OK", onPress: () => PourStore.remove(item) },
+            { text: "OK", onPress: () => PourStore.destroy(item) },
           ],
           { cancelable: false }
         );

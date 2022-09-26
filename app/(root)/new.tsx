@@ -41,7 +41,7 @@ export default function LogFormScreen({ navigation }) {
           });
 
           // Go back to tabs from the modal
-          navigation.navigate("Tabs");
+          navigation.navigate("index");
         }}
       />
 

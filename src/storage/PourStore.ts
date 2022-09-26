@@ -61,10 +61,20 @@ export function create(data: Omit<PourRecord, "id">) {
   return rows[0];
 }
 
-export function remove(data: Pick<PourRecord, "id">) {
+export function destroy(data: Pick<PourRecord, "id">) {
   const { status, message } = exec(`DELETE FROM pours WHERE id = ?;`, [
     data.id,
   ]);
+
+  if (status === 1) {
+    throw new Error(message);
+  }
+
+  store.setState(() => all()._array);
+}
+
+export function destroyAll() {
+  const { status, message } = exec(`DELETE FROM pours;`);
 
   if (status === 1) {
     throw new Error(message);
