@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as FileSystem from "expo-file-system";
 import { useLink, NativeStack } from "expo-router";
@@ -47,7 +48,7 @@ export default function LogFormScreen() {
         }}
       />
 
-      <StatusBar style="light" />
+      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </>
   );
 }
