@@ -9,6 +9,8 @@
     "jsEngine": "hermes",
     "scheme": "microfoam",
     "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#232323"
     },
     "updates": {
