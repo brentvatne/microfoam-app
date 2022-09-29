@@ -13,7 +13,7 @@ import {
 
 /**
  * Form with:
- * - Photo/video
+ * - Photo
  * - Attempted design
  * - Rating
  * - What went well

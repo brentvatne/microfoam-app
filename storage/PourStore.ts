@@ -1,5 +1,5 @@
 /**
- * PourStore.create({ date: '...', pourRating: 1, milkRating: 1, photoUrl: '..', videoUrl: '..',  goodNotes: '..', improvementNotes: '...' })
+ * PourStore.create({ date: '...', rating: 1, photoUrl: '..', notes: '...' })
  * PourStore.all();
  * PourStore.first(10, { order: 'asc' });
  * PourStore.last(10);
@@ -20,7 +20,6 @@ type PourRecord = {
   id: number;
   date_time: number;
   photo_url?: string;
-  video_url?: string;
   rating: number;
   notes?: string;
 };
@@ -33,22 +32,14 @@ type Pour = {
 
 export function toJSON() {
   return JSON.stringify(
-    all()._array.map((item) => ({
+    all().map((item) => ({
       ...item,
-      photo_url: null, // TODO: upload to some object store and then fail toJSON if not uploaded
     }))
   );
 }
 
 function toRow(pour) {
-  return [
-    pour.id,
-    pour.date_time,
-    pour.photo_url,
-    pour.video_url,
-    pour.rating,
-    pour.notes,
-  ];
+  return [pour.id, pour.date_time, pour.photo_url, pour.rating, pour.notes];
 }
 
 export function loadFromJSON(json: string) {
@@ -66,7 +57,7 @@ export function loadFromJSON(json: string) {
   rows.forEach((row) => {
     const { status, message } = exec(
       `
-    INSERT INTO pours (id, date_time, photo_url, video_url, rating, notes)
+    INSERT INTO pours (id, date_time, photo_url, rating, notes)
       VALUES (?, ?, ?, ?, ?, ?);
   `,
       row
@@ -77,7 +68,7 @@ export function loadFromJSON(json: string) {
     }
   });
 
-  store.setState(() => all()._array);
+  store.setState(() => all());
 }
 
 export function all() {
@@ -89,23 +80,40 @@ export function all() {
     throw new Error(message);
   }
 
-  return rows;
+  return rows._array;
 }
 
-export function create(data: Omit<PourRecord, "id">) {
-  const { status, rows, message } = exec(
+export function update(pour: PourRecord) {
+  const { status, message } = exec(
     `
-		INSERT INTO pours (date_time, photo_url, video_url, rating, notes)
-			VALUES (?, ?, ?, ?, ?);
-	)`,
-    [data.date_time, data.photo_url, data.video_url, data.rating, data.notes]
+    UPDATE pours
+      SET date_time = ?, photo_url = ?, rating = ?, notes = ?
+      WHERE id = ?;
+  `,
+    [pour.date_time, pour.photo_url, pour.rating, pour.notes, pour.id]
   );
 
   if (status === 1) {
     throw new Error(message);
   }
 
-  store.setState(() => all()._array);
+  store.setState(() => all());
+}
+
+export function create(data: Omit<PourRecord, "id">) {
+  const { status, rows, message } = exec(
+    `
+		INSERT INTO pours (date_time, photo_url, rating, notes)
+			VALUES (?, ?, ?, ?);
+	`,
+    [data.date_time, data.photo_url, data.rating, data.notes]
+  );
+
+  if (status === 1) {
+    throw new Error(message);
+  }
+
+  store.setState(() => all());
 
   return rows[0];
 }
@@ -119,7 +127,7 @@ export function destroy(data: Pick<PourRecord, "id">) {
     throw new Error(message);
   }
 
-  store.setState(() => all()._array);
+  store.setState(() => all());
 }
 
 export function destroyAll() {
@@ -129,13 +137,13 @@ export function destroyAll() {
     throw new Error(message);
   }
 
-  store.setState(() => all()._array);
+  store.setState(() => all());
 }
 
 /** "yikes" below */
 
 const createStore = () => {
-  let state = all()._array;
+  let state = all();
   const getState = () => state;
   const listeners = new Set();
   const setState = (fn) => {
