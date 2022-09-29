@@ -3338,10 +3338,10 @@ expo-modules-core@0.11.5:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-router@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.14.tgz#45ddb66848ddf96273e77571a711c7a2327d0cc9"
-  integrity sha512-u5wgd6Yt01zlOzlCU4F1TTR2FrDi4j+rABp6c2pS6fRk8Srjqz3XTG/uXo2zeGihrl+0uBnwbt3yjYyWmTrC6A==
+expo-router@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.19.tgz#1e170861639761075e579d3095fd5abc47a5fe63"
+  integrity sha512-x5dTuXAfrRopid8jrpCrjyOQr4LJXZZuElb4bu9HRlmXvSMoDRgNbKZSelXUOIelSbvgPp7GIxnx1C7wFfbfYg==
   dependencies:
     "@bacons/expo-metro-runtime" "^2.0.1"
     "@bacons/react-views" "^1.1.3"
