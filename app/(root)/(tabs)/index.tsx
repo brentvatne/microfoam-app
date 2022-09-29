@@ -36,6 +36,7 @@ function Row({ item }) {
       }}
     >
       <View style={{ flexDirection: "row", marginBottom: Margin[4] }}>
+        { /* TODO: cache the image locally if it's a remote image */ }
         <Image
           source={{ uri: item.photo_url }}
           style={{
@@ -73,7 +74,7 @@ function Row({ item }) {
 export default function LogListScreen({ navigation }) {
   const pours = PourStore.usePours();
 
-  // todo: change to flashlist
+  // TODO: change to flashlist
   return (
     <>
       <Tabs.Screen

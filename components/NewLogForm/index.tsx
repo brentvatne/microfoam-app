@@ -135,6 +135,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       selectionLimit: 1,
+      quality: 0.6,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 

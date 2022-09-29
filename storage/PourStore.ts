@@ -51,6 +51,7 @@ export function loadFromJSON(json: string) {
     })
   );
 
+  console.log(rows);
   // ok now clear it
   destroyAll();
 
@@ -58,7 +59,7 @@ export function loadFromJSON(json: string) {
     const { status, message } = exec(
       `
     INSERT INTO pours (id, date_time, photo_url, rating, notes)
-      VALUES (?, ?, ?, ?, ?, ?);
+      VALUES (?, ?, ?, ?, ?);
   `,
       row
     );
@@ -80,10 +81,10 @@ export function all() {
     throw new Error(message);
   }
 
-  return rows._array;
+  return rows._array as PourRecord[];
 }
 
-export function update(pour: PourRecord) {
+export function update(id: number, pour: PourRecord) {
   const { status, message } = exec(
     `
     UPDATE pours
