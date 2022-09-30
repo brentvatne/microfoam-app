@@ -51,7 +51,6 @@ export function loadFromJSON(json: string) {
     })
   );
 
-  console.log(rows);
   // ok now clear it
   destroyAll();
 

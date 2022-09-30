@@ -1,13 +1,6 @@
-import {
-  Alert,
-  Button,
-  Pressable,
-  FlatList,
-  Image,
-  Text,
-  View,
-} from "react-native";
-import { Tabs } from "expo-router";
+import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
+import { Tabs, Link, useLink } from "expo-router";
+import { BorderlessButton } from "react-native-gesture-handler";
 import {
   TailwindColor,
   FontSize,
@@ -36,7 +29,7 @@ function Row({ item }) {
       }}
     >
       <View style={{ flexDirection: "row", marginBottom: Margin[4] }}>
-        { /* TODO: cache the image locally if it's a remote image */ }
+        {/* TODO: cache the image locally if it's a remote image */}
         <Image
           source={{ uri: item.photo_url }}
           style={{
@@ -47,22 +40,36 @@ function Row({ item }) {
             borderRadius: 10,
           }}
         />
-        <View style={{ flexDirection: "column", paddingTop: Padding[2] }}>
+        <View
+          style={{ flexDirection: "column", paddingTop: Padding[2], flex: 1 }}
+        >
           <View>
-            <Text style={{ fontSize: FontSize.lg }}>
-              <Text>Rating:</Text>{" "}
-              <Text style={{ fontWeight: "bold" }}>{item.rating} / 5</Text>
+            <Text
+              style={{
+                fontSize: FontSize.base,
+                color: TailwindColor["gray-700"],
+              }}
+            >
+              <Text>Rating:</Text> <Text>{item.rating} / 5</Text>
             </Text>
           </View>
           <View>
             <Text
               style={{
-                fontSize: FontSize.lg,
-                color: TailwindColor["gray-500"],
+                fontSize: FontSize.base,
+                color: TailwindColor["gray-700"],
               }}
             >
               {new Date(parseInt(item.date_time, 10)).toDateString()}
             </Text>
+
+            <View style={{ marginTop: Margin[2], flex: 1 }}>
+              <Text numberOfLines={2} style={{ flex: 1 }}>
+                {item.notes ?? (
+                  <Text style={{ fontStyle: "italic" }}>No notes</Text>
+                )}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -71,8 +78,9 @@ function Row({ item }) {
 }
 
 // Default to a grid maybe?
-export default function LogListScreen({ navigation }) {
+export default function LogListScreen() {
   const pours = PourStore.usePours();
+  const link = useLink();
 
   // TODO: change to flashlist
   return (
@@ -80,7 +88,16 @@ export default function LogListScreen({ navigation }) {
       <Tabs.Screen
         options={{
           headerRight: () => (
-            <Button title="New" onPress={() => navigation.navigate("new")} />
+            <Link href="/new" style={{ marginRight: 16 }}>
+              <Text
+                style={{
+                  fontSize: FontSize.lg,
+                  color: TailwindColor["blue-600"],
+                }}
+              >
+                New
+              </Text>
+            </Link>
           ),
         }}
       />
@@ -88,9 +105,63 @@ export default function LogListScreen({ navigation }) {
         data={pours}
         renderItem={Row}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={EmptyState}
         style={{ backgroundColor: TailwindColor.white }}
         contentContainerStyle={{ padding: Padding[3] }}
       />
     </>
+  );
+}
+
+function EmptyState() {
+  const link = useLink();
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: Padding[3],
+      }}
+    >
+      <Text
+        style={{
+          fontSize: FontSize.xl,
+          textAlign: "center",
+          marginBottom: Margin[5],
+          marginTop: Margin[3],
+          color: TailwindColor["gray-800"],
+        }}
+      >
+        You haven't logged any pours yet.
+      </Text>
+
+      <BorderlessButton
+        borderless={false}
+        onPress={() => {
+          link.push("/new");
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            padding: Padding[4],
+            backgroundColor: TailwindColor["blue-100"],
+            borderRadius: 10,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: TailwindColor["blue-500"],
+              fontSize: FontSize.xl,
+            }}
+          >
+            Enter your first pour
+          </Text>
+        </View>
+      </BorderlessButton>
+    </View>
   );
 }
