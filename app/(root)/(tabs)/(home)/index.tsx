@@ -31,7 +31,7 @@ function PourRow({ item }) {
             },
             { text: "OK", onPress: () => PourStore.destroy(item) },
           ],
-          { cancelable: false }
+          { cancelable: true }
         );
       }}
     >
@@ -74,7 +74,14 @@ function PourRow({ item }) {
             <View style={{ marginTop: Margin[2], flex: 1 }}>
               <Text numberOfLines={2} style={{ flex: 1 }}>
                 {item.notes ?? (
-                  <Text style={{ fontStyle: "italic" }}>No notes</Text>
+                  <Text
+                    style={{
+                      fontStyle: "italic",
+                      color: TailwindColor["gray-400"],
+                    }}
+                  >
+                    No notes
+                  </Text>
                 )}
               </Text>
             </View>

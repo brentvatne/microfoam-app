@@ -59,7 +59,7 @@ export default function ShowPour({ route }) {
               }}
             >
               {pour.notes ?? (
-                <Text style={{ fontStyle: "italic" }}>No notes</Text>
+                <Text style={{ fontStyle: "italic", color: TailwindColor['gray-400'] }}>No notes</Text>
               )}
             </Text>
           </View>

@@ -40,6 +40,7 @@ export default function Settings() {
       />
 
       <Button title="Upload images" onPress={() => uploadImagesAsync()} />
+
       <Button
         title="Drop and create database"
         onPress={() => {
@@ -85,6 +86,22 @@ export default function Settings() {
           fontSize: FontSize.base,
           textAlign: "center",
           color: TailwindColor["gray-700"],
+        }}
+        onPress={async () => {
+          const result = await Updates.fetchUpdateAsync();
+          if (result.isNew) {
+            Alert.alert(
+              "New update available",
+              "Restart the app to apply the update",
+              [
+                { text: "Cancel", style: "cancel" },
+                { text: "Restart", onPress: () => Updates.reloadAsync() },
+              ],
+              { cancelable: true }
+            );
+          } else {
+            alert("No update available");
+          }
         }}
       >
         ID: {Updates.updateId ?? "(no update id)"}
