@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Text,
-  TextInput,
-  Image,
-  ScrollView,
-  View,
-  Platform,
-} from "react-native";
+import { Text, TextInput, Image, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
@@ -20,11 +13,12 @@ import {
   Padding,
   Margin,
 } from "../../constants/styles";
+import { PourRecord } from "../../storage/PourStore";
 
 /**
  * Form with:
  * - ✅ Photo
- * - Rating
+ * - ✅ Rating
  * - Attempted design
  * - ✅ What went well / things to improve
  */
@@ -36,16 +30,28 @@ type Data = {
   notes?: string;
 };
 
-export default function LogFormScreen({
-  onCreate,
+function maybeDate(date: number | undefined) {
+  if (date) {
+    return new Date(date);
+  }
+}
+
+export default function LogForm({
+  onSave,
+  initialData,
 }: {
-  onCreate: (data: Data) => void;
+  onSave: (data: Data) => void;
+  initialData?: PourRecord;
 }) {
-  const [dateTime, setDateTime] = useState(new Date());
   const [dateTimePickerVisible, setDateTimePickerVisible] = useState(false);
-  const [rating, setRating] = useState(3);
-  const [photoUri, setPhotoUri] = useState<string | undefined>();
-  const [notes, setNotes] = useState<string | undefined>();
+  const [dateTime, setDateTime] = useState(
+    maybeDate(initialData?.date_time) ?? new Date()
+  );
+  const [rating, setRating] = useState(initialData?.rating ?? 3);
+  const [photoUri, setPhotoUri] = useState<string | undefined>(
+    initialData?.photo_url
+  );
+  const [notes, setNotes] = useState<string | undefined>(initialData?.notes);
 
   // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
   // 🤷‍♂️
@@ -163,7 +169,7 @@ export default function LogFormScreen({
               alert("A photo is required. That is the whole point.");
               return;
             }
-            onCreate({ dateTime, rating, photoUri, notes });
+            onSave({ dateTime, rating, photoUri, notes });
           }}
         >
           <View
@@ -246,7 +252,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
           <Text
             style={{ fontSize: FontSize.lg, color: TailwindColor["gray-700"] }}
           >
-            Select a photo
+            {photoUri ? "Select a different photo " : "Select a photo"}
           </Text>
         </RectButton>
       )}

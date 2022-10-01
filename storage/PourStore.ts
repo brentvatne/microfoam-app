@@ -16,7 +16,7 @@
 import { useSyncExternalStore, useCallback } from "react";
 import { exec } from "./db";
 
-type PourRecord = {
+export type PourRecord = {
   id: number;
   date_time: number;
   photo_url?: string;
@@ -83,6 +83,7 @@ export function all() {
   return rows._array as PourRecord[];
 }
 
+// TODO: make pour accept Partial<PourRecord>
 export function update(id: number, pour: PourRecord) {
   const { status, message } = exec(
     `

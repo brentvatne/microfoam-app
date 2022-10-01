@@ -9,9 +9,12 @@ import {
 } from "../../../constants/styles";
 import * as PourStore from "../../../storage/PourStore";
 
-function Row({ item }) {
+function PourRow({ item }) {
+  const link = useLink();
+
   return (
     <Pressable
+      onPress={() => link.push(`/${item.id}`)}
       onLongPress={() => {
         // TODO: bottom sheet
         Alert.alert(
@@ -77,12 +80,11 @@ function Row({ item }) {
   );
 }
 
-// Default to a grid maybe?
+const renderItem = ({ item }) => <PourRow item={item} />;
+
 export default function LogListScreen() {
   const pours = PourStore.usePours();
-  const link = useLink();
 
-  // TODO: change to flashlist
   return (
     <>
       <Tabs.Screen
@@ -103,7 +105,7 @@ export default function LogListScreen() {
       />
       <FlatList
         data={pours}
-        renderItem={Row}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={EmptyState}
         style={{ backgroundColor: TailwindColor.white, flex: 1 }}
@@ -117,7 +119,14 @@ function EmptyState() {
   const link = useLink();
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: 40,
+      }}
+    >
       <Text
         style={{
           fontSize: FontSize.xl,
