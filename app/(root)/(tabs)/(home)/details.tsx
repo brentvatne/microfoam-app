@@ -1,8 +1,8 @@
-import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
+import { Text } from "react-native";
 import { NativeStack, Link, Children } from "expo-router";
 import { format } from "date-fns";
 
-import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
+import { TailwindColor, FontSize } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 
 export default function DetailsLayout({ route }) {

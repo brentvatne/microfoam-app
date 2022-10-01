@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Image, ImageProps, StyleSheet, View, ViewProps } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, ViewProps } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { AnimatePresence, MotiView } from "moti";
 import FastImage from "react-native-fast-image";

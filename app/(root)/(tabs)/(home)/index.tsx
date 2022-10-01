@@ -1,6 +1,6 @@
-import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
+import { Alert, FlatList, Text, View } from "react-native";
 import { NativeStack, Link, useLink } from "expo-router";
-import { BorderlessButton } from "react-native-gesture-handler";
+import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
@@ -10,12 +10,16 @@ function PourRow({ item }) {
   const link = useLink();
 
   return (
-    <Pressable
+    <RectButton
+      style={{
+        paddingVertical: Padding[4],
+        paddingHorizontal: Padding[3],
+      }}
       onPress={() => {
         link.push(`/details/${item.id}`);
       }}
       onLongPress={() => {
-        // TODO: bottom sheet
+        // TODO: bottom sheet with view / share / edit / delete options
         Alert.alert(
           "Delete pour?",
           "Are you sure you want to delete this pour?",
@@ -30,20 +34,7 @@ function PourRow({ item }) {
         );
       }}
     >
-      <View style={{ flexDirection: "row", marginBottom: Margin[4] }}>
-        {/* TODO: cache the image locally if it's a remote image */}
-        {/* <View
-          style={{
-            borderRadius: 10,
-            overflow: "hidden",
-            marginRight: Margin[3],
-          }}
-        >
-          <Blurhash
-            blurhash={item.blurhash}
-            style={{ width: 100, height: 100 }}
-          />
-        </View> */}
+      <View style={{ flexDirection: "row" }}>
         <Photo
           uri={item.photo_url}
           blurhash={item.blurhash}
@@ -89,7 +80,7 @@ function PourRow({ item }) {
           </View>
         </View>
       </View>
-    </Pressable>
+    </RectButton>
   );
 }
 
@@ -123,7 +114,6 @@ export default function LogListScreen() {
         keyExtractor={(item) => item.id}
         ListEmptyComponent={EmptyState}
         style={{ backgroundColor: TailwindColor.white, flex: 1 }}
-        contentContainerStyle={{ padding: Padding[3] }}
       />
     </>
   );
