@@ -19,7 +19,7 @@ import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 
 import { exec } from "./db";
-import { maybeCopyPhotoToDocumentsAsync } from "./fs";
+import { maybeCopyPhotoToDocumentsAsync, isLocalFile } from "./fs";
 
 export type PourRecord = {
   id: number;
@@ -98,7 +98,10 @@ export function all() {
 
 // TODO: make pour accept Partial<PourRecord>
 export async function updateAsync(id: number, pour: PourRecord) {
-  const { photoUrl, blurhash } = await processImageAsync(pour.photo_url);
+  const { photoUrl, blurhash } = await processImageAsync({
+    uri: pour.photo_url,
+    blurhash: pour.blurhash,
+  });
 
   const { status, message } = exec(
     `
@@ -116,7 +119,14 @@ export async function updateAsync(id: number, pour: PourRecord) {
   store.setState(() => all());
 }
 
-async function processImageAsync(uri: string) {
+async function processImageAsync(pour: { uri: string; blurhash?: string }) {
+  const { uri } = pour;
+
+  // Bail out if file is remote
+  if (!isLocalFile(uri)) {
+    return { photoUrl: uri, blurhash: pour.blurhash };
+  }
+
   const resizedUri = await maybeShrinkImageAsync(uri, { width: 800 });
   const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
   const thumbnail = await shrinkImageAsync(photoUrl, { width: 50, height: 50 });
@@ -148,7 +158,10 @@ async function maybeShrinkImageAsync(uri: string, dimensions: Dimensions) {
 }
 
 export async function createAsync(data: Omit<PourRecord, "id">) {
-  const { photoUrl, blurhash } = await processImageAsync(data.photo_url);
+  const { photoUrl, blurhash } = await processImageAsync({
+    uri: data.photo_url,
+    blurhash: data.blurhash,
+  });
   const { status, rows, message } = exec(
     `
 		INSERT INTO pours (date_time, photo_url, rating, notes, blurhash)

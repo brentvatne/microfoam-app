@@ -4,6 +4,7 @@ import { BorderlessButton } from "react-native-gesture-handler";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
+import Photo from "~/components/Photo";
 
 function PourRow({ item }) {
   const link = useLink();
@@ -43,14 +44,16 @@ function PourRow({ item }) {
             style={{ width: 100, height: 100 }}
           />
         </View> */}
-        <Image
-          source={{ uri: item.photo_url }}
-          style={{
+        <Photo
+          uri={item.photo_url}
+          blurhash={item.blurhash}
+          containerStyle={{
             height: 100,
             width: 100,
-            marginRight: Margin[3],
-            backgroundColor: TailwindColor["gray-200"],
             borderRadius: 10,
+            marginRight: Margin[3],
+            overflow: "hidden",
+            backgroundColor: TailwindColor["gray-200"],
           }}
         />
         <View
@@ -99,7 +102,7 @@ export default function LogListScreen() {
     <>
       <NativeStack.Screen
         options={{
-          title: "Pours", 
+          title: "Pours",
           headerRight: () => (
             <Link href="/new" style={{ marginRight: 16 }}>
               <Text

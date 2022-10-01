@@ -2,6 +2,13 @@ import * as FileSystem from "expo-file-system";
 
 export const PHOTOS_DIRECTORY = `${FileSystem.documentDirectory}photos`;
 
+export function isLocalFile(uri: string) {
+  return (
+    uri.startsWith(FileSystem.cacheDirectory) ||
+    uri.startsWith(FileSystem.documentDirectory)
+  );
+}
+
 export async function ensureDirectoryExistsAsync(directory) {
   const info = await FileSystem.getInfoAsync(directory);
   if (!info.exists) {
