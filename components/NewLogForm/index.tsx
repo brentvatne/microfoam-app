@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Text, TextInput, Image, ScrollView, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  Image,
+  ScrollView,
+  View,
+  Platform,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
@@ -109,6 +116,7 @@ export default function LogFormScreen({
         />
         <BorderlessButton
           onPress={() => setDateTimePickerVisible(true)}
+          style={{ paddingVertical: Padding[2] }}
           borderless={false}
         >
           <View>
@@ -118,7 +126,7 @@ export default function LogFormScreen({
           </View>
         </BorderlessButton>
 
-        <View style={{ marginBottom: Margin[6] }} />
+        <View style={{ marginBottom: Margin[5] }} />
 
         <Text
           style={{
@@ -141,6 +149,7 @@ export default function LogFormScreen({
             backgroundColor: TailwindColor["gray-100"],
             paddingHorizontal: 10,
             paddingTop: 10,
+            textAlignVertical: "top",
             borderRadius: 5,
           }}
         />

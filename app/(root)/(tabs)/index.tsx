@@ -106,7 +106,7 @@ export default function LogListScreen() {
         renderItem={Row}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={EmptyState}
-        style={{ backgroundColor: TailwindColor.white }}
+        style={{ backgroundColor: TailwindColor.white, flex: 1 }}
         contentContainerStyle={{ padding: Padding[3] }}
       />
     </>
@@ -117,14 +117,7 @@ function EmptyState() {
   const link = useLink();
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: Padding[3],
-      }}
-    >
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text
         style={{
           fontSize: FontSize.xl,

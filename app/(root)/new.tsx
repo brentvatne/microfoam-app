@@ -38,7 +38,7 @@ export default function LogFormScreen() {
           title: "Log a new pour",
           headerLeft: () => (
             <BorderlessButton
-              style={{ marginTop: 2 }}
+              style={{ marginTop: Platform.OS === 'android' ? 4 : 2, marginRight: Platform.OS === 'android' ? 20 : 0 }}
               borderless={false}
               onPress={() => {
                 link.back();
