@@ -7,12 +7,7 @@ import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import { format } from "date-fns";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
-import {
-  TailwindColor,
-  FontSize,
-  Padding,
-  Margin,
-} from "~/constants/styles";
+import { TailwindColor, FontSize, Padding, Margin } from "~/constants/styles";
 import { PourRecord } from "~/storage/PourStore";
 
 /**

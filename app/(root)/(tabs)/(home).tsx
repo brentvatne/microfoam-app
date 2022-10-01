@@ -1,3 +1,3 @@
-import { NativeStack } from 'expo-router';
+import { NativeStack } from "expo-router";
 
 export default NativeStack;
