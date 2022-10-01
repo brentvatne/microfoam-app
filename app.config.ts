@@ -17,4 +17,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       ? "com.brents.microfoam"
       : "com.brents.microfoam.dev", // Android
   },
+  plugins: [
+    [
+      "expo-document-picker",
+      {
+        iCloudContainerEnvironment: process.env.RELEASE
+          ? "Production"
+          : "Development",
+      },
+    ],
+  ],
 });
