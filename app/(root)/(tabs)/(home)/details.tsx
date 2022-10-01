@@ -1,11 +1,13 @@
-import { Text } from "react-native";
-import { NativeStack, Link, Children } from "expo-router";
+import { NativeStack, useLink, Children } from "expo-router";
 import { format } from "date-fns";
+import { BorderlessButton } from "react-native-gesture-handler";
 
-import { TailwindColor, FontSize } from "~/constants/styles";
+import { TailwindColor } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function DetailsLayout({ route }) {
+  const link = useLink();
   const pour = PourStore.usePour(route.params?.id);
 
   return (
@@ -14,16 +16,18 @@ export default function DetailsLayout({ route }) {
         options={{
           title: format(new Date(pour.date_time), "PPPP"),
           headerRight: () => (
-            <Link href={`/${route.params.id}`} style={{ marginRight: 16 }}>
-              <Text
-                style={{
-                  fontSize: FontSize.lg,
-                  color: TailwindColor["blue-600"],
-                }}
-              >
-                Edit
-              </Text>
-            </Link>
+            <BorderlessButton
+              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+              onPress={() => {
+                link.push(`/${route.params.id}`);
+              }}
+            >
+              <AntDesign
+                name="edit"
+                size={24}
+                color={TailwindColor["blue-500"]}
+              />
+            </BorderlessButton>
           ),
         }}
       />

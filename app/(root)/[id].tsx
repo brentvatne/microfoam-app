@@ -6,6 +6,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as PourStore from "~/storage/PourStore";
 import LogForm from "~/components/LogForm";
+import { TailwindColor } from "~/constants/styles";
 
 export default function EditPourScreen({ route }) {
   const id = route.params?.id;
@@ -20,8 +21,9 @@ export default function EditPourScreen({ route }) {
           title: "Edit pour",
           headerLeft: () => (
             <BorderlessButton
+              hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
               style={{
-                marginTop: Platform.OS === "android" ? 4 : 2,
+                marginTop: Platform.OS === "android" ? 4 : 3,
                 marginRight: Platform.OS === "android" ? 20 : 0,
               }}
               borderless={false}
@@ -29,7 +31,11 @@ export default function EditPourScreen({ route }) {
                 link.back();
               }}
             >
-              <AntDesign name="close" size={24} color="black" />
+              <AntDesign
+                name="close"
+                size={24}
+                color={TailwindColor["blue-500"]}
+              />
             </BorderlessButton>
           ),
         }}

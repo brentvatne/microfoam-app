@@ -1,6 +1,7 @@
 import { Alert, FlatList, Text, View } from "react-native";
-import { NativeStack, Link, useLink } from "expo-router";
+import { NativeStack, useLink } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
@@ -88,6 +89,7 @@ const renderItem = ({ item }) => <PourRow item={item} />;
 
 export default function LogListScreen() {
   const pours = PourStore.usePours();
+  const link = useLink();
 
   return (
     <>
@@ -95,16 +97,18 @@ export default function LogListScreen() {
         options={{
           title: "Pours",
           headerRight: () => (
-            <Link href="/new" style={{ marginRight: 16 }}>
-              <Text
-                style={{
-                  fontSize: FontSize.lg,
-                  color: TailwindColor["blue-600"],
-                }}
-              >
-                New
-              </Text>
-            </Link>
+            <BorderlessButton
+              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+              onPress={() => {
+                link.push("/new");
+              }}
+            >
+              <AntDesign
+                name="pluscircleo"
+                size={24}
+                color={TailwindColor["blue-500"]}
+              />
+            </BorderlessButton>
           ),
         }}
       />
