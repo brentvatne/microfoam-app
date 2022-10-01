@@ -106,8 +106,9 @@ export async function updateAsync(id: number, pour: PourRecord) {
       SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?
       WHERE id = ?;
   `,
-    [pour.id, pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id]
+    [pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id]
   );
+
 
   if (status === 1) {
     throw new Error(message);
@@ -130,7 +131,7 @@ type Dimensions =
   | { height: number };
 
 async function shrinkImageAsync(uri: string, dimensions: Dimensions) {
-  console.log(`resizing ${uri} to ${dimensions}`);
+  console.log(`resizing ${uri} to ${JSON.stringify(dimensions)}`);
   const result = await manipulateAsync(uri, [{ resize: dimensions }], {
     compress: 1,
     format: SaveFormat.JPEG,
