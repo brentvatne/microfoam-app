@@ -127,7 +127,7 @@ async function processImageAsync(pour: { uri: string; blurhash?: string }) {
     return { photoUrl: uri, blurhash: pour.blurhash };
   }
 
-  const resizedUri = await maybeShrinkImageAsync(uri, { width: 800 });
+  const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
   const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
   const thumbnail = await shrinkImageAsync(photoUrl, { width: 50, height: 50 });
   const blurhash = await Blurhash.encode(thumbnail, 4, 3);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { AnimatePresence, MotiView } from "moti";
-import FastImage from "react-native-fast-image";
+import FastImage, { ResizeMode } from "react-native-fast-image";
 
 import { isLocalFile } from "~/storage/fs";
 
@@ -10,10 +10,11 @@ type Props = {
   blurhash?: string;
   uri: string;
   containerStyle?: ViewProps["style"];
+  resizeMode?: ResizeMode;
 };
 
 export default function Photo(props: Props) {
-  const { blurhash, uri, containerStyle } = props;
+  const { blurhash, uri, resizeMode, containerStyle } = props;
   const [isLoaded, setIsLoaded] = useState(isLocalFile(uri));
 
   return (
@@ -22,6 +23,7 @@ export default function Photo(props: Props) {
         onLoad={() => setIsLoaded(true)}
         onError={() => console.log(`error loading image: ${uri}`)}
         source={{ uri }}
+        resizeMode={resizeMode}
         style={[StyleSheet.absoluteFill]}
       />
 

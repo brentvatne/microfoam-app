@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Text, TextInput, Image, ScrollView, View } from "react-native";
+import { Text, TextInput, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import DatePicker from "react-native-date-picker";
+import FastImage from "react-native-fast-image";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import { format } from "date-fns";
@@ -223,13 +224,13 @@ function PhotoPickerForm({ onChange, photoUri }) {
       }}
     >
       {photoUri ? (
-        <Image
+        <FastImage
           source={{ uri: photoUri }}
+          resizeMode="contain"
           style={{
             width: 200,
             height: 200,
             borderRadius: 10,
-            resizeMode: "contain",
           }}
         />
       ) : (
