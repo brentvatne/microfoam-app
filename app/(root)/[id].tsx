@@ -5,7 +5,6 @@ import { BorderlessButton } from "react-native-gesture-handler";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as PourStore from "../../storage/PourStore";
-import { maybeCopyPhotoToDocumentsAsync } from "../../storage/fs";
 import LogForm from "../../components/LogForm";
 
 export default function EditPourScreen({ route }) {
@@ -38,14 +37,12 @@ export default function EditPourScreen({ route }) {
       <LogForm
         initialData={pour}
         onSave={async (data) => {
-          const photoUri = await maybeCopyPhotoToDocumentsAsync(data.photoUri);
-
           // TODO: verify it was successful
-          PourStore.update(id, {
+          await PourStore.updateAsync(id, {
             id: id,
             date_time: data.dateTime.getTime(),
             rating: data.rating,
-            photo_url: photoUri,
+            photo_url: data.photoUri,
             notes: data.notes,
           });
 

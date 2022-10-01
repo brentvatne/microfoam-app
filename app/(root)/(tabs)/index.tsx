@@ -1,6 +1,8 @@
 import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
 import { Tabs, Link, useLink } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
+import { Blurhash } from "react-native-blurhash";
+
 import {
   TailwindColor,
   FontSize,
@@ -33,6 +35,18 @@ function PourRow({ item }) {
     >
       <View style={{ flexDirection: "row", marginBottom: Margin[4] }}>
         {/* TODO: cache the image locally if it's a remote image */}
+        {/* <View
+          style={{
+            borderRadius: 10,
+            overflow: "hidden",
+            marginRight: Margin[3],
+          }}
+        >
+          <Blurhash
+            blurhash={item.blurhash}
+            style={{ width: 100, height: 100 }}
+          />
+        </View> */}
         <Image
           source={{ uri: item.photo_url }}
           style={{

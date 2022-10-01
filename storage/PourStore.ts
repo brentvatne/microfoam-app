@@ -14,7 +14,12 @@
  */
 
 import { useSyncExternalStore, useCallback } from "react";
+import { Blurhash } from "react-native-blurhash";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
+
 import { exec } from "./db";
+import { maybeCopyPhotoToDocumentsAsync } from "./fs";
 
 export type PourRecord = {
   id: number;
@@ -22,6 +27,7 @@ export type PourRecord = {
   photo_url?: string;
   rating: number;
   notes?: string;
+  blurhash?: string;
 };
 
 /** TODO: js object that we map  */
@@ -39,7 +45,14 @@ export function toJSON() {
 }
 
 function toRow(pour) {
-  return [pour.id, pour.date_time, pour.photo_url, pour.rating, pour.notes];
+  return [
+    pour.id,
+    pour.date_time,
+    pour.photo_url,
+    pour.rating,
+    pour.notes,
+    pour.blurhash,
+  ];
 }
 
 export function loadFromJSON(json: string) {
@@ -57,8 +70,8 @@ export function loadFromJSON(json: string) {
   rows.forEach((row) => {
     const { status, message } = exec(
       `
-    INSERT INTO pours (id, date_time, photo_url, rating, notes)
-      VALUES (?, ?, ?, ?, ?);
+    INSERT INTO pours (id, date_time, photo_url, rating, notes, blurhash)
+      VALUES (?, ?, ?, ?, ?, ?);
   `,
       row
     );
@@ -84,14 +97,16 @@ export function all() {
 }
 
 // TODO: make pour accept Partial<PourRecord>
-export function update(id: number, pour: PourRecord) {
+export async function updateAsync(id: number, pour: PourRecord) {
+  const { photoUrl, blurhash } = await processImageAsync(pour.photo_url);
+
   const { status, message } = exec(
     `
     UPDATE pours
-      SET date_time = ?, photo_url = ?, rating = ?, notes = ?
+      SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?
       WHERE id = ?;
   `,
-    [pour.date_time, pour.photo_url, pour.rating, pour.notes, pour.id]
+    [pour.id, pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id]
   );
 
   if (status === 1) {
@@ -101,13 +116,45 @@ export function update(id: number, pour: PourRecord) {
   store.setState(() => all());
 }
 
-export function create(data: Omit<PourRecord, "id">) {
+async function processImageAsync(uri: string) {
+  const resizedUri = await maybeShrinkImageAsync(uri, { width: 800 });
+  const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
+  const thumbnail = await shrinkImageAsync(photoUrl, { width: 50, height: 50 });
+  const blurhash = await Blurhash.encode(thumbnail, 4, 3);
+  return { photoUrl, blurhash };
+}
+
+type Dimensions =
+  | { width: number; height: number }
+  | { width: number }
+  | { height: number };
+
+async function shrinkImageAsync(uri: string, dimensions: Dimensions) {
+  console.log(`resizing ${uri} to ${dimensions}`);
+  const result = await manipulateAsync(uri, [{ resize: dimensions }], {
+    compress: 1,
+    format: SaveFormat.JPEG,
+  });
+
+  return result.uri;
+}
+
+async function maybeShrinkImageAsync(uri: string, dimensions: Dimensions) {
+  if (uri.startsWith(FileSystem.cacheDirectory)) {
+    return shrinkImageAsync(uri, dimensions);
+  }
+
+  return uri;
+}
+
+export async function createAsync(data: Omit<PourRecord, "id">) {
+  const { photoUrl, blurhash } = await processImageAsync(data.photo_url);
   const { status, rows, message } = exec(
     `
-		INSERT INTO pours (date_time, photo_url, rating, notes)
-			VALUES (?, ?, ?, ?);
+		INSERT INTO pours (date_time, photo_url, rating, notes, blurhash)
+			VALUES (?, ?, ?, ?, ?);
 	`,
-    [data.date_time, data.photo_url, data.rating, data.notes]
+    [data.date_time, photoUrl, data.rating, data.notes, blurhash]
   );
 
   if (status === 1) {

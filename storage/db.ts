@@ -60,6 +60,7 @@ function _createSchema() {
       id INTEGER PRIMARY KEY,
       date_time INTEGER NOT NULL,
       photo_url TEXT,
+      blurhash TEXT,
       rating INTEGER NOT NULL,
       notes TEXT
     );

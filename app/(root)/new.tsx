@@ -5,7 +5,6 @@ import { BorderlessButton } from "react-native-gesture-handler";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as PourStore from "../../storage/PourStore";
-import { copyPhotoToDocumentsAsync } from "../../storage/fs";
 import LogForm from "../../components/LogForm";
 
 export default function NewPourScreen() {
@@ -34,15 +33,13 @@ export default function NewPourScreen() {
       />
       <LogForm
         onSave={async (data) => {
-          const photoUri = await copyPhotoToDocumentsAsync(data.photoUri);
-
-          // TODO: verify it was successful
-          PourStore.create({
-            date_time: data.dateTime.getTime(),
-            rating: data.rating,
-            photo_url: photoUri,
-            notes: data.notes,
-          });
+            // TODO: verify it was successful
+            await PourStore.createAsync({
+              date_time: data.dateTime.getTime(),
+              rating: data.rating,
+              photo_url: data.photoUri,
+              notes: data.notes,
+            });
 
           // Go back to tabs from the modal
           link.push("/");
