@@ -109,7 +109,6 @@ export async function updateAsync(id: number, pour: PourRecord) {
     [pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id]
   );
 
-
   if (status === 1) {
     throw new Error(message);
   }
@@ -219,4 +218,12 @@ const store = createStore();
 export function usePours() {
   let state = useStore((state) => state);
   return state;
+}
+
+export function usePour(pourId: string | number) {
+  // dumb, should always be number - but we get it from the route params which are strings
+  const id = parseInt(pourId.toString(), 10);
+  let state = usePours();
+  let pour = state.find((p) => p.id === id);
+  return pour;
 }

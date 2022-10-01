@@ -12,8 +12,8 @@ import {
   FontSize,
   Padding,
   Margin,
-} from "../../constants/styles";
-import { PourRecord } from "../../storage/PourStore";
+} from "~/constants/styles";
+import { PourRecord } from "~/storage/PourStore";
 
 /**
  * Form with:

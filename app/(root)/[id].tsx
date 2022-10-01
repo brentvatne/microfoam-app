@@ -4,8 +4,8 @@ import { useLink, NativeStack } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-import * as PourStore from "../../storage/PourStore";
-import LogForm from "../../components/LogForm";
+import * as PourStore from "~/storage/PourStore";
+import LogForm from "~/components/LogForm";
 
 export default function EditPourScreen({ route }) {
   const id = route.params?.id;
@@ -47,7 +47,7 @@ export default function EditPourScreen({ route }) {
           });
 
           // Go back to tabs from the modal
-          link.push("/");
+          link.back();
         }}
       />
 

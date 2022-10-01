@@ -6,10 +6,10 @@ import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
 import { v4 as uuid } from "uuid";
 
-import * as db from "../../../storage/db";
-import * as PourStore from "../../../storage/PourStore";
-import { supabase } from "../../../storage/supabase";
-import { FontSize, Margin, TailwindColor } from "../../../constants/styles";
+import * as db from "~/storage/db";
+import * as PourStore from "~/storage/PourStore";
+import { supabase } from "~/storage/supabase";
+import { FontSize, Margin, TailwindColor } from "~/constants/styles";
 
 export default function Settings() {
   return (

@@ -1,22 +1,18 @@
 import { Alert, Pressable, FlatList, Image, Text, View } from "react-native";
-import { Tabs, Link, useLink } from "expo-router";
+import { NativeStack, Link, useLink } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
-import { Blurhash } from "react-native-blurhash";
 
-import {
-  TailwindColor,
-  FontSize,
-  Margin,
-  Padding,
-} from "../../../constants/styles";
-import * as PourStore from "../../../storage/PourStore";
+import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
+import * as PourStore from "~/storage/PourStore";
 
 function PourRow({ item }) {
   const link = useLink();
 
   return (
     <Pressable
-      onPress={() => link.push(`/${item.id}`)}
+      onPress={() => {
+        link.push(`/details/${item.id}`);
+      }}
       onLongPress={() => {
         // TODO: bottom sheet
         Alert.alert(
@@ -101,8 +97,9 @@ export default function LogListScreen() {
 
   return (
     <>
-      <Tabs.Screen
+      <NativeStack.Screen
         options={{
+          title: "Pours", 
           headerRight: () => (
             <Link href="/new" style={{ marginRight: 16 }}>
               <Text

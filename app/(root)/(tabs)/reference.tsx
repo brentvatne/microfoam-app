@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { TailwindColor, FontSize } from "../../../constants/styles";
+import { TailwindColor, FontSize } from "~/constants/styles";
 
 export default function Reference() {
   return (
