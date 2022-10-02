@@ -1,6 +1,6 @@
 import { NativeStack, useLink, Children } from "expo-router";
-import { format } from "date-fns";
 import { BorderlessButton } from "react-native-gesture-handler";
+import format from "date-fns/format";
 
 import { TailwindColor } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";

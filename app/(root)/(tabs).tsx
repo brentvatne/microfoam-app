@@ -25,7 +25,7 @@ export default function TabsContainer() {
           }}
         />
         <Tabs.Screen
-          name="(settings)"
+          name="settings"
           options={{
             title: "Settings",
             headerShown: false,

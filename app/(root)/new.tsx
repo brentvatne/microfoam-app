@@ -48,7 +48,7 @@ export default function NewPourScreen() {
           });
 
           // Go back to tabs from the modal
-          link.push("/");
+          link.back();
         }}
       />
 

@@ -1,4 +1,5 @@
 import * as FileSystem from "expo-file-system";
+import assert from "assert";
 
 export const PHOTOS_DIRECTORY = `${FileSystem.documentDirectory}photos`;
 
@@ -6,16 +7,28 @@ export function isLocalFile(uri: string) {
   return !uri.startsWith("http");
 }
 
+export async function getLocalPhotoInfoAsync(uri: string) {
+  assert(isLocalFile(uri), "Expected local file");
+
+  const localPath = getPathToPhoto(uri);
+  const info = await FileSystem.getInfoAsync(localPath);
+  return { size: info.size, modificationTime: info.modificationTime };
+}
+
 export function getPathToPhoto(photoUrlOrFilename: string) {
-  if (isLocalFile(photoUrlOrFilename)) {
-    if (photoUrlOrFilename.startsWith(FileSystem.cacheDirectory)) {
-      return photoUrlOrFilename;
-    } else {
-      return `${PHOTOS_DIRECTORY}/${photoUrlOrFilename}`;
-    }
-  } else {
+  if (
+    photoUrlOrFilename.startsWith(FileSystem.cacheDirectory) ||
+    !isLocalFile(photoUrlOrFilename)
+  ) {
     return photoUrlOrFilename;
   }
+
+  let filename = photoUrlOrFilename;
+  if (photoUrlOrFilename.startsWith("file://")) {
+    filename = photoUrlOrFilename.split("/").pop();
+  }
+
+  return `${PHOTOS_DIRECTORY}/${filename}`;
 }
 
 export async function ensureDirectoryExistsAsync(directory) {

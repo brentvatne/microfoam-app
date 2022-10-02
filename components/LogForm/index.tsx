@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
-import { format } from "date-fns";
+import format from "date-fns/format";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { TailwindColor, FontSize, Padding, Margin } from "~/constants/styles";

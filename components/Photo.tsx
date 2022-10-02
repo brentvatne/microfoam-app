@@ -20,8 +20,6 @@ export default function Photo(props: Props) {
 
   let maybeLocalUri = uri;
 
-	console.log(maybeLocalUri);
-
   if (isLocalFile(uri) && !uri.startsWith(FileSystem.cacheDirectory)) {
 		let filename = uri;
 		if (uri.startsWith('file://')) {
