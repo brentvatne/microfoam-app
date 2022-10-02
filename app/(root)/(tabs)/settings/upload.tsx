@@ -147,7 +147,7 @@ function EmptyState() {
             color: TailwindColor["green-800"],
           }}
         >
-          ✅ All photos are already synced!
+          ✅ All photos are synced!
         </Text>
       </View>
     </View>
