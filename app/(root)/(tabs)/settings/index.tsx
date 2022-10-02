@@ -1,4 +1,4 @@
-import { ScrollView, Alert, Text, StyleSheet } from "react-native";
+import { ScrollView, Alert, Text, StyleSheet, View } from "react-native";
 import * as Application from "expo-application";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
@@ -13,8 +13,6 @@ import Button from "~/components/Button";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
 
 export default function Settings() {
-  const link = useLink();
-
   return (
     <>
       <NativeStack.Screen options={{ title: "Settings" }} />
@@ -29,10 +27,7 @@ export default function Settings() {
           Data Management
         </Text>
 
-        <Button
-          title="Upload photos"
-          onPress={() => link.push("/settings/upload")}
-        />
+        <UploadButton />
 
         <Button
           title="Export data as JSON"
@@ -141,6 +136,44 @@ export default function Settings() {
         </Text>
       </ScrollView>
     </>
+  );
+}
+
+function UploadButton() {
+  const link = useLink();
+  const pours = PourStore.usePours();
+  const numPoursWithLocalPhotos = pours.filter((p) =>
+    isLocalFile(p.photo_url)
+  ).length;
+
+  const word = numPoursWithLocalPhotos === 1 ? "photo" : "photos";
+  const message =
+    numPoursWithLocalPhotos === 0
+      ? `✅ All ${word} are synced`
+      : `⚠️ ${numPoursWithLocalPhotos} ${word} not yet synced`;
+
+  return (
+    <View style={{ flexDirection: "column", alignItems: "center" }}>
+      <Button
+        title="Upload photos"
+        onPress={() => link.push("/settings/upload")}
+      />
+
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 3,
+        }}
+      >
+        <Text
+          style={{ marginTop: -10, marginBottom: 15, fontSize: FontSize.lg }}
+        >
+          {message}
+        </Text>
+      </View>
+    </View>
   );
 }
 
