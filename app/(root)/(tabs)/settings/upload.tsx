@@ -16,7 +16,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
-import { supabase } from "~/storage/supabase";
+import { supabase, useAuthSession } from "~/storage/supabase";
 import {
   getLocalPhotoInfoAsync,
   getPathToPhoto,
@@ -26,6 +26,7 @@ import {
 const PhotoRow = ({ item, uploadRequested }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
+  const session = useAuthSession();
 
   useEffect(() => {
     async function getFileInfoAsync() {
@@ -51,7 +52,13 @@ const PhotoRow = ({ item, uploadRequested }) => {
 
   useEffect(() => {
     if (isUploading) {
-      syncPhotoAsync(item);
+      if (!session) {
+        alert("You need to be signed in to upload photos.");
+        setIsUploading(false);
+        return;
+      }
+
+      syncPhotoAsync(item, session.user.id);
     }
   }, [isUploading]);
 
@@ -160,6 +167,7 @@ export default function Upload() {
   const poursWithLocalPhotos = pours.filter((pour) =>
     isLocalFile(pour.photo_url)
   );
+  const session = useAuthSession();
 
   useEffect(() => {
     if (uploadAll && poursWithLocalPhotos.length === 0) {
@@ -192,7 +200,13 @@ export default function Upload() {
         }}
       >
         <RectButton
-          onPress={() => setUploadAll(true)}
+          onPress={() => {
+            if (!session) {
+              alert("You need to be signed in to upload photos.");
+              return;
+            }
+            setUploadAll(true);
+          }}
           enabled={poursWithLocalPhotos.length > 0 && !uploadAll}
           style={{
             flex: 1,
@@ -223,18 +237,18 @@ export default function Upload() {
   );
 }
 
-async function syncPhotoAsync(pour: PourStore.PourRecord) {
+async function syncPhotoAsync(pour: PourStore.PourRecord, userId: string) {
   try {
-    const url = await uploadImageAsync(pour.photo_url);
+    const url = await uploadImageAsync(pour.photo_url, userId);
     PourStore.updateAsync(pour.id, { ...pour, photo_url: url });
   } catch (e) {
     alert(e.message);
   }
 }
 
-async function uploadImageAsync(filename: string) {
+async function uploadImageAsync(filename: string, userId: string) {
   const extension = filename.split(".").pop();
-  const destination = `${uuid()}.${extension}`;
+  const destination = `${userId}/${uuid()}.${extension}`;
 
   const formData = new FormData();
   const photo = {
@@ -262,60 +276,3 @@ async function uploadImageAsync(filename: string) {
 
   return publicUrl;
 }
-
-// function ImageUploadTool() {
-//   const [isUploading, setIsUploading] = useState(false);
-//   const pours = PourStore.usePours();
-//   const numPoursWithLocalPhotos = pours.filter((p) =>
-//     isLocalFile(p.photo_url)
-//   ).length;
-
-//   const word = numPoursWithLocalPhotos === 1 ? "photo" : "photos";
-
-//   const message =
-//     numPoursWithLocalPhotos === 0
-//       ? `✅ All ${word} are synced`
-//       : isUploading
-//       ? `Uploading... ${numPoursWithLocalPhotos} ${word} remaining`
-//       : `⚠️ ${numPoursWithLocalPhotos} ${word} not yet synced`;
-
-//   return (
-//     <View style={{ flexDirection: "column", alignItems: "center" }}>
-//       <Button
-//         title="Upload photos"
-//         onPress={async () => {
-//           try {
-//             setIsUploading(true);
-//             await uploadImagesAsync();
-//           } catch (e) {
-//             alert(e.message);
-//           } finally {
-//             setIsUploading(false);
-//           }
-//         }}
-//         disabled={isUploading || numPoursWithLocalPhotos === 0}
-//       />
-
-//       <View
-//         style={{
-//           flexDirection: "row",
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginTop: 3,
-//         }}
-//       >
-//         {isUploading ? (
-//           <ActivityIndicator
-//             size="small"
-//             style={{ marginTop: -5, marginRight: 5, alignSelf: "flex-start" }}
-//           />
-//         ) : null}
-//         <Text
-//           style={{ marginTop: -5, marginBottom: 15, fontSize: FontSize.lg }}
-//         >
-//           {message}
-//         </Text>
-//       </View>
-//     </View>
-//   );
-// }

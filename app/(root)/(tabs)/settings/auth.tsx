@@ -75,7 +75,7 @@ export default function Auth() {
               autoCapitalize="none"
               keyboardType="email-address"
               style={{
-                backgroundColor: TailwindColor.white,
+                backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
                 width: 350,
                 padding: 5,
@@ -92,9 +92,10 @@ export default function Auth() {
                 try {
                   const result = await signInAsync(email);
                   // state machine -- email, loading, waiting for otp, ...
-                  setIsWaitingForOtp(true);
                   if (result.error) {
                     alert(`Error: "${result.error}"`);
+                  } else {
+                    setIsWaitingForOtp(true);
                   }
                 } catch (e) {
                   alert(`Error: "${e.message}"`);
@@ -112,7 +113,7 @@ export default function Auth() {
               onChangeText={(text) => setOtp(text)}
               autoCapitalize="none"
               style={{
-                backgroundColor: TailwindColor.white,
+                backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
                 width: 350,
                 padding: 5,
