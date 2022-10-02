@@ -151,6 +151,7 @@ export default function LogForm({
             backgroundColor: TailwindColor["gray-100"],
             paddingHorizontal: 10,
             paddingTop: 10,
+            fontSize: FontSize.lg,
             textAlignVertical: "top",
             borderRadius: 5,
           }}
@@ -226,11 +227,12 @@ function PhotoPickerForm({ onChange, photoUri }) {
       {photoUri ? (
         <Photo
           uri={photoUri}
-          resizeMode="contain"
+          resizeMode="cover"
           containerStyle={{
             width: 200,
             height: 200,
-            borderRadius: 10,
+            borderRadius: 5,
+            overflow: 'hidden',
           }}
         />
       ) : (

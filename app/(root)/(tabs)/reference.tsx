@@ -11,7 +11,11 @@ export default function Reference() {
         backgroundColor: TailwindColor.white,
       }}
     >
-      <Text style={{ fontSize: FontSize.xl }}>Reference goes here</Text>
+      <Text style={{ fontSize: FontSize.xl }}>Monks head</Text>
+      <Text style={{ fontSize: FontSize.xl }}>Heart</Text>
+      <Text style={{ fontSize: FontSize.xl }}>Tulip</Text>
+      <Text style={{ fontSize: FontSize.xl }}>Rosetta</Text>
+      <Text style={{ fontSize: FontSize.xl }}>Swan</Text>
     </View>
   );
 }

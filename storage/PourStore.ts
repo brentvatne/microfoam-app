@@ -103,7 +103,7 @@ async function processImageAsync(pour: { uri: string; blurhash?: string }) {
   const { uri } = pour;
 
   // Bail out if file is remote
-  if (!isLocalFile(uri)) {
+  if (!uri.startsWith(FileSystem.cacheDirectory)) {
     return { photoUrl: uri, blurhash: pour.blurhash };
   }
 

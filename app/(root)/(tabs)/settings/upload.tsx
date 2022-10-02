@@ -161,6 +161,12 @@ export default function Upload() {
     isLocalFile(pour.photo_url)
   );
 
+  useEffect(() => {
+    if (uploadAll && poursWithLocalPhotos.length === 0) {
+      setUploadAll(false);
+    }
+  }, [uploadAll, poursWithLocalPhotos.length]);
+
   const renderItem = ({ item }) => (
     <PhotoRow item={item} uploadRequested={uploadAll} />
   );
