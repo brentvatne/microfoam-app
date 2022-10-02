@@ -11,6 +11,52 @@ import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
+import { useAuthSession } from "~/storage/supabase";
+
+function AuthButton() {
+  const session = useAuthSession();
+  const link = useLink();
+
+  if (session) {
+    return (
+      <View style={{ flexDirection: "column", alignItems: "center" }}>
+        <Button
+          title="Manage session"
+          onPress={() => link.push("/settings/auth")}
+        />
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 3,
+          }}
+        >
+          <Text
+            numberOfLines={1}
+            style={{
+              marginTop: -10,
+              marginBottom: 15,
+              fontSize: FontSize.lg,
+              color: TailwindColor["gray-600"],
+            }}
+          >
+            Signed in as{" "}
+            <Text style={{ fontWeight: "bold" }}>{session.user.email}</Text>
+          </Text>
+        </View>
+      </View>
+    );
+  } else {
+    return (
+      <Button
+        title="Sign in"
+        onPress={() => link.push("/settings/auth")}
+      />
+    );
+  }
+}
 
 export default function Settings() {
   return (
@@ -26,6 +72,8 @@ export default function Settings() {
         <Text style={[styles.header, { marginTop: Margin[7] }]}>
           Data Management
         </Text>
+
+        <AuthButton />
 
         <UploadButton />
 
@@ -168,7 +216,12 @@ function UploadButton() {
         }}
       >
         <Text
-          style={{ marginTop: -10, marginBottom: 15, fontSize: FontSize.lg }}
+          style={{
+            marginTop: -10,
+            marginBottom: 15,
+            fontSize: FontSize.lg,
+            color: TailwindColor["gray-600"],
+          }}
         >
           {message}
         </Text>
