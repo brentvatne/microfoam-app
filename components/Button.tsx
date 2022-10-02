@@ -13,7 +13,7 @@ export default function Button({
 }) {
   return (
     <BorderlessButton
-      hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+      hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
       enabled={!disabled}
       onPress={onPress}
     >

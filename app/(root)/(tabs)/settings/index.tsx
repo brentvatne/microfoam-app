@@ -7,6 +7,7 @@ import * as Updates from "expo-updates";
 import { NativeStack, useLink } from "expo-router";
 
 import * as db from "~/storage/db";
+import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
@@ -35,7 +36,7 @@ export default function Settings() {
 
         <Button
           title="Export data as JSON"
-          onPress={() => exportDatabaseAsync()}
+          onPress={() => maybeExportDatabaseAsync()}
         />
         <Button
           title="Import database from JSON"
@@ -155,6 +156,33 @@ async function importDatabaseAsync() {
     } catch (e) {
       alert("Import failed");
     }
+  }
+}
+
+async function maybeExportDatabaseAsync() {
+  const pours = PourStore.all();
+  const poursWithLocalPhotos = pours.filter((pour) =>
+    isLocalFile(pour.photo_url)
+  );
+
+  if (poursWithLocalPhotos.length > 0) {
+    Alert.alert(
+      `${poursWithLocalPhotos.length} ${
+        poursWithLocalPhotos.length === 1 ? "photo is" : "photos are"
+      } not uploaded yet`,
+      "If you proceed with the export, these photos won't point to publicly accessible web URLs. Do you want to proceed anyways?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        { text: "Proceed with export", onPress: () => exportDatabaseAsync() },
+      ],
+      { cancelable: true }
+    );
+    return;
+  } else {
+    exportDatabaseAsync();
   }
 }
 
