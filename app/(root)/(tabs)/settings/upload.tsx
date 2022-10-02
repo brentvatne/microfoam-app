@@ -11,12 +11,13 @@ import { NativeStack } from "expo-router";
 import { RectButton } from "react-native-gesture-handler";
 import prettyBytes from "pretty-bytes";
 import format from "date-fns/format";
+import * as FileSystem from "expo-file-system";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
-import { supabase } from "~/storage/supabase";
+import { supabase, supabaseAnonKey, supabaseUrl } from "~/storage/supabase";
 import {
   getLocalPhotoInfoAsync,
   getPathToPhoto,
@@ -57,7 +58,6 @@ const PhotoRow = ({ item, uploadRequested }) => {
 
   // Trigger uploading from the parent component
   useEffect(() => {
-    console.log(uploadRequested);
     if (uploadRequested && !isUploading) {
       setIsUploading(true);
     }
@@ -263,6 +263,60 @@ async function uploadImageAsync(filename: string) {
   return publicUrl;
 }
 
+/** Aborted code that might be interesting later */
+
+async function uploadImageNativeAsync(filename: string) {
+  const extension = filename.split(".").pop();
+  const destination = `${uuid()}.${extension}`;
+  const fileUri = getPathToPhoto(filename);
+
+  const bucket = "photos";
+  const path = `${destination}`;
+  const url = `${supabaseUrl}/storage/v1/object/${bucket}/${path}`;
+  const headers = {
+    Authorization: `Bearer ${supabaseAnonKey}`,
+    apikey: `${supabaseAnonKey}`,
+  };
+
+  // Progress callback never fires :(
+  // return new Promise((resolve, reject) => {
+  //   FileSystem.createUploadTask(
+  //     url,
+  //     fileUri,
+  //     {
+  //       sessionType: FileSystem.FileSystemSessionType.FOREGROUND,
+  //       headers,
+  //       httpMethod: "POST",
+  //       fieldName: "file",
+  //     },
+  //     (data) => {
+  //       console.log("cb");
+  //       console.log(JSON.stringify(data));
+  //       if (data.totalByteSent === data.totalBytesExpectedToSend) {
+  //         resolve(url);
+  //       }
+  //     }
+  //   );
+  // });
+
+  // This works but what's the point if we can't get progress? Can just use
+  // supabase's upload instead
+  // const response = await FileSystem.uploadAsync(url, fileUri, {
+  //   sessionType: FileSystem.FileSystemSessionType.FOREGROUND,
+  //   fieldName: "file",
+  //   headers,
+  //   httpMethod: "POST",
+  // });
+
+  // console.log(response.status);
+  // console.log(response.body);
+  // if (response.status !== 200) {
+  //   throw new Error("Failed to upload photo");
+  // }
+  // return url;
+}
+
+
 // function ImageUploadTool() {
 //   const [isUploading, setIsUploading] = useState(false);
 //   const pours = PourStore.usePours();
@@ -279,43 +333,43 @@ async function uploadImageAsync(filename: string) {
 //       ? `Uploading... ${numPoursWithLocalPhotos} ${word} remaining`
 //       : `⚠️ ${numPoursWithLocalPhotos} ${word} not yet synced`;
 
-//   return (
-//     <View style={{ flexDirection: "column", alignItems: "center" }}>
-//       <Button
-//         title="Upload photos"
-//         onPress={async () => {
-//           try {
-//             setIsUploading(true);
-//             await uploadImagesAsync();
-//           } catch (e) {
-//             alert(e.message);
-//           } finally {
-//             setIsUploading(false);
-//           }
-//         }}
-//         disabled={isUploading || numPoursWithLocalPhotos === 0}
-//       />
+  return (
+    <View style={{ flexDirection: "column", alignItems: "center" }}>
+      <Button
+        title="Upload photos"
+        onPress={async () => {
+          try {
+            setIsUploading(true);
+            await uploadImagesAsync();
+          } catch (e) {
+            alert(e.message);
+          } finally {
+            setIsUploading(false);
+          }
+        }}
+        disabled={isUploading || numPoursWithLocalPhotos === 0}
+      />
 
-//       <View
-//         style={{
-//           flexDirection: "row",
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginTop: 3,
-//         }}
-//       >
-//         {isUploading ? (
-//           <ActivityIndicator
-//             size="small"
-//             style={{ marginTop: -5, marginRight: 5, alignSelf: "flex-start" }}
-//           />
-//         ) : null}
-//         <Text
-//           style={{ marginTop: -5, marginBottom: 15, fontSize: FontSize.lg }}
-//         >
-//           {message}
-//         </Text>
-//       </View>
-//     </View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 3,
+        }}
+      >
+        {isUploading ? (
+          <ActivityIndicator
+            size="small"
+            style={{ marginTop: -5, marginRight: 5, alignSelf: "flex-start" }}
+          />
+        ) : null}
+        <Text
+          style={{ marginTop: -5, marginBottom: 15, fontSize: FontSize.lg }}
+        >
+          {message}
+        </Text>
+      </View>
+    </View>
 //   );
 // }
