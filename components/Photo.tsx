@@ -21,11 +21,11 @@ export default function Photo(props: Props) {
   let maybeLocalUri = uri;
 
   if (isLocalFile(uri) && !uri.startsWith(FileSystem.cacheDirectory)) {
-		let filename = uri;
-		if (uri.startsWith('file://')) {
-			const uriParts = uri.split("/");
-			filename = uriParts[uriParts.length - 1];
-		}
+    let filename = uri;
+    if (uri.startsWith("file://")) {
+      const uriParts = uri.split("/");
+      filename = uriParts[uriParts.length - 1];
+    }
 
     maybeLocalUri = `${PHOTOS_DIRECTORY}/${filename}`;
   }

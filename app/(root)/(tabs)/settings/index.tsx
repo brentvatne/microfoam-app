@@ -50,10 +50,7 @@ function AuthButton() {
     );
   } else {
     return (
-      <Button
-        title="Sign in"
-        onPress={() => link.push("/settings/auth")}
-      />
+      <Button title="Sign in" onPress={() => link.push("/settings/auth")} />
     );
   }
 }

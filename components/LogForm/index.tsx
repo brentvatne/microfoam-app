@@ -232,7 +232,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
             width: 200,
             height: 200,
             borderRadius: 5,
-            overflow: 'hidden',
+            overflow: "hidden",
           }}
         />
       ) : (

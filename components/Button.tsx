@@ -23,7 +23,7 @@ export default function Button({
             ? TailwindColor["gray-500"]
             : TailwindColor["blue-500"],
           fontSize: FontSize.xl,
-					marginTop: Margin[1],
+          marginTop: Margin[1],
           marginBottom: Margin[4],
           textAlign: "center",
         }}
