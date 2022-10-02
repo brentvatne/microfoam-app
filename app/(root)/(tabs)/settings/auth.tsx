@@ -73,6 +73,7 @@ export default function Auth() {
               placeholder="person@example.com"
               onChangeText={(text) => setEmail(text)}
               autoCapitalize="none"
+              autoComplete="email"
               keyboardType="email-address"
               style={{
                 backgroundColor: TailwindColor["gray-100"],
