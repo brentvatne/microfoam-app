@@ -20,11 +20,15 @@ export default function Photo(props: Props) {
 
   let maybeLocalUri = uri;
 
-  // Documents directory can change...
-  // TODO: don't save full path, only save relative path
+	console.log(maybeLocalUri);
+
   if (isLocalFile(uri) && !uri.startsWith(FileSystem.cacheDirectory)) {
-    const uriParts = uri.split("/");
-    const filename = uriParts[uriParts.length - 1];
+		let filename = uri;
+		if (uri.startsWith('file://')) {
+			const uriParts = uri.split("/");
+			filename = uriParts[uriParts.length - 1];
+		}
+
     maybeLocalUri = `${PHOTOS_DIRECTORY}/${filename}`;
   }
 

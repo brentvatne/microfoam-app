@@ -1,18 +1,3 @@
-/**
- * PourStore.create({ date: '...', rating: 1, photoUrl: '..', notes: '...' })
- * PourStore.all();
- * PourStore.first(10, { order: 'asc' });
- * PourStore.last(10);
- * PourStore.best(10);
- * PourStore.worst(10);
- * PourStore.improvementNotes(10);
- *
- * const pours = usePours(PourStore.all);
- * -> when `create`  or update, invalidate and get them all again
- *
- * PourStore.update(id, pour)
- */
-
 import { useSyncExternalStore, useCallback } from "react";
 import { Blurhash } from "react-native-blurhash";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
@@ -24,16 +9,11 @@ import { maybeCopyPhotoToDocumentsAsync, isLocalFile } from "./fs";
 export type PourRecord = {
   id: number;
   date_time: number;
+  /* Web URL or local filename (not full path) from documents directory */
   photo_url?: string;
   rating: number;
   notes?: string;
   blurhash?: string;
-};
-
-/** TODO: js object that we map  */
-type Pour = {
-  id: number;
-  date_time: Date;
 };
 
 export function toJSON() {
@@ -44,7 +24,7 @@ export function toJSON() {
   );
 }
 
-function toRow(pour) {
+function toRow(pour: PourRecord) {
   return [
     pour.id,
     pour.date_time,
@@ -128,10 +108,13 @@ async function processImageAsync(pour: { uri: string; blurhash?: string }) {
   }
 
   const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
-  const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
-  const thumbnail = await shrinkImageAsync(photoUrl, { width: 50, height: 50 });
+  const thumbnail = await shrinkImageAsync(uri, { width: 50, height: 50 });
+
   const blurhash = await Blurhash.encode(thumbnail, 4, 3);
-  return { photoUrl, blurhash };
+  const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
+  const filename = photoUrl.split("/").pop();
+
+  return { photoUrl: filename, blurhash };
 }
 
 type Dimensions =

@@ -8,8 +8,8 @@ export default function TabsContainer() {
         <Tabs.Screen
           name="(home)"
           options={{
-            headerShown: false,
             title: "Pours",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => {
               return <AntDesign name="rest" size={size} color={color} />;
             },
@@ -25,9 +25,10 @@ export default function TabsContainer() {
           }}
         />
         <Tabs.Screen
-          name="settings"
+          name="(settings)"
           options={{
             title: "Settings",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => {
               return <AntDesign name="setting" size={size} color={color} />;
             },

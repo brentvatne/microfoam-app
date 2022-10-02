@@ -6,6 +6,18 @@ export function isLocalFile(uri: string) {
   return !uri.startsWith("http");
 }
 
+export function getPathToPhoto(photoUrlOrFilename: string) {
+  if (isLocalFile(photoUrlOrFilename)) {
+    if (photoUrlOrFilename.startsWith(FileSystem.cacheDirectory)) {
+      return photoUrlOrFilename;
+    } else {
+      return `${PHOTOS_DIRECTORY}/${photoUrlOrFilename}`;
+    }
+  } else {
+    return photoUrlOrFilename;
+  }
+}
+
 export async function ensureDirectoryExistsAsync(directory) {
   const info = await FileSystem.getInfoAsync(directory);
   if (!info.exists) {
@@ -28,5 +40,6 @@ export async function maybeCopyPhotoToDocumentsAsync(uri) {
   if (uri.startsWith(PHOTOS_DIRECTORY)) {
     return uri;
   }
+
   return copyPhotoToDocumentsAsync(uri);
 }
