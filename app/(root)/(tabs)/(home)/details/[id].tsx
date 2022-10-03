@@ -1,8 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useEffect } from "react";
 import { Blurhash } from "react-native-blurhash";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { useLink } from "expo-router";
 
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
@@ -89,7 +87,7 @@ export default function ShowPour({ route }) {
               color: TailwindColor["gray-700"],
             }}
           >
-            <Text>Pattern:</Text> <Text>{pour.pattern ?? "Formless blob"}</Text>
+            <Text>{pour.pattern ?? "Formless blob"}</Text>
           </Text>
           <Text
             style={{

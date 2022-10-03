@@ -376,7 +376,11 @@ function PatternPicker({
               flexDirection: "row",
               justifyContent: "space-between",
               paddingHorizontal: Padding[5],
-              paddingVertical: Padding[2],
+              paddingVertical: Padding[1],
+              paddingBottom: Padding[3],
+              marginBottom: Margin[3],
+              borderBottomWidth: 1,
+              borderBottomColor: TailwindColor["gray-200"],
             }}
           >
             <Text style={styles.heading}>Pattern</Text>

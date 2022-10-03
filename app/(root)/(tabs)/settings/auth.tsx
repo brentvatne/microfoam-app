@@ -49,6 +49,7 @@ export default function Auth() {
         {!isWaitingForOtp && !session && (
           <View style={styles.container}>
             <TextInput
+              autoFocus
               value={email}
               placeholder="person@example.com"
               onChangeText={(text) => setEmail(text)}
@@ -91,6 +92,7 @@ export default function Auth() {
             <TextInput
               value={otp}
               placeholder="123456"
+              autoFocus
               onChangeText={(text) => setOtp(text)}
               keyboardType="number-pad"
               autoCapitalize="none"
