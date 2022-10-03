@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, TextInput, ScrollView, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
@@ -59,6 +60,9 @@ export default function LogForm({
         <PhotoPickerForm
           onChange={(data) => {
             setPhotoUri(data.uri);
+            if (data.creationTime) {
+              setDateTime(data.creationTime);
+            }
           }}
           photoUri={photoUri}
         />
@@ -196,7 +200,14 @@ function maybeDate(date: number | undefined) {
 }
 
 function PhotoPickerForm({ onChange, photoUri }) {
+  const [response, requestPermission] = MediaLibrary.usePermissions();
+
   const launchPickerAsync = async () => {
+    // Only required in order to get back the assetId from the ImagePicker response
+    if (response?.status === MediaLibrary.PermissionStatus.UNDETERMINED) {
+      requestPermission();
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       selectionLimit: 1,
@@ -204,14 +215,31 @@ function PhotoPickerForm({ onChange, photoUri }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
-    if (result.cancelled === false) {
-      onChange({
-        uri: result.uri,
-        width: result.width,
-        height: result.height,
-        exif: result.exif,
-      });
+    if (result.cancelled === true) {
+      return;
     }
+
+    let creationTime = null;
+    if (result.assetId) {
+      try {
+        const assetInfo = await MediaLibrary.getAssetInfoAsync(result.assetId);
+        if (assetInfo?.creationTime) {
+          creationTime = new Date(assetInfo.creationTime);
+        }
+      } catch (e) {
+        console.warn(
+          `Unable to get asset info for ID "${result.assetId}": ${e.message}`
+        );
+      }
+    }
+
+    onChange({
+      uri: result.uri,
+      creationTime,
+      width: result.width,
+      height: result.height,
+      exif: result.exif,
+    });
   };
 
   return (
