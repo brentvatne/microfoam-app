@@ -1,6 +1,8 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect } from "react";
 import { Blurhash } from "react-native-blurhash";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { useLink } from 'expo-router';
 
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
@@ -10,6 +12,10 @@ export default function ShowPour({ route }) {
   const { id } = route.params;
   const frame = useSafeAreaFrame();
   const pour = PourStore.usePour(id);
+
+  if (!pour) {
+    return null;
+  }
 
   const targetImageWidth = frame.width > 400 ? 400 : frame.width;
   const targetImageHeight = Math.min(400, targetImageWidth);

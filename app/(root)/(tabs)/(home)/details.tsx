@@ -14,7 +14,7 @@ export default function DetailsLayout({ route }) {
     <>
       <NativeStack.Screen
         options={{
-          title: format(new Date(pour.date_time), "PPPP"),
+          title: pour?.date_time ? format(new Date(pour.date_time), "PPPP") : '-',
           headerRight: () => (
             <BorderlessButton
               hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}

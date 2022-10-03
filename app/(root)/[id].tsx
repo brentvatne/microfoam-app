@@ -9,10 +9,10 @@ import LogForm from "~/components/LogForm";
 import { TailwindColor } from "~/constants/styles";
 
 export default function EditPourScreen({ route }) {
-  const id = route.params?.id;
+  const id = parseInt(route.params?.id, 10);
   const link = useLink();
   const pours = PourStore.all();
-  const pour = pours.find((p) => p.id === parseInt(id, 10));
+  const pour = pours.find((p) => p.id === id);
 
   return (
     <>
@@ -45,7 +45,7 @@ export default function EditPourScreen({ route }) {
         onSave={async (data) => {
           // TODO: verify it was successful
           await PourStore.updateAsync(id, {
-            id: id,
+            id,
             date_time: data.dateTime.getTime(),
             rating: data.rating,
             photo_url: data.photoUri,
@@ -54,6 +54,10 @@ export default function EditPourScreen({ route }) {
 
           // Go back to tabs from the modal
           link.back();
+        }}
+        onDelete={() => {
+          PourStore.destroy({ id });
+          link.push('/');
         }}
       />
 

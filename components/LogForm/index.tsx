@@ -11,6 +11,7 @@ import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { TailwindColor, FontSize, Padding, Margin } from "~/constants/styles";
 import { PourRecord } from "~/storage/PourStore";
 import Photo from "~/components/Photo";
+import BlockButton from "~/components/BlockButton";
 
 /**
  * Form with:
@@ -29,9 +30,11 @@ type Data = {
 
 export default function LogForm({
   onSave,
+  onDelete,
   initialData,
 }: {
   onSave: (data: Data) => void;
+  onDelete?: () => void;
   initialData?: PourRecord;
 }) {
   const [dateTimePickerVisible, setDateTimePickerVisible] = useState(false);
@@ -157,8 +160,8 @@ export default function LogForm({
 
         <View style={{ marginBottom: Margin[4] }} />
 
-        <BorderlessButton
-          borderless={false}
+        <BlockButton
+          label="Save"
           onPress={() => {
             if (!photoUri) {
               alert("A photo is required. That is the whole point.");
@@ -166,26 +169,16 @@ export default function LogForm({
             }
             onSave({ dateTime, rating, photoUri, notes });
           }}
-        >
-          <View
-            style={{
-              width: "100%",
-              padding: Padding[4],
-              backgroundColor: TailwindColor["blue-100"],
-              borderRadius: 10,
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: TailwindColor["blue-500"],
-                fontSize: FontSize.xl,
-              }}
-            >
-              Save
-            </Text>
-          </View>
-        </BorderlessButton>
+        />
+
+        {onDelete && (
+          <BlockButton
+            label="Delete"
+            destructive
+            onPress={onDelete}
+            containerStyle={{ marginTop: Margin[3], marginBottom: Margin[4] }}
+          />
+        )}
 
         <View style={{ marginBottom: Margin[4] }} />
       </View>

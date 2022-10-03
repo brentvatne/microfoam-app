@@ -4,7 +4,7 @@ import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 
 import { exec } from "./db";
-import { maybeCopyPhotoToDocumentsAsync, isLocalFile } from "./fs";
+import { maybeCopyPhotoToDocumentsAsync } from "./fs";
 
 export type PourRecord = {
   id: number;
@@ -14,6 +14,7 @@ export type PourRecord = {
   rating: number;
   notes?: string;
   blurhash?: string;
+  pattern?: string;
 };
 
 export function toJSON() {
@@ -32,6 +33,7 @@ function toRow(pour: PourRecord) {
     pour.rating,
     pour.notes,
     pour.blurhash,
+    pour.pattern,
   ];
 }
 
@@ -50,8 +52,8 @@ export function loadFromJSON(json: string) {
   rows.forEach((row) => {
     const { status, message } = exec(
       `
-    INSERT INTO pours (id, date_time, photo_url, rating, notes, blurhash)
-      VALUES (?, ?, ?, ?, ?, ?);
+    INSERT INTO pours (id, date_time, photo_url, rating, notes, blurhash, pattern)
+      VALUES (?, ?, ?, ?, ?, ?, ?);
   `,
       row
     );
@@ -86,10 +88,10 @@ export async function updateAsync(id: number, pour: PourRecord) {
   const { status, message } = exec(
     `
     UPDATE pours
-      SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?
+      SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?, pattern = ?
       WHERE id = ?;
   `,
-    [pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id]
+    [pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, id, pour.pattern]
   );
 
   if (status === 1) {
@@ -147,10 +149,10 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
   });
   const { status, rows, message } = exec(
     `
-		INSERT INTO pours (date_time, photo_url, rating, notes, blurhash)
-			VALUES (?, ?, ?, ?, ?);
+		INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
+			VALUES (?, ?, ?, ?, ?, ?);
 	`,
-    [data.date_time, photoUrl, data.rating, data.notes, blurhash]
+    [data.date_time, photoUrl, data.rating, data.notes, blurhash, data.pattern]
   );
 
   if (status === 1) {
