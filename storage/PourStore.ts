@@ -68,7 +68,7 @@ export function loadFromJSON(json: string) {
 
 export function all() {
   const { status, message, rows } = exec(
-    `SELECT * FROM pours ORDER BY ID DESC;`
+    `SELECT * FROM pours ORDER BY DATE_TIME DESC;`
   );
 
   if (status === 1) {
@@ -157,9 +157,10 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
   });
   const { status, rows, message } = exec(
     `
-		INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
-			VALUES (?, ?, ?, ?, ?, ?);
-	`,
+    INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
+      VALUES (?, ?, ?, ?, ?, ?)
+      RETURNING id;
+  `,
     [data.date_time, photoUrl, data.rating, data.notes, blurhash, data.pattern]
   );
 
@@ -169,7 +170,7 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
 
   store.setState(() => all());
 
-  return rows[0];
+  return { id: rows._array[0].id };
 }
 
 export function destroy(data: Pick<PourRecord, "id">) {

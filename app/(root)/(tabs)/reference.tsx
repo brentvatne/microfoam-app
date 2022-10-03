@@ -96,7 +96,7 @@ function Row({ title, children }: { title: string; children?: any }) {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: Padding[4],
+    paddingTop: Padding[3],
   },
   description: {
     backgroundColor: TailwindColor["gray-100"],
@@ -108,8 +108,9 @@ const styles = StyleSheet.create({
     fontSize: FontSize.lg,
   },
   row: {
+    padding: Padding[3],
+    marginTop: Margin[2],
     flexDirection: "row",
     alignItems: "center",
-    padding: Padding[5],
   },
 });

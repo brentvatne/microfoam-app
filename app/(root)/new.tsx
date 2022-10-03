@@ -40,15 +40,17 @@ export default function NewPourScreen() {
       <LogForm
         onSave={async (data) => {
           // TODO: verify it was successful
-          await PourStore.createAsync({
+          const row = await PourStore.createAsync({
             date_time: data.dateTime.getTime(),
             rating: data.rating,
             photo_url: data.photoUri,
             notes: data.notes,
           });
 
-          // Go back to tabs from the modal
-          link.back();
+          // Go back to tabs from the modal (not sure if desirable?)
+          // link.push(`/details/${row.id}`);
+
+          link.push(`/`);
         }}
       />
 

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Keyboard,
+  Text,
+  TextInput,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import DatePicker from "react-native-date-picker";
@@ -71,6 +78,7 @@ export default function LogForm({
     <BottomSheetModalProvider>
       <ScrollView
         style={{ flex: 1, backgroundColor: TailwindColor.white }}
+        keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="always"
       >
         <View style={{ padding: Padding[4] }}>
@@ -328,6 +336,7 @@ function PatternPicker({
   const snapPoints = React.useMemo(() => [1, 450], []);
 
   const handlePresentModalPress = React.useCallback(() => {
+    Keyboard.dismiss();
     bottomSheetModalRef.current?.present();
   }, []);
 
