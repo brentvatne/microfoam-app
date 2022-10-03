@@ -1,11 +1,61 @@
-import { Alert, FlatList, Text, View } from "react-native";
+import { useRef } from "react";
+import { Alert, Text, View } from "react-native";
 import { NativeStack, useLink } from "expo-router";
-import { RectButton, BorderlessButton } from "react-native-gesture-handler";
+import {
+  RectButton,
+  BorderlessButton,
+  FlatList,
+} from "react-native-gesture-handler";
+import { useScrollToTop } from "@react-navigation/native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
+
+export default function LogListScreen() {
+  const pours = PourStore.usePours();
+  const link = useLink();
+  const ref = useRef(null);
+  useScrollToTop(ref);
+
+  return (
+    <>
+      <NativeStack.Screen
+        options={{
+          title: "Pours",
+          headerRight: () => (
+            <BorderlessButton
+              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+              onPress={() => {
+                link.push("/new");
+              }}
+            >
+              <AntDesign
+                name="pluscircleo"
+                size={24}
+                color={TailwindColor["blue-500"]}
+              />
+            </BorderlessButton>
+          ),
+        }}
+      />
+      <FlatList
+        data={pours}
+        renderItem={renderItem}
+        ref={ref}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{ height: 1, backgroundColor: TailwindColor["gray-100"] }}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={EmptyState}
+        style={{ backgroundColor: TailwindColor.white, flex: 1 }}
+      />
+    </>
+  );
+}
 
 function PourRow({ item }) {
   const link = useLink();
@@ -92,47 +142,6 @@ function PourRow({ item }) {
 }
 
 const renderItem = ({ item }) => <PourRow item={item} />;
-
-export default function LogListScreen() {
-  const pours = PourStore.usePours();
-  const link = useLink();
-
-  return (
-    <>
-      <NativeStack.Screen
-        options={{
-          title: "Pours",
-          headerRight: () => (
-            <BorderlessButton
-              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
-              onPress={() => {
-                link.push("/new");
-              }}
-            >
-              <AntDesign
-                name="pluscircleo"
-                size={24}
-                color={TailwindColor["blue-500"]}
-              />
-            </BorderlessButton>
-          ),
-        }}
-      />
-      <FlatList
-        data={pours}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{ height: 1, backgroundColor: TailwindColor["gray-100"] }}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={EmptyState}
-        style={{ backgroundColor: TailwindColor.white, flex: 1 }}
-      />
-    </>
-  );
-}
 
 function EmptyState() {
   const link = useLink();
