@@ -2,7 +2,7 @@ export const FontSize = {
   base: 14,
   lg: 14 * 1.125,
   xl: 14 * 1.25,
-  xxl: 14 * 1.25,
+  xxl: 14 * 1.35,
 };
 
 export const Padding = {

@@ -85,7 +85,7 @@ function Row({ title, children }: { title: string; children?: any }) {
             color="black"
             style={{ marginRight: Margin[3] }}
           />
-          <Text style={{ fontSize: FontSize.xl }}>{title}</Text>
+          <Text style={{ fontSize: FontSize.xxl }}>{title}</Text>
         </View>
 
         {isExpanded ? children : null}
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
   description: {
     backgroundColor: TailwindColor["gray-100"],
     marginTop: Margin[1],
-    margin: Margin[5],
+    marginHorizontal: Margin[5],
+    marginBottom: Margin[3],
     padding: Padding[3],
   },
   paragraph: {
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   },
   row: {
     padding: Padding[3],
-    marginTop: Margin[2],
+    marginTop: Margin[1],
     flexDirection: "row",
     alignItems: "center",
   },
