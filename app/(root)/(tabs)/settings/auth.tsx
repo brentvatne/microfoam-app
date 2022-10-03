@@ -58,7 +58,7 @@ export default function Auth() {
               style={{
                 backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
-                width: 350,
+                flex: 1,
                 padding: 5,
                 borderRadius: 5,
                 height: 50,
@@ -97,7 +97,7 @@ export default function Auth() {
               style={{
                 backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
-                width: 350,
+                flex: 1,
                 padding: 5,
                 borderRadius: 5,
                 height: 50,
