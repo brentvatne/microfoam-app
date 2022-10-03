@@ -32,6 +32,7 @@ type Data = {
   dateTime: Date;
   rating: number;
   notes?: string;
+  pattern?: string;
 };
 
 export default function LogForm({
@@ -197,7 +198,7 @@ export default function LogForm({
                 alert("A photo is required. That is the whole point.");
                 return;
               }
-              onSave({ dateTime, rating, photoUri, notes });
+              onSave({ dateTime, rating, photoUri, notes, pattern });
             }}
           />
 

@@ -50,6 +50,7 @@ export default function EditPourScreen({ route }) {
             rating: data.rating,
             photo_url: data.photoUri,
             notes: data.notes,
+            pattern: data.pattern,
           });
 
           // Go back to tabs from the modal
