@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Text, TextInput, ScrollView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, TextInput, ScrollView, StyleSheet, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import DatePicker from "react-native-date-picker";
@@ -7,6 +7,12 @@ import SegmentedControl from "@react-native-segmented-control/segmented-control"
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import {
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
 
 import { TailwindColor, FontSize, Padding, Margin } from "~/constants/styles";
 import { PourRecord } from "~/storage/PourStore";
@@ -46,6 +52,9 @@ export default function LogForm({
     initialData?.photo_url
   );
   const [notes, setNotes] = useState<string | undefined>(initialData?.notes);
+  const [pattern, setPattern] = useState<string | undefined>(
+    initialData?.pattern ?? "Formless blob"
+  );
 
   // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
   // 🤷‍♂️
@@ -58,131 +67,153 @@ export default function LogForm({
   }, []);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: TailwindColor.white }}>
-      <View style={{ padding: Padding[4] }}>
-        <PhotoPickerForm
-          onChange={(data) => {
-            setPhotoUri(data.uri);
-            if (data.creationTime) {
-              setDateTime(data.creationTime);
-            }
-          }}
-          photoUri={photoUri}
-        />
+    <BottomSheetModalProvider>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: TailwindColor.white }}
+        keyboardShouldPersistTaps="always"
+      >
+        <View style={{ padding: Padding[4] }}>
+          <PhotoPickerForm
+            onChange={(data) => {
+              setPhotoUri(data.uri);
+              if (data.creationTime) {
+                setDateTime(data.creationTime);
+              }
+            }}
+            photoUri={photoUri}
+          />
 
-        <View style={{ marginTop: Margin[4] }} />
+          <View style={{ marginTop: Margin[4] }} />
 
-        <Text
-          style={{
-            fontSize: FontSize.xl,
-            fontWeight: "bold",
-            paddingTop: Padding[1],
-            paddingBottom: Padding[2],
-          }}
-        >
-          Rating
-        </Text>
+          <Text
+            style={{
+              fontSize: FontSize.xl,
+              fontWeight: "bold",
+              paddingTop: Padding[1],
+              paddingBottom: Padding[2],
+            }}
+          >
+            Rating
+          </Text>
 
-        <View>
-          <SegmentedControl
-            values={["1", "2", "3", "4", "5"]}
-            selectedIndex={rating - 1}
-            onChange={(event) => {
-              setRating(event.nativeEvent.selectedSegmentIndex + 1);
+          <View>
+            <SegmentedControl
+              values={["1", "2", "3", "4", "5"]}
+              selectedIndex={rating - 1}
+              onChange={(event) => {
+                setRating(event.nativeEvent.selectedSegmentIndex + 1);
+              }}
+            />
+          </View>
+
+          <View style={{ marginBottom: Margin[5] }} />
+
+          <Text
+            style={{
+              fontSize: FontSize.xl,
+              fontWeight: "bold",
+              paddingBottom: Padding[2],
+            }}
+          >
+            When
+          </Text>
+          <DatePicker
+            modal
+            mode="date"
+            open={dateTimePickerVisible}
+            date={dateTime}
+            onConfirm={(date) => {
+              setDateTimePickerVisible(false);
+              setDateTime(date);
+            }}
+            onCancel={() => {
+              setDateTimePickerVisible(false);
             }}
           />
-        </View>
+          <BorderlessButton
+            onPress={() => setDateTimePickerVisible(true)}
+            style={{ paddingVertical: Padding[2] }}
+            borderless={false}
+          >
+            <View>
+              <Text style={{ fontSize: FontSize.lg }}>
+                {format(dateTime, "PPPP")}
+              </Text>
+            </View>
+          </BorderlessButton>
 
-        <View style={{ marginBottom: Margin[5] }} />
+          <View style={{ marginBottom: Margin[5] }} />
 
-        <Text
-          style={{
-            fontSize: FontSize.xl,
-            fontWeight: "bold",
-            paddingBottom: Padding[2],
-          }}
-        >
-          When
-        </Text>
-        <DatePicker
-          modal
-          mode="date"
-          open={dateTimePickerVisible}
-          date={dateTime}
-          onConfirm={(date) => {
-            setDateTimePickerVisible(false);
-            setDateTime(date);
-          }}
-          onCancel={() => {
-            setDateTimePickerVisible(false);
-          }}
-        />
-        <BorderlessButton
-          onPress={() => setDateTimePickerVisible(true)}
-          style={{ paddingVertical: Padding[2] }}
-          borderless={false}
-        >
-          <View>
-            <Text style={{ fontSize: FontSize.lg }}>
-              {format(dateTime, "PPPP")}
-            </Text>
-          </View>
-        </BorderlessButton>
+          <Text
+            style={{
+              fontSize: FontSize.xl,
+              fontWeight: "bold",
+              paddingBottom: Padding[2],
+            }}
+          >
+            Pattern
+          </Text>
 
-        <View style={{ marginBottom: Margin[5] }} />
-
-        <Text
-          style={{
-            fontSize: FontSize.xl,
-            fontWeight: "bold",
-            paddingBottom: Padding[2],
-          }}
-        >
-          Notes
-        </Text>
-
-        <TextInput
-          multiline
-          maxLength={500}
-          onChangeText={(text) => setNotes(text)}
-          value={notes}
-          placeholder="What went well? What could be improved?"
-          style={{
-            height: 100,
-            backgroundColor: TailwindColor["gray-100"],
-            paddingHorizontal: 10,
-            paddingTop: 10,
-            fontSize: FontSize.lg,
-            textAlignVertical: "top",
-            borderRadius: 5,
-          }}
-        />
-
-        <View style={{ marginBottom: Margin[4] }} />
-
-        <BlockButton
-          label="Save"
-          onPress={() => {
-            if (!photoUri) {
-              alert("A photo is required. That is the whole point.");
-              return;
-            }
-            onSave({ dateTime, rating, photoUri, notes });
-          }}
-        />
-
-        {onDelete && (
-          <BlockButton
-            label="Delete"
-            destructive
-            onPress={onDelete}
-            containerStyle={{ marginTop: Margin[3], marginBottom: Margin[4] }}
+          <PatternPicker
+            pattern={pattern}
+            onChange={(value) => setPattern(value)}
           />
-        )}
 
-        <View style={{ marginBottom: Margin[4] }} />
-      </View>
-    </ScrollView>
+          <View style={{ marginBottom: Margin[5] }} />
+
+          <Text
+            style={{
+              fontSize: FontSize.xl,
+              fontWeight: "bold",
+              paddingBottom: Padding[2],
+            }}
+          >
+            Notes
+          </Text>
+
+          <TextInput
+            multiline
+            maxLength={500}
+            onChangeText={(text) => setNotes(text)}
+            value={notes}
+            placeholder="What went well? What could be improved?"
+            style={{
+              height: 100,
+              backgroundColor: TailwindColor["gray-100"],
+              paddingHorizontal: 10,
+              paddingTop: 10,
+              fontSize: FontSize.lg,
+              textAlignVertical: "top",
+              borderRadius: 5,
+            }}
+          />
+
+          <View style={{ marginBottom: Margin[4] }} />
+
+          <BlockButton
+            label="Save"
+            onPress={() => {
+              if (!photoUri) {
+                alert("A photo is required. That is the whole point.");
+                return;
+              }
+              onSave({ dateTime, rating, photoUri, notes });
+            }}
+          />
+
+          {onDelete && (
+            <BlockButton
+              label="Delete"
+              destructive
+              onPress={onDelete}
+              containerStyle={{ marginTop: Margin[3], marginBottom: Margin[4] }}
+            />
+          )}
+
+          <View style={{ marginBottom: Margin[4] }} />
+        </View>
+      </ScrollView>
+    </BottomSheetModalProvider>
   );
 }
 
@@ -193,12 +224,12 @@ function maybeDate(date: number | undefined) {
 }
 
 function PhotoPickerForm({ onChange, photoUri }) {
-  const [response, requestPermission] = MediaLibrary.usePermissions();
+  const [response, requestPermissionAsync] = MediaLibrary.usePermissions();
 
   const launchPickerAsync = async () => {
     // Only required in order to get back the assetId from the ImagePicker response
     if (response?.status === MediaLibrary.PermissionStatus.UNDETERMINED) {
-      requestPermission();
+      await requestPermissionAsync();
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -284,3 +315,127 @@ function PhotoPickerForm({ onChange, photoUri }) {
     </View>
   );
 }
+
+function PatternPicker({
+  pattern,
+  onChange,
+}: {
+  pattern?: string;
+  onChange: (value: string) => void;
+}) {
+  const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
+  const snapPoints = React.useMemo(() => [1, 450], []);
+
+  const handlePresentModalPress = React.useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = React.useCallback((index: number) => {
+    // Hack to work around needing multiple snap points for background
+    if (index === 0) {
+      bottomSheetModalRef.current?.close();
+    }
+  }, []);
+
+  const renderBackdrop = React.useCallback(
+    (props) => (
+      <BottomSheetBackdrop {...props} opacity={0.2} pressBehavior="close" />
+    ),
+    []
+  );
+
+  const selectOption = (option: string) => {
+    onChange(option);
+    bottomSheetModalRef.current?.close();
+  };
+
+  return (
+    <>
+      <BorderlessButton
+        onPress={handlePresentModalPress}
+        style={{ paddingVertical: Padding[2] }}
+        borderless={false}
+      >
+        <View>
+          <Text style={{ fontSize: FontSize.lg }}>{pattern}</Text>
+        </View>
+      </BorderlessButton>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        enablePanDownToClose
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={renderBackdrop}
+        style={{ flex: 1 }}
+      >
+        <>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingHorizontal: Padding[5],
+              paddingVertical: Padding[2],
+            }}
+          >
+            <Text style={styles.heading}>Pattern</Text>
+            <BorderlessButton
+              onPress={() => bottomSheetModalRef.current?.close()}
+            >
+              <AntDesign name="close" size={24} color="black" />
+            </BorderlessButton>
+          </View>
+
+          <Option
+            label="Formless blob"
+            onPress={selectOption}
+            selection={pattern}
+          />
+          <Option
+            label="Monk's head"
+            onPress={selectOption}
+            selection={pattern}
+          />
+          <Option label="Heart" onPress={selectOption} selection={pattern} />
+          <Option label="Tulip" onPress={selectOption} selection={pattern} />
+          <Option label="Rosetta" onPress={selectOption} selection={pattern} />
+          <Option label="Swan" onPress={selectOption} selection={pattern} />
+          <Option label="Other" onPress={selectOption} selection={pattern} />
+        </>
+      </BottomSheetModal>
+    </>
+  );
+}
+
+function Option({ label, onPress, selection }) {
+  return (
+    <RectButton
+      style={{
+        paddingVertical: Padding[3],
+        paddingHorizontal: Padding[5],
+      }}
+      onPress={() => onPress(label)}
+    >
+      <Text
+        style={[
+          styles.option,
+          selection === label ? { fontWeight: "bold" } : null,
+        ]}
+      >
+        {label}
+      </Text>
+    </RectButton>
+  );
+}
+
+const styles = StyleSheet.create({
+  heading: {
+    fontSize: FontSize.xl,
+    fontWeight: "bold",
+    paddingTop: Padding[1],
+    paddingBottom: Padding[2],
+  },
+  option: {
+    fontSize: FontSize.xl,
+  },
+});

@@ -91,7 +91,15 @@ export async function updateAsync(id: number, pour: PourRecord) {
       SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?, pattern = ?
       WHERE id = ?;
   `,
-    [pour.date_time, photoUrl, pour.rating, pour.notes, blurhash, pour.pattern, id]
+    [
+      pour.date_time,
+      photoUrl,
+      pour.rating,
+      pour.notes,
+      blurhash,
+      pour.pattern,
+      id,
+    ]
   );
 
   if (status === 1) {

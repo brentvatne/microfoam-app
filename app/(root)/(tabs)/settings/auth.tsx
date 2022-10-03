@@ -117,7 +117,7 @@ export default function Auth() {
                 } catch (e) {
                   alert(`Error: "${e.message}"`);
                 } finally {
-                  setOtp("")
+                  setOtp("");
                   setIsWaitingForOtp(false);
                 }
               }}
@@ -155,4 +155,4 @@ const styles = StyleSheet.create({
     margin: Margin[4],
     marginTop: Margin[5],
   },
-})
+});

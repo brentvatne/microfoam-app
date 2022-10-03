@@ -57,7 +57,7 @@ export default function EditPourScreen({ route }) {
         }}
         onDelete={() => {
           PourStore.destroy({ id });
-          link.push('/');
+          link.push("/");
         }}
       />
 

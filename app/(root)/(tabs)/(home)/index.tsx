@@ -103,7 +103,7 @@ function PourRow({ item }) {
           style={{ flexDirection: "column", paddingTop: Padding[2], flex: 1 }}
         >
           <View style={{ flex: 1, marginBottom: Margin[2] }}>
-            <Text numberOfLines={2} style={{ flex: 1, fontSize: FontSize.lg }}>
+            <Text numberOfLines={1} style={{ flex: 1, fontSize: FontSize.lg }}>
               {item.notes ?? (
                 <Text
                   style={{
@@ -118,6 +118,14 @@ function PourRow({ item }) {
           </View>
 
           <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: FontSize.lg,
+                color: TailwindColor["gray-600"],
+              }}
+            >
+              <Text>Pattern:</Text> <Text>{item.pattern ?? 'Formless blob'}</Text>
+            </Text>
             <Text
               style={{
                 fontSize: FontSize.lg,

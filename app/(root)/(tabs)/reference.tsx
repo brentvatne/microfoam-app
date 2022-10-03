@@ -14,7 +14,16 @@ export default function Reference() {
       }}
     >
       <View style={styles.container}>
-        <Row title="Monks head">
+        <Row title="Formless blob">
+          <View style={styles.description}>
+            <Text style={styles.paragraph}>
+              Everyone has to start somewhere. For latte art, that somewhere is
+              a formless blob. You manage to get some surface of the milk, but
+              it's not really a shape. It's just a blob. Better than nothing!
+            </Text>
+          </View>
+        </Row>
+        <Row title="Monk's head">
           <View style={styles.description}>
             <Text style={styles.paragraph}>
               This is the most basic design. You need to do be able to do this
