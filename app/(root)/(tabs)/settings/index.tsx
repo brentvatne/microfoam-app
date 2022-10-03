@@ -1,4 +1,5 @@
-import { ScrollView, Alert, Text, StyleSheet, View } from "react-native";
+import { Alert, Text, StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import * as Application from "expo-application";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";

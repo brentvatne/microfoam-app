@@ -26,12 +26,6 @@ type Data = {
   notes?: string;
 };
 
-function maybeDate(date: number | undefined) {
-  if (date) {
-    return new Date(date);
-  }
-}
-
 export default function LogForm({
   onSave,
   initialData,
@@ -195,6 +189,12 @@ export default function LogForm({
   );
 }
 
+function maybeDate(date: number | undefined) {
+  if (date) {
+    return new Date(date);
+  }
+}
+
 function PhotoPickerForm({ onChange, photoUri }) {
   const launchPickerAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -213,6 +213,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
       });
     }
   };
+
   return (
     <View
       style={{
@@ -225,16 +226,21 @@ function PhotoPickerForm({ onChange, photoUri }) {
       }}
     >
       {photoUri ? (
-        <Photo
-          uri={photoUri}
-          resizeMode="cover"
-          containerStyle={{
-            width: 200,
-            height: 200,
-            borderRadius: 5,
-            overflow: "hidden",
-          }}
-        />
+        <BorderlessButton
+          onPress={() => launchPickerAsync()}
+          borderless={false}
+        >
+          <Photo
+            uri={photoUri}
+            resizeMode="cover"
+            containerStyle={{
+              width: 200,
+              height: 200,
+              borderRadius: 5,
+              overflow: "hidden",
+            }}
+          />
+        </BorderlessButton>
       ) : (
         <RectButton
           style={{
