@@ -16,7 +16,7 @@
       "channel": "preview",
       "distribution": "internal",
       "env": {
-        "RELEASE": "1"
+        "PREVIEW": "1"
       }
     },
     "production": {
