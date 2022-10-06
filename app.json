@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "auto",
+    "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
     "scheme": "microfoam",
     "backgroundColor": "#1e1e1e",
