@@ -1,20 +1,14 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { NativeStack } from "expo-router";
 import { RectButton } from "react-native-gesture-handler";
 import prettyBytes from "pretty-bytes";
 import format from "date-fns/format";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
+import { AntDesign, FlatList, Text, View } from "~/components/Themed";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
 import {
@@ -188,7 +182,7 @@ export default function Upload() {
         keyExtractor={(item) => item.id}
         extraData={uploadAll}
         ListEmptyComponent={EmptyState}
-        style={{ backgroundColor: TailwindColor.white, flex: 1 }}
+        style={{ flex: 1 }}
       />
       <View
         style={{

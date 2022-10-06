@@ -5,9 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "auto",
     "jsEngine": "hermes",
     "scheme": "microfoam",
+    "backgroundColor": "#1e1e1e",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

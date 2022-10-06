@@ -1,9 +1,10 @@
 import { Tabs, NativeStack } from "expo-router";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { AntDesign } from "~/components/Themed";
 
 export default function TabsContainer() {
   return (
     <>
+      <NativeStack.Screen options={{ headerShown: false }} />
       <Tabs>
         <Tabs.Screen
           name="(home)"
@@ -35,7 +36,6 @@ export default function TabsContainer() {
           }}
         />
       </Tabs>
-      <NativeStack.Screen options={{ headerShown: false }} />
     </>
   );
 }

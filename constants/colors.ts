@@ -223,3 +223,18 @@ export const TailwindColor = {
   "rose-800": "rgb(159,18,57)",
   "rose-900": "rgb(136,19,55)",
 };
+
+export const ThemeColors = {
+  light: {
+    text: TailwindColor.black,
+    view: TailwindColor.white,
+    viewAccent: TailwindColor.white,
+    tint: TailwindColor["blue-400"],
+  },
+  dark: {
+    text: TailwindColor.white,
+    view: "rgb(30,30,30)",
+    viewAccent: "rgb(45,45,45)",
+    tint: TailwindColor["blue-400"],
+  },
+};

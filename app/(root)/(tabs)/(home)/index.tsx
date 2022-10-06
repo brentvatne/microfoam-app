@@ -1,17 +1,14 @@
 import { useRef } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, View as UnthemedView } from "react-native";
 import { NativeStack, useLink } from "expo-router";
-import {
-  RectButton,
-  BorderlessButton,
-  FlatList,
-} from "react-native-gesture-handler";
+import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
+/* TODO: pass through ref on FlatList wrapper */
+import { AntDesign, FlatList, Text, View } from "~/components/Themed";
 
 export default function LogListScreen() {
   const pours = PourStore.usePours();
@@ -31,11 +28,7 @@ export default function LogListScreen() {
                 link.push("/new");
               }}
             >
-              <AntDesign
-                name="pluscircleo"
-                size={24}
-                color={TailwindColor["blue-500"]}
-              />
+              <AntDesign name="pluscircleo" size={24} />
             </BorderlessButton>
           ),
         }}
@@ -43,15 +36,17 @@ export default function LogListScreen() {
       <FlatList
         data={pours}
         renderItem={renderItem}
-        ref={ref}
+        // ref={ref}
         ItemSeparatorComponent={() => (
           <View
-            style={{ height: 1, backgroundColor: TailwindColor["gray-100"] }}
+            darkColor={TailwindColor["gray-800"]}
+            lightColor={TailwindColor["gray-100"]}
+            style={{ height: 1 }}
           />
         )}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={EmptyState}
-        style={{ backgroundColor: TailwindColor.white, flex: 1 }}
+        style={{ flex: 1 }}
       />
     </>
   );
@@ -85,7 +80,7 @@ function PourRow({ item }) {
         );
       }}
     >
-      <View style={{ flexDirection: "row" }}>
+      <UnthemedView style={{ flexDirection: "row" }}>
         <Photo
           uri={item.photo_url}
           blurhash={item.blurhash}
@@ -99,52 +94,50 @@ function PourRow({ item }) {
           }}
         />
 
-        <View
+        <UnthemedView
           style={{ flexDirection: "column", paddingTop: Padding[1], flex: 1 }}
         >
-          <View style={{ flex: 1, marginBottom: Margin[2] }}>
+          <UnthemedView style={{ flex: 1, marginBottom: Margin[2] }}>
             <Text numberOfLines={2} style={{ flex: 1, fontSize: FontSize.lg }}>
               {item.notes ?? (
                 <Text
-                  style={{
-                    fontStyle: "italic",
-                    color: TailwindColor["gray-400"],
-                  }}
+                  darkColor={TailwindColor["gray-100"]}
+                  lightColor={TailwindColor["gray-400"]}
+                  style={{ fontStyle: "italic" }}
                 >
                   No notes
                 </Text>
               )}
             </Text>
-          </View>
+          </UnthemedView>
 
-          <View style={{ flex: 1 }}>
+          <UnthemedView style={{ flex: 1 }}>
             <Text
+              darkColor={TailwindColor["gray-300"]}
+              lightColor={TailwindColor["gray-600"]}
               style={{
                 fontSize: FontSize.base,
-                color: TailwindColor["gray-600"],
               }}
             >
-              <Text>{item.pattern ?? "Formless blob"}</Text>
+              {item.pattern ?? "Formless blob"}
             </Text>
             <Text
-              style={{
-                fontSize: FontSize.base,
-                color: TailwindColor["gray-600"],
-              }}
+              darkColor={TailwindColor["gray-300"]}
+              lightColor={TailwindColor["gray-600"]}
+              style={{ fontSize: FontSize.base }}
             >
-              <Text>Rating:</Text> <Text>{item.rating} / 5</Text>
+              Rating: {item.rating} / 5
             </Text>
             <Text
-              style={{
-                fontSize: FontSize.base,
-                color: TailwindColor["gray-600"],
-              }}
+              darkColor={TailwindColor["gray-300"]}
+              lightColor={TailwindColor["gray-600"]}
+              style={{ fontSize: FontSize.base }}
             >
               {new Date(parseInt(item.date_time, 10)).toDateString()}
             </Text>
-          </View>
-        </View>
-      </View>
+          </UnthemedView>
+        </UnthemedView>
+      </UnthemedView>
     </RectButton>
   );
 }
@@ -164,12 +157,13 @@ function EmptyState() {
       }}
     >
       <Text
+        darkColor={TailwindColor["gray-100"]}
+        lightColor={TailwindColor["gray-800"]}
         style={{
           fontSize: FontSize.xl,
           textAlign: "center",
           marginBottom: Margin[5],
           marginTop: Margin[3],
-          color: TailwindColor["gray-800"],
         }}
       >
         You haven't logged any pours yet.

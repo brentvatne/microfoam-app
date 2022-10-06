@@ -2,11 +2,10 @@ import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useLink, NativeStack } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { AntDesign } from "~/components/Themed";
 
 import * as PourStore from "~/storage/PourStore";
 import LogForm from "~/components/LogForm";
-import { TailwindColor } from "~/constants/styles";
 
 export default function NewPourScreen() {
   const link = useLink();
@@ -28,11 +27,7 @@ export default function NewPourScreen() {
                 link.back();
               }}
             >
-              <AntDesign
-                name="close"
-                size={24}
-                color={TailwindColor["blue-500"]}
-              />
+              <AntDesign name="close" size={24} />
             </BorderlessButton>
           ),
         }}

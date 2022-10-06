@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import Photo from "~/components/Photo";
+import { ScrollView, Text, View } from "~/components/Themed";
 
 export default function ShowPour({ route }) {
   const { id } = route.params;
@@ -19,7 +20,7 @@ export default function ShowPour({ route }) {
   const targetImageHeight = Math.min(400, targetImageWidth);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: TailwindColor.white }}>
+    <ScrollView style={{ flex: 1 }}>
       <View
         style={{
           width: "100%",
@@ -42,6 +43,7 @@ export default function ShowPour({ route }) {
           <Photo
             uri={pour.photo_url}
             containerStyle={{
+              backgroundColor: TailwindColor.black,
               width: targetImageWidth,
               height: targetImageHeight,
             }}
@@ -81,30 +83,33 @@ export default function ShowPour({ route }) {
 
         <View>
           <Text
+            darkColor={TailwindColor["gray-300"]}
+            lightColor={TailwindColor["gray-600"]}
             style={{
               fontSize: FontSize.lg,
               lineHeight: FontSize.lg * 1.5,
-              color: TailwindColor["gray-700"],
             }}
           >
-            <Text>{pour.pattern ?? "Formless blob"}</Text>
+            {pour.pattern ?? "Formless blob"}
           </Text>
           <Text
+            darkColor={TailwindColor["gray-300"]}
+            lightColor={TailwindColor["gray-600"]}
             style={{
               fontSize: FontSize.lg,
               lineHeight: FontSize.lg * 1.5,
-              color: TailwindColor["gray-700"],
             }}
           >
-            <Text>Rating:</Text> <Text>{pour.rating} / 5</Text>
+            Rating: {pour.rating} / 5
           </Text>
         </View>
         <View>
           <Text
+            darkColor={TailwindColor["gray-300"]}
+            lightColor={TailwindColor["gray-600"]}
             style={{
               fontSize: FontSize.lg,
               lineHeight: FontSize.lg * 1.5,
-              color: TailwindColor["gray-700"],
             }}
           >
             {new Date(parseInt(pour.date_time, 10)).toDateString()}

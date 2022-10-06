@@ -1,5 +1,4 @@
-import { Alert, Text, StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Alert, StyleSheet } from "react-native";
 import * as Application from "expo-application";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
@@ -11,6 +10,7 @@ import * as db from "~/storage/db";
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
+import { ScrollView, Text, View } from "~/components/Themed";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
 import { useAuthSession } from "~/storage/supabase";
 
@@ -35,16 +35,23 @@ function AuthButton() {
           }}
         >
           <Text
+            darkColor={TailwindColor["gray-400"]}
+            lightColor={TailwindColor["gray-600"]}
             numberOfLines={1}
             style={{
               marginTop: -10,
               marginBottom: 15,
               fontSize: FontSize.lg,
-              color: TailwindColor["gray-600"],
             }}
           >
             Signed in as{" "}
-            <Text style={{ fontWeight: "bold" }}>{session.user.email}</Text>
+            <Text
+              darkColor={TailwindColor["gray-400"]}
+              lightColor={TailwindColor["gray-600"]}
+              style={{ fontWeight: "bold" }}
+            >
+              {session.user.email}
+            </Text>
           </Text>
         </View>
       </View>
@@ -61,11 +68,8 @@ export default function Settings() {
     <>
       <NativeStack.Screen options={{ title: "Settings" }} />
       <ScrollView
-        style={{ flex: 1, backgroundColor: TailwindColor.white }}
-        contentContainerStyle={{
-          minHeight: "100%",
-          backgroundColor: "white",
-        }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ minHeight: "100%" }}
       >
         <Text style={[styles.header, { marginTop: Margin[7] }]}>
           Data Management
@@ -150,31 +154,34 @@ export default function Settings() {
 
         <Text style={styles.header}>Debug info</Text>
         <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
           style={{
             marginTop: Margin[1],
             fontSize: FontSize.base,
             textAlign: "center",
-            color: TailwindColor["gray-700"],
           }}
         >
           Version: {Application.nativeApplicationVersion} (
           {Application.nativeBuildVersion})
         </Text>
         <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
           style={{
             marginTop: Margin[1],
             fontSize: FontSize.base,
             textAlign: "center",
-            color: TailwindColor["gray-700"],
           }}
         >
           ID: {Updates.updateId ?? "(no update id)"}
         </Text>
         <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
           style={{
             fontSize: FontSize.base,
             textAlign: "center",
-            color: TailwindColor["gray-700"],
             marginTop: Margin[1],
           }}
         >
@@ -214,11 +221,12 @@ function UploadButton() {
         }}
       >
         <Text
+          darkColor={TailwindColor["gray-400"]}
+          lightColor={TailwindColor["gray-600"]}
           style={{
             marginTop: -10,
             marginBottom: 15,
             fontSize: FontSize.lg,
-            color: TailwindColor["gray-600"],
           }}
         >
           {message}
@@ -281,12 +289,23 @@ async function exportDatabaseAsync() {
   }
 }
 
+function Header({ children }) {
+  return (
+    <Text
+      darkColor={TailwindColor["gray-100"]}
+      lightColor={TailwindColor["gray-700"]}
+      style={styles.header}
+    >
+      {children}
+    </Text>
+  );
+}
+
 const styles = StyleSheet.create({
   header: {
     fontWeight: "bold",
     marginTop: Margin[5],
     marginBottom: Margin[4],
-    color: TailwindColor["gray-700"],
     fontSize: FontSize.xxl,
     textAlign: "center",
   },

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Keyboard,
-  Text,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Keyboard, TextInput, StyleSheet, useColorScheme } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import DatePicker from "react-native-date-picker";
@@ -14,7 +7,6 @@ import SegmentedControl from "@react-native-segmented-control/segmented-control"
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
@@ -25,6 +17,14 @@ import { TailwindColor, FontSize, Padding, Margin } from "~/constants/styles";
 import { PourRecord } from "~/storage/PourStore";
 import Photo from "~/components/Photo";
 import BlockButton from "~/components/BlockButton";
+import {
+  AntDesign,
+  ScrollView,
+  Text,
+  View,
+  useThemeColor,
+} from "~/components/Themed";
+import { ThemeColors } from "~/constants/colors";
 
 /**
  * Form with:
@@ -77,7 +77,7 @@ export default function LogForm({
   return (
     <BottomSheetModalProvider>
       <ScrollView
-        style={{ flex: 1, backgroundColor: TailwindColor.white }}
+        style={{ flex: 1 }}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="always"
       >
@@ -105,15 +105,10 @@ export default function LogForm({
             Rating
           </Text>
 
-          <View>
-            <SegmentedControl
-              values={["1", "2", "3", "4", "5"]}
-              selectedIndex={rating - 1}
-              onChange={(event) => {
-                setRating(event.nativeEvent.selectedSegmentIndex + 1);
-              }}
-            />
-          </View>
+          <RatingPicker
+            rating={rating}
+            onChange={(value) => setRating(value)}
+          />
 
           <View style={{ marginBottom: Margin[5] }} />
 
@@ -234,6 +229,7 @@ function maybeDate(date: number | undefined) {
 
 function PhotoPickerForm({ onChange, photoUri }) {
   const [response, requestPermissionAsync] = MediaLibrary.usePermissions();
+  const colorScheme = useColorScheme();
 
   const launchPickerAsync = async () => {
     // Only required in order to get back the assetId from the ImagePicker response
@@ -277,13 +273,14 @@ function PhotoPickerForm({ onChange, photoUri }) {
 
   return (
     <View
+      darkColor={TailwindColor["zinc-800"]}
+      lightColor={TailwindColor["gray-100"]}
       style={{
         flex: 1,
         borderRadius: 10,
         padding: Padding[5],
         margin: Margin[2],
         alignItems: "center",
-        backgroundColor: TailwindColor["gray-100"],
       }}
     >
       {photoUri ? (
@@ -307,7 +304,10 @@ function PhotoPickerForm({ onChange, photoUri }) {
           style={{
             width: 200,
             height: 200,
-            backgroundColor: TailwindColor["gray-200"],
+            backgroundColor:
+              colorScheme === "light"
+                ? TailwindColor["gray-200"]
+                : TailwindColor["zinc-700"],
             borderRadius: 5,
             alignItems: "center",
             justifyContent: "center",
@@ -315,7 +315,9 @@ function PhotoPickerForm({ onChange, photoUri }) {
           onPress={() => launchPickerAsync()}
         >
           <Text
-            style={{ fontSize: FontSize.lg, color: TailwindColor["gray-700"] }}
+            darkColor={TailwindColor["gray-200"]}
+            lightColor={TailwindColor["gray-700"]}
+            style={{ fontSize: FontSize.lg }}
           >
             {photoUri ? "Select a different photo " : "Select a photo"}
           </Text>
@@ -332,6 +334,16 @@ function PatternPicker({
   pattern?: string;
   onChange: (value: string) => void;
 }) {
+  const bottomSheetBackgroundColor = useThemeColor({
+    light: ThemeColors.light.view,
+    dark: "rgb(45,45,45)",
+  });
+  const textColor = useThemeColor({ light: "#000", dark: "#fff" });
+  const borderBottomColor = useThemeColor({
+    light: TailwindColor["gray-200"],
+    dark: TailwindColor["zinc-700"],
+  });
+
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
   const snapPoints = React.useMemo(() => [1, 450], []);
 
@@ -377,10 +389,13 @@ function PatternPicker({
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={renderBackdrop}
+        handleIndicatorStyle={{ backgroundColor: textColor, opacity: 0.5 }}
+        backgroundStyle={{ backgroundColor: bottomSheetBackgroundColor }}
         style={{ flex: 1 }}
       >
         <>
           <View
+            darkColor={ThemeColors.dark.viewAccent}
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -389,14 +404,14 @@ function PatternPicker({
               paddingBottom: Padding[3],
               marginBottom: Margin[3],
               borderBottomWidth: 1,
-              borderBottomColor: TailwindColor["gray-200"],
+              borderBottomColor,
             }}
           >
             <Text style={styles.heading}>Pattern</Text>
             <BorderlessButton
               onPress={() => bottomSheetModalRef.current?.close()}
             >
-              <AntDesign name="close" size={24} color="black" />
+              <AntDesign name="close" size={24} />
             </BorderlessButton>
           </View>
 
@@ -433,12 +448,27 @@ function Option({ label, onPress, selection }) {
       <Text
         style={[
           styles.option,
-          selection === label ? { fontWeight: "bold" } : null,
+          selection === label ? { fontWeight: "900" } : null,
         ]}
       >
         {label}
       </Text>
     </RectButton>
+  );
+}
+
+function RatingPicker({ onChange, rating }) {
+  const colorScheme = useColorScheme();
+
+  return (
+    <SegmentedControl
+      appearance={colorScheme ?? "light"}
+      values={["1", "2", "3", "4", "5"]}
+      selectedIndex={rating - 1}
+      onChange={(event) => {
+        onChange(event.nativeEvent.selectedSegmentIndex + 1);
+      }}
+    />
   );
 }
 

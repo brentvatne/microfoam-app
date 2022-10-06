@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { StyleSheet, TextInput } from "react-native";
 import { NativeStack } from "expo-router";
 
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
+import { ScrollView, Text, View } from "~/components/Themed";
 import BlockButton from "~/components/BlockButton";
 
 export default function Auth() {
@@ -16,13 +16,7 @@ export default function Auth() {
   return (
     <>
       <NativeStack.Screen options={{ title: "Authentication" }} />
-      <ScrollView
-        keyboardShouldPersistTaps="never"
-        style={{
-          flex: 1,
-          backgroundColor: TailwindColor.white,
-        }}
-      >
+      <ScrollView keyboardShouldPersistTaps="never" style={{ flex: 1 }}>
         {session && (
           <View
             style={{
