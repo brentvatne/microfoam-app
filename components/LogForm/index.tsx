@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useState,
+  useImperativeHandle,
+} from "react";
 import { Keyboard, TextInput, StyleSheet, useColorScheme } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -34,15 +39,18 @@ type Data = {
   pattern?: string;
 };
 
-export default function LogForm({
-  onSave,
-  onDelete,
-  initialData,
-}: {
+export type LogFormHandle = {
+  getData: () => Data;
+};
+
+type Props = {
   onSave: (data: Data) => void;
   onDelete?: () => void;
+  onPickPhoto?: (uri?: string) => void;
   initialData?: PourRecord;
-}) {
+};
+
+function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
   const [dateTimePickerVisible, setDateTimePickerVisible] = useState(false);
   const [dateTime, setDateTime] = useState(
     maybeDate(initialData?.date_time) ?? new Date()
@@ -54,6 +62,16 @@ export default function LogForm({
   const [notes, setNotes] = useState<string | undefined>(initialData?.notes);
   const [pattern, setPattern] = useState<string | undefined>(
     initialData?.pattern ?? "Formless blob"
+  );
+
+  const formData = { dateTime, rating, photoUri, notes, pattern };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getData: () => formData,
+    }),
+    [formData]
   );
 
   // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
@@ -80,6 +98,7 @@ export default function LogForm({
               if (data.creationTime) {
                 setDateTime(data.creationTime);
               }
+              onPickPhoto?.(data.uri);
             }}
             photoUri={photoUri}
           />
@@ -193,7 +212,7 @@ export default function LogForm({
                 alert("A photo is required. That is the whole point.");
                 return;
               }
-              onSave({ dateTime, rating, photoUri, notes, pattern });
+              onSave(formData);
             }}
           />
 
@@ -212,6 +231,8 @@ export default function LogForm({
     </BottomSheetModalProvider>
   );
 }
+
+export default forwardRef<LogFormHandle, Props>(LogForm);
 
 function maybeDate(date: number | undefined) {
   if (date) {
