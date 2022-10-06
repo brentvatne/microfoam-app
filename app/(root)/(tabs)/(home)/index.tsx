@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Alert, View as UnthemedView } from "react-native";
+import { Alert, StyleSheet, View as UnthemedView } from "react-native";
 import { NativeStack, useLink } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
@@ -36,12 +36,12 @@ export default function LogListScreen() {
       <FlatList
         data={pours}
         renderItem={renderItem}
-        // ref={ref}
+        ref={ref}
         ItemSeparatorComponent={() => (
           <View
-            darkColor={TailwindColor["gray-800"]}
+            darkColor={TailwindColor["zinc-700"]}
             lightColor={TailwindColor["gray-100"]}
-            style={{ height: 1 }}
+            style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
           />
         )}
         keyExtractor={(item) => item.id}

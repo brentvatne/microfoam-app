@@ -26,14 +26,6 @@ import {
 } from "~/components/Themed";
 import { ThemeColors } from "~/constants/colors";
 
-/**
- * Form with:
- * - ✅ Photo
- * - ✅ Rating
- * - Attempted design
- * - ✅ What went well / things to improve
- */
-
 type Data = {
   photoUri: string;
   dateTime: Date;

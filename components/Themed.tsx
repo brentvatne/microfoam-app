@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -54,33 +55,45 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-export function ScrollView(props: ScrollViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "view"
-  );
-
-  return (
-    <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
-  );
-}
-
-export function FlatList(props: FlatListProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "view"
-  );
-
-  return (
-    <DefaultFlatList style={[{ backgroundColor }, style]} {...otherProps} />
-  );
-}
-
 export function AntDesign(props: AntDesignProps) {
   const { lightColor, darkColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "tint");
 
   return <DefaultAntDesign color={color} {...otherProps} />;
 }
+
+const ScrollView = forwardRef<DefaultScrollView, ScrollViewProps>(
+  (props, ref) => {
+    const { style, lightColor, darkColor, ...otherProps } = props;
+    const backgroundColor = useThemeColor(
+      { light: lightColor, dark: darkColor },
+      "view"
+    );
+
+    return (
+      <DefaultScrollView
+        style={[{ backgroundColor }, style]}
+        {...otherProps}
+        ref={ref}
+      />
+    );
+  }
+);
+
+const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "view"
+  );
+
+  return (
+    <DefaultFlatList
+      style={[{ backgroundColor }, style]}
+      {...otherProps}
+      ref={ref}
+    />
+  );
+});
+
+export { FlatList, ScrollView };
