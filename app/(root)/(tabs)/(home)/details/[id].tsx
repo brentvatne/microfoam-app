@@ -6,6 +6,7 @@ import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import Photo from "~/components/Photo";
 import { ScrollView, Text, View } from "~/components/Themed";
+import { humanDate } from "~/utils/formatDate";
 
 export default function ShowPour({ route }) {
   const { id } = route.params;
@@ -112,7 +113,7 @@ export default function ShowPour({ route }) {
               lineHeight: FontSize.lg * 1.5,
             }}
           >
-            {new Date(parseInt(pour.date_time, 10)).toDateString()}
+            {humanDate(pour.date_time)}
           </Text>
         </View>
       </View>

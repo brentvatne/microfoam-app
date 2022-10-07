@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
+  TextInput as DefaultTextInput,
   useColorScheme,
 } from "react-native";
 import {
@@ -9,6 +10,7 @@ import {
   ScrollView as DefaultScrollView,
 } from "react-native-gesture-handler";
 import DefaultAntDesign from "@expo/vector-icons/AntDesign";
+import Color from "color";
 
 import { ThemeColors } from "~/constants/colors";
 
@@ -31,12 +33,20 @@ type ThemeProps = {
   darkColor?: string;
 };
 
+type LayeredThemeProps = {
+  lightTextColor?: string;
+  darkTextColor?: string;
+  lightBackgroundColor?: string;
+  darkBackgroundColor?: string;
+};
+
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
 export type AntDesignProps = ThemeProps &
   React.ComponentProps<typeof DefaultAntDesign>;
+export type TextInputProps = LayeredThemeProps & DefaultTextInput["props"];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -96,4 +106,36 @@ const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
   );
 });
 
-export { FlatList, ScrollView };
+const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
+  const {
+    style,
+    lightTextColor,
+    darkTextColor,
+    lightBackgroundColor,
+    darkBackgroundColor,
+    ...otherProps
+  } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightBackgroundColor, dark: darkBackgroundColor },
+    "textInputBackground"
+  );
+
+  const color = useThemeColor(
+    { light: lightTextColor, dark: darkTextColor },
+    "textInputText"
+  );
+
+  const placeholderTextColor = Color(color).alpha(0.3).toString();
+  console.log({ color, placeholderTextColor });
+
+  return (
+    <DefaultTextInput
+      style={[{ backgroundColor, color }, style]}
+      placeholderTextColor={placeholderTextColor}
+      {...otherProps}
+      ref={ref}
+    />
+  );
+});
+
+export { FlatList, ScrollView, TextInput };

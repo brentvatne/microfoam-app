@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet } from "react-native";
 import { NativeStack } from "expo-router";
 
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
-import { ScrollView, Text, View } from "~/components/Themed";
+import { ScrollView, Text, TextInput, View } from "~/components/Themed";
 import BlockButton from "~/components/BlockButton";
 
 export default function Auth() {
@@ -51,14 +51,12 @@ export default function Auth() {
               autoComplete="email"
               keyboardType="email-address"
               style={{
-                backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
                 flex: 1,
                 padding: 5,
                 borderRadius: 5,
                 height: 50,
                 marginBottom: 20,
-                borderColor: "black",
               }}
             />
 
@@ -91,7 +89,6 @@ export default function Auth() {
               keyboardType="number-pad"
               autoCapitalize="none"
               style={{
-                backgroundColor: TailwindColor["gray-100"],
                 fontSize: FontSize.lg,
                 flex: 1,
                 padding: 5,

@@ -230,11 +230,16 @@ export const ThemeColors = {
     view: TailwindColor.white,
     viewAccent: TailwindColor.white,
     tint: TailwindColor["blue-400"],
+    textInputBackground: TailwindColor["gray-100"],
+    textInputText: TailwindColor.black,
   },
   dark: {
     text: TailwindColor.white,
     view: "rgb(30,30,30)",
     viewAccent: "rgb(45,45,45)",
-    tint: TailwindColor["blue-400"],
+    tint: TailwindColor.white,
+    textInputBackground: TailwindColor["zinc-700"],
+    textInputText: TailwindColor.white,
+    textInputPlaceholder: TailwindColor["zinc-500"],
   },
 };

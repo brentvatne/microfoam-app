@@ -3,12 +3,13 @@ import { Alert, StyleSheet, View as UnthemedView } from "react-native";
 import { NativeStack, useLink } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
+import { MotiView } from "moti";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
-/* TODO: pass through ref on FlatList wrapper */
 import { AntDesign, FlatList, Text, View } from "~/components/Themed";
+import { humanDate } from "~/utils/formatDate";
 
 export default function LogListScreen() {
   const pours = PourStore.usePours();
@@ -33,21 +34,30 @@ export default function LogListScreen() {
           ),
         }}
       />
-      <FlatList
-        data={pours}
-        renderItem={renderItem}
-        ref={ref}
-        ItemSeparatorComponent={() => (
-          <View
-            darkColor={TailwindColor["zinc-700"]}
-            lightColor={TailwindColor["gray-100"]}
-            style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
+      <View style={{ flex: 1 }}>
+        <MotiView
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: "timing", duration: 500 }}
+          style={{ flex: 1 }}
+        >
+          <FlatList
+            data={pours}
+            renderItem={renderItem}
+            ref={ref}
+            ItemSeparatorComponent={() => (
+              <View
+                darkColor={TailwindColor["zinc-700"]}
+                lightColor={TailwindColor["gray-100"]}
+                style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={EmptyState}
+            style={{ flex: 1 }}
           />
-        )}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={EmptyState}
-        style={{ flex: 1 }}
-      />
+        </MotiView>
+      </View>
     </>
   );
 }
@@ -90,7 +100,7 @@ function PourRow({ item }) {
             borderRadius: 5,
             marginRight: Margin[3],
             overflow: "hidden",
-            backgroundColor: TailwindColor["gray-200"],
+            backgroundColor: "transparent",
           }}
         />
 
@@ -133,7 +143,7 @@ function PourRow({ item }) {
               lightColor={TailwindColor["gray-600"]}
               style={{ fontSize: FontSize.base }}
             >
-              {new Date(parseInt(item.date_time, 10)).toDateString()}
+              {humanDate(item.date_time)}
             </Text>
           </UnthemedView>
         </UnthemedView>

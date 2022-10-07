@@ -4,7 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
 } from "react";
-import { Keyboard, TextInput, StyleSheet, useColorScheme } from "react-native";
+import { Keyboard, StyleSheet, useColorScheme } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import DatePicker from "react-native-date-picker";
@@ -26,6 +26,7 @@ import {
   AntDesign,
   ScrollView,
   Text,
+  TextInput,
   View,
   useThemeColor,
 } from "~/components/Themed";
@@ -194,7 +195,6 @@ function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
             placeholder="What went well? What could be improved?"
             style={{
               height: 100,
-              backgroundColor: TailwindColor["gray-100"],
               paddingHorizontal: 10,
               paddingTop: 10,
               fontSize: FontSize.lg,

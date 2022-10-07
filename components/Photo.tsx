@@ -32,13 +32,20 @@ export default function Photo(props: Props) {
 
   return (
     <View style={containerStyle}>
-      <FastImage
-        onLoad={() => setIsLoaded(true)}
-        onError={() => console.log(`error loading image: ${uri}`)}
-        source={{ uri: maybeLocalUri }}
-        resizeMode={resizeMode}
+      <MotiView
+        from={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ type: "timing", duration: 300 }}
         style={[StyleSheet.absoluteFill]}
-      />
+      >
+        <FastImage
+          onLoad={() => setIsLoaded(true)}
+          onError={() => console.log(`error loading image: ${uri}`)}
+          source={{ uri: maybeLocalUri }}
+          resizeMode={resizeMode}
+          style={[StyleSheet.absoluteFill]}
+        />
+      </MotiView>
 
       <AnimatePresence>
         {!isLoaded && (
