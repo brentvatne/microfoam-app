@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLink, NativeStack } from "expo-router";
+import { useLink, Stack } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import * as PourStore from "~/storage/PourStore";
@@ -32,7 +32,7 @@ export default function EditPourScreen({ route }) {
 
   return (
     <>
-      <NativeStack.Screen
+      <Stack.Screen
         options={{
           title: "Edit pour",
           headerLeft: () => (

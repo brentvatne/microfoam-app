@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { NativeStack } from "expo-router";
+import { Stack } from "expo-router";
 
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
@@ -15,7 +15,7 @@ export default function Auth() {
 
   return (
     <>
-      <NativeStack.Screen options={{ title: "Authentication" }} />
+      <Stack.Screen options={{ title: "Authentication" }} />
       <ScrollView keyboardShouldPersistTaps="never" style={{ flex: 1 }}>
         {session && (
           <View

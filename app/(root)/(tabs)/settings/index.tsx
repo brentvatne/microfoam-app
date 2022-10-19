@@ -4,7 +4,7 @@ import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
-import { NativeStack, useLink } from "expo-router";
+import { Stack, useLink } from "expo-router";
 
 import * as db from "~/storage/db";
 import { isLocalFile } from "~/storage/fs";
@@ -66,7 +66,7 @@ function AuthButton() {
 export default function Settings() {
   return (
     <>
-      <NativeStack.Screen options={{ title: "Settings" }} />
+      <Stack.Screen options={{ title: "Settings" }} />
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ minHeight: "100%" }}

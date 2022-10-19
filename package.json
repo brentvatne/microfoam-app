@@ -30,7 +30,7 @@
     "expo-image-manipulator": "^10.4.0",
     "expo-image-picker": "~13.3.1",
     "expo-media-library": "~14.2.0",
-    "expo-router": "^0.0.19",
+    "expo-router": "^0.0.31",
     "expo-sharing": "~10.3.0",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",

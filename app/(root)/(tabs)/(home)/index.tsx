@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Alert, StyleSheet, View as UnthemedView } from "react-native";
-import { NativeStack, useLink } from "expo-router";
+import { Stack, useLink } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
 import { MotiView } from "moti";
@@ -19,7 +19,7 @@ export default function LogListScreen() {
 
   return (
     <>
-      <NativeStack.Screen
+      <Stack.Screen
         options={{
           title: "Pours",
           headerRight: () => (

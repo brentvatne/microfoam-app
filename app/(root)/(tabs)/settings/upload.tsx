@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { NativeStack } from "expo-router";
+import { Stack } from "expo-router";
 import { RectButton } from "react-native-gesture-handler";
 import prettyBytes from "pretty-bytes";
 import format from "date-fns/format";
@@ -175,7 +175,7 @@ export default function Upload() {
 
   return (
     <>
-      <NativeStack.Screen options={{ title: "Upload photos" }} />
+      <Stack.Screen options={{ title: "Upload photos" }} />
       <FlatList
         data={poursWithLocalPhotos}
         renderItem={renderItem}

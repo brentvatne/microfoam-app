@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { NativeStack, RootContainer } from "expo-router";
+import { Stack, RootContainer } from "expo-router";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
 
@@ -18,7 +18,7 @@ export default function Root() {
   return (
     <>
       <ContainerConfiguration />
-      <NativeStack screenOptions={{ presentation: "modal" }} />
+      <Stack screenOptions={{ presentation: "modal" }} />
     </>
   );
 }

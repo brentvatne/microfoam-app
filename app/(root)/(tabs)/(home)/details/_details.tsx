@@ -1,4 +1,4 @@
-import { NativeStack, useLink, Children } from "expo-router";
+import { Stack, useLink, Children } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
 
@@ -11,7 +11,7 @@ export default function DetailsLayout({ route }) {
 
   return (
     <>
-      <NativeStack.Screen
+      <Stack.Screen
         options={{
           title: null,
           headerRight: () => (

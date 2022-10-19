@@ -1843,24 +1843,10 @@
     react-is "^16.13.0"
     use-latest-callback "^0.1.5"
 
-"@react-navigation/drawer@^6.4.4":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-6.5.0.tgz#6f73a04deca2ce046626a60d9a59b11e8cc97167"
-  integrity sha512-ma3qPjAfbwF07xd1w1gaWdcvYWmT4F+Z098q2J7XGbHw8yTGQYiNTnD1NMKerXwxM24vui2tMuFHA54F1rIvHQ==
-  dependencies:
-    "@react-navigation/elements" "^1.3.6"
-    color "^4.2.3"
-    warn-once "^0.1.0"
-
 "@react-navigation/elements@^1.3.5":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.5.tgz#904876ce3f3c36632f242322dd622bb3e18e6775"
   integrity sha512-3Ef5cYuQXqJRco7RG99fkDEciAuYTkAD7go5D8RFYG8rAp2aI/cDnGwFwvFVANlRsbFFPGU3ZLY8EUJihf4Hjw==
-
-"@react-navigation/elements@^1.3.6":
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.6.tgz#fa700318528db93f05144b1be4b691b9c1dd1abe"
-  integrity sha512-pNJ8R9JMga6SXOw6wGVN0tjmE6vegwPmJBL45SEMX2fqTfAk2ykDnlJHodRpHpAgsv0DaI8qX76z3A+aqKSU0w==
 
 "@react-navigation/native-stack@^6.8.0":
   version "6.8.0"
@@ -1886,15 +1872,6 @@
   integrity sha512-uJ+N7dyrZjA2L3ykyH0OyEiLNhzxDSfUqgOS4LmrLWlgly/oYFfPTqsxCD8zP0r3hv7ayLIPQPC1u1ubSO+42A==
   dependencies:
     nanoid "^3.1.23"
-
-"@react-navigation/stack@^6.2.3":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-6.3.1.tgz#71f53d7598332765da08f78b56aeae245cc98cb6"
-  integrity sha512-WkURDiSip8QpB+cuEbp5GfDPDGxER7w7ooJVgG3J2nJNnYuKxsZR7qnlqWL2vjQW81NzKQpT7xrCADy+mfvIiQ==
-  dependencies:
-    "@react-navigation/elements" "^1.3.6"
-    color "^4.2.3"
-    warn-once "^0.1.0"
 
 "@segment/loosely-validate-event@^2.0.0":
   version "2.0.0"
@@ -3570,27 +3547,21 @@ expo-modules-core@0.11.5:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-router@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.19.tgz#1e170861639761075e579d3095fd5abc47a5fe63"
-  integrity sha512-x5dTuXAfrRopid8jrpCrjyOQr4LJXZZuElb4bu9HRlmXvSMoDRgNbKZSelXUOIelSbvgPp7GIxnx1C7wFfbfYg==
+expo-router@^0.0.31:
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.31.tgz#f31b091c5859ac7f1d6e6f1b12048d579559fedd"
+  integrity sha512-0wcMve7Q0b7qG9GNWFhz1/jVD0s+W7jC1udBf0N5RgqUKtYeHjtzcl4ops/58gB5mv71lGgltSmrdakRI9OnSg==
   dependencies:
     "@bacons/expo-metro-runtime" "^2.0.1"
     "@bacons/react-views" "^1.1.3"
     "@radix-ui/react-slot" "^1.0.0"
     "@react-navigation/bottom-tabs" "^6.3.3"
-    "@react-navigation/drawer" "^6.4.4"
     "@react-navigation/native" "^6.0.12"
     "@react-navigation/native-stack" "^6.8.0"
-    "@react-navigation/stack" "^6.2.3"
     expo-constants "~13.2.4"
     expo-linking "^3.2.2"
     expo-splash-screen "^0.16.2"
     expo-status-bar "^1.4.0"
-    react-native-gesture-handler "~2.5.0"
-    react-native-reanimated "~2.9.1"
-    react-native-safe-area-context "4.3.1"
-    react-native-screens "~3.15.0"
 
 expo-sharing@~10.3.0:
   version "10.3.0"
@@ -6464,7 +6435,7 @@ react-native-fast-image@^8.6.1:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.1.tgz#6a3a11b8ebc7629919265d33a420a04d13c897e0"
   integrity sha512-ILuP7EuakqHNzTr8ZbumhuxG4tE/wGQ66z4nEEuzc0FlqY6rYaPsnq/UD2ahoyFj6QP1WvA2RIK3odib+VcqWg==
 
-react-native-gesture-handler@2.6.2, react-native-gesture-handler@~2.5.0, react-native-gesture-handler@~2.6.2:
+react-native-gesture-handler@2.6.2, react-native-gesture-handler@~2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.6.2.tgz#f3b68d374f5dda603ff29f7df2edb39472eb97ce"
   integrity sha512-Ff/WKlR8KiM1wq7UJZvIyCB+OsweewaeZk+4RDIYNGM9tvNIAXEm/MtYnLHiBXiSJjZItF/8B83gE6pVq40vIw==

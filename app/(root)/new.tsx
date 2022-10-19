@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLink, NativeStack } from "expo-router";
+import { useLink, Stack } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { AntDesign } from "~/components/Themed";
 
@@ -34,7 +34,7 @@ export default function NewPourScreen() {
 
   return (
     <>
-      <NativeStack.Screen
+      <Stack.Screen
         options={{
           title: "Log a new pour",
           headerLeft: () => (
