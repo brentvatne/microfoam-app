@@ -36,7 +36,7 @@ export default function Photo(props: Props) {
       <MotiView
         from={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ type: "timing", duration: 300 }}
+        transition={{ type: "timing", duration: 400 }}
         style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
       >
         <FastImage
@@ -55,6 +55,7 @@ export default function Photo(props: Props) {
               from={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ type: "timing", duration: 400 }}
               style={[StyleSheet.absoluteFill]}
             >
               <Blurhash blurhash={blurhash} style={{ flex: 1 }} />
