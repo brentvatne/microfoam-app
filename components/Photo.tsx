@@ -4,6 +4,7 @@ import { Blurhash } from "react-native-blurhash";
 import { AnimatePresence, MotiView } from "moti";
 import FastImage, { ResizeMode } from "react-native-fast-image";
 import * as FileSystem from "expo-file-system";
+import { TailwindColor } from "~/constants/colors";
 
 import { PHOTOS_DIRECTORY, isLocalFile } from "~/storage/fs";
 
@@ -36,28 +37,33 @@ export default function Photo(props: Props) {
         from={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ type: "timing", duration: 300 }}
-        style={[StyleSheet.absoluteFill]}
+        style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
       >
         <FastImage
           onLoad={() => setIsLoaded(true)}
           onError={() => console.log(`error loading image: ${uri}`)}
           source={{ uri: maybeLocalUri }}
           resizeMode={resizeMode}
-          style={[StyleSheet.absoluteFill]}
+          style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
         />
       </MotiView>
 
       <AnimatePresence>
-        {!isLoaded && (
-          <MotiView
-            from={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={[StyleSheet.absoluteFill]}
-          >
-            <Blurhash blurhash={blurhash} style={{ flex: 1 }} />
-          </MotiView>
-        )}
+        {!isLoaded &&
+          (blurhash ? (
+            <MotiView
+              from={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={[StyleSheet.absoluteFill]}
+            >
+              <Blurhash blurhash={blurhash} style={{ flex: 1 }} />
+            </MotiView>
+          ) : (
+            <View
+              style={[StyleSheet.absoluteFill, { backgroundColor: TailwindColor['neutral-300'] }]}
+            />
+          ))}
       </AnimatePresence>
     </View>
   );

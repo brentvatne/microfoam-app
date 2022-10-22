@@ -38,13 +38,16 @@ export default function ShowPour({ route }) {
         <View
           style={[
             StyleSheet.absoluteFill,
-            { alignItems: "center", justifyContent: "center" },
+            {
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "transparent",
+            },
           ]}
         >
           <Photo
             uri={pour.photo_url}
             containerStyle={{
-              backgroundColor: TailwindColor.black,
               width: targetImageWidth,
               height: targetImageHeight,
             }}

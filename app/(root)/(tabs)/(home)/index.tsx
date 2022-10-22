@@ -1,5 +1,10 @@
 import { useRef } from "react";
-import { Alert, StyleSheet, View as UnthemedView } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Platform,
+  View as UnthemedView,
+} from "react-native";
 import { Stack, useLink } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
@@ -17,21 +22,28 @@ export default function LogListScreen() {
   const ref = useRef(null);
   useScrollToTop(ref);
 
+  const headerButton = () => (
+    <BorderlessButton
+      hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+      onPress={() => {
+        link.push("/new");
+      }}
+    >
+      <AntDesign
+        name={Platform.select({ ios: "plus", default: "pluscircleo" })}
+        size={24}
+      />
+    </BorderlessButton>
+  );
+
   return (
     <>
       <Stack.Screen
         options={{
           title: "Pours",
-          headerRight: () => (
-            <BorderlessButton
-              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
-              onPress={() => {
-                link.push("/new");
-              }}
-            >
-              <AntDesign name="pluscircleo" size={24} />
-            </BorderlessButton>
-          ),
+          ...(Platform.OS === "ios"
+            ? { headerLeft: headerButton }
+            : { headerRight: headerButton }),
         }}
       />
       <View style={{ flex: 1 }}>

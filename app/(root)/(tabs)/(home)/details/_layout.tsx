@@ -1,13 +1,10 @@
 import { Stack, useLink, Children } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
-import format from "date-fns/format";
 
-import * as PourStore from "~/storage/PourStore";
 import { AntDesign } from "~/components/Themed";
 
 export default function DetailsLayout({ route }) {
   const link = useLink();
-  const pour = PourStore.usePour(route.params?.id);
 
   return (
     <>

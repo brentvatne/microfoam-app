@@ -155,6 +155,7 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
     uri: data.photo_url,
     blurhash: data.blurhash,
   });
+
   const { status, rows, message } = exec(
     `
     INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
