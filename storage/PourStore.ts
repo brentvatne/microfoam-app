@@ -50,30 +50,20 @@ export function loadFromJSON(json: string) {
   destroyAll();
 
   rows.forEach((row) => {
-    const { status, message } = exec(
+    exec(
       `
     INSERT INTO pours (id, date_time, photo_url, rating, notes, blurhash, pattern)
       VALUES (?, ?, ?, ?, ?, ?, ?);
   `,
       row
     );
-
-    if (status === 1) {
-      throw new Error(message);
-    }
   });
 
   store.setState(() => all());
 }
 
 export function all() {
-  const { status, message, rows } = exec(
-    `SELECT * FROM pours ORDER BY DATE_TIME DESC;`
-  );
-
-  if (status === 1) {
-    throw new Error(message);
-  }
+  const { rows } = exec(`SELECT * FROM pours ORDER BY DATE_TIME DESC;`);
 
   return rows._array as PourRecord[];
 }
@@ -85,7 +75,7 @@ export async function updateAsync(id: number, pour: PourRecord) {
     blurhash: pour.blurhash,
   });
 
-  const { status, message } = exec(
+  exec(
     `
     UPDATE pours
       SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?, pattern = ?
@@ -101,10 +91,6 @@ export async function updateAsync(id: number, pour: PourRecord) {
       id,
     ]
   );
-
-  if (status === 1) {
-    throw new Error(message);
-  }
 
   store.setState(() => all());
 }
@@ -156,7 +142,7 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
     blurhash: data.blurhash,
   });
 
-  const { status, rows, message } = exec(
+  const { rows } = exec(
     `
     INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -165,34 +151,18 @@ export async function createAsync(data: Omit<PourRecord, "id">) {
     [data.date_time, photoUrl, data.rating, data.notes, blurhash, data.pattern]
   );
 
-  if (status === 1) {
-    throw new Error(message);
-  }
-
   store.setState(() => all());
 
   return { id: rows._array[0].id };
 }
 
 export function destroy(data: Pick<PourRecord, "id">) {
-  const { status, message } = exec(`DELETE FROM pours WHERE id = ?;`, [
-    data.id,
-  ]);
-
-  if (status === 1) {
-    throw new Error(message);
-  }
-
+  exec(`DELETE FROM pours WHERE id = ?;`, [data.id]);
   store.setState(() => all());
 }
 
 export function destroyAll() {
-  const { status, message } = exec(`DELETE FROM pours;`);
-
-  if (status === 1) {
-    throw new Error(message);
-  }
-
+  exec(`DELETE FROM pours;`);
   store.setState(() => all());
 }
 
