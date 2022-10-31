@@ -11,8 +11,9 @@ npm-debug.*
 web-build/
 
 # Ignore native projects, generate them with prebuild
-ios
 android
 
 # macOS
 .DS_Store
+
+ios/Pods
