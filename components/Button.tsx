@@ -14,6 +14,7 @@ export default function Button({
 }) {
   return (
     <BorderlessButton
+      borderless={false}
       hitSlop={{ top: 16, left: 16, bottom: 16, right: 16 }}
       enabled={!disabled}
       onPress={onPress}

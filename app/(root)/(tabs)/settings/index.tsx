@@ -5,6 +5,7 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
 import { Stack, useLink } from "expo-router";
+import { setTheme, Theme } from "expo-settings";
 
 import * as db from "~/storage/db";
 import { isLocalFile } from "~/storage/fs";
@@ -89,6 +90,27 @@ export default function Settings() {
         />
 
         <Text style={styles.header}>Debug tools</Text>
+
+        <Button
+          title="Use light theme"
+          onPress={() => {
+            setTheme(Theme.Light);
+          }}
+        />
+
+        <Button
+          title="Use dark theme"
+          onPress={() => {
+            setTheme(Theme.Dark);
+          }}
+        />
+
+        <Button
+          title="Use system theme"
+          onPress={() => {
+            setTheme(Theme.System);
+          }}
+        />
 
         <Button
           title="Clear data"

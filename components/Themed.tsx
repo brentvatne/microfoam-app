@@ -1,9 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, createContext, useContext } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
   TextInput as DefaultTextInput,
-  useColorScheme,
 } from "react-native";
 import {
   FlatList as DefaultFlatList,
@@ -14,12 +13,15 @@ import Color from "color";
 
 import { ThemeColors } from "~/constants/colors";
 
+export const ThemeContext = createContext<"light" | "dark">("light");
+
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName?: keyof typeof ThemeColors.light & keyof typeof ThemeColors.dark
 ) {
-  const theme = useColorScheme();
+  const theme = useContext(ThemeContext);
   const colorFromProps = props[theme];
+  console.log(theme);
 
   if (colorFromProps) {
     return colorFromProps;

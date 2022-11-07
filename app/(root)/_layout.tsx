@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack, RootContainer } from "expo-router";
 import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
+import { ThemeContext } from "~/components/Themed";
+import * as Settings from "expo-settings";
 
 const CustomDarkTheme = {
   ...DarkTheme,
@@ -15,23 +18,31 @@ const CustomDarkTheme = {
 };
 
 export default function Root() {
-  return (
-    <>
-      <ContainerConfiguration />
-      <Stack screenOptions={{ presentation: "modal" }} />
-    </>
-  );
-}
-
-function ContainerConfiguration() {
   const colorScheme = useColorScheme();
+  const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
+
+  useEffect(() => {
+    const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
+      setTheme(newTheme);
+    });
+
+    return () => subscription.remove();
+  }, [setTheme]);
+
+  let resolvedColorScheme = colorScheme;
+  if (theme !== Settings.Theme.System) {
+    resolvedColorScheme = theme === Settings.Theme.Dark ? "dark" : "light";
+  }
 
   return (
     <>
-      <StatusBar style={colorScheme === "light" ? "dark" : "light"} />
+      <StatusBar style={resolvedColorScheme === "light" ? "dark" : "light"} />
       <RootContainer
-        theme={colorScheme === "dark" ? CustomDarkTheme : DefaultTheme}
+        theme={resolvedColorScheme === "dark" ? CustomDarkTheme : DefaultTheme}
       />
+      <ThemeContext.Provider value={resolvedColorScheme}>
+        <Stack screenOptions={{ presentation: "modal" }} />
+      </ThemeContext.Provider>
     </>
   );
 }
