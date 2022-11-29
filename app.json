@@ -34,11 +34,6 @@
       },
       "package": "com.brents.microfoam"
     },
-    "extra": {
-      "eas": {
-        "projectId": "f19296df-44bd-482a-90bb-2af254c6ac42"
-      }
-    },
     "runtimeVersion": {
       "policy": "appVersion"
     }

@@ -9,6 +9,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+.envrc
 
 # Ignore native projects, generate them with prebuild
 ios

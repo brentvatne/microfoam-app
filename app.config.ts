@@ -13,6 +13,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.android,
     package: getPackage(config),
   },
+  extra: {
+    eas: {
+      projectId: process.env.EAS_PROJECT_ID,
+    },
+  },
   plugins: [
     [
       "expo-document-picker",

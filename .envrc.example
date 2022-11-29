@@ -1,0 +1,4 @@
+# This is the actual project ID, but unless you are part of the organization on EAS,
+# you will not be able to access it. You can run `eas init` to create a new project
+# on EAS and replace the ID here with the given ID.
+export EAS_PROJECT_ID="f19296df-44bd-482a-90bb-2af254c6ac42"
