@@ -27,8 +27,13 @@ export function clear() {
 }
 
 function _schemaIsValid() {
-  const { metadata } = exec(`SELECT * FROM pours;`);
-  return metadata !== undefined;
+  try {
+    const { metadata } = exec(`SELECT * FROM pours;`);
+    console.log(metadata)
+    return metadata !== undefined;
+  } catch(e) {
+    return false;
+  }
 }
 
 function _createSchema() {

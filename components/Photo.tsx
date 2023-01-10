@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { AnimatePresence, MotiView } from "moti";
-import FastImage, { ResizeMode } from "react-native-fast-image";
+import { Image } from "expo-image";
 import * as FileSystem from "expo-file-system";
 import { TailwindColor } from "~/constants/colors";
 
@@ -12,7 +12,7 @@ type Props = {
   blurhash?: string;
   uri: string;
   containerStyle?: ViewProps["style"];
-  resizeMode?: ResizeMode;
+  resizeMode?: "cover" | "contain";
 };
 
 export default function Photo(props: Props) {
@@ -39,11 +39,11 @@ export default function Photo(props: Props) {
         transition={{ type: "timing", duration: 400 }}
         style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
       >
-        <FastImage
+        <Image
           onLoad={() => setIsLoaded(true)}
           onError={() => console.log(`error loading image: ${uri}`)}
           source={{ uri: maybeLocalUri }}
-          resizeMode={resizeMode}
+          contentFit={resizeMode}
           style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
         />
       </MotiView>
@@ -62,7 +62,10 @@ export default function Photo(props: Props) {
             </MotiView>
           ) : (
             <View
-              style={[StyleSheet.absoluteFill, { backgroundColor: TailwindColor['neutral-300'] }]}
+              style={[
+                StyleSheet.absoluteFill,
+                { backgroundColor: TailwindColor["neutral-300"] },
+              ]}
             />
           ))}
       </AnimatePresence>
