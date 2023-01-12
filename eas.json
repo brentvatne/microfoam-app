@@ -4,12 +4,19 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "base": {
+      "ios": {
+        "resourceClass": "m1-medium"
+      }
+    },
     "development": {
+      "extends": "base",
       "channel": "development",
-      "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "developmentClient": true
     },
     "preview": {
+      "extends": "base",
       "channel": "preview",
       "distribution": "internal",
       "env": {
@@ -17,6 +24,7 @@
       }
     },
     "production": {
+      "extends": "base",
       "channel": "production",
       "autoIncrement": true,
       "env": {

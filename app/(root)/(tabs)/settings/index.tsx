@@ -260,10 +260,8 @@ function UploadButton() {
 
 async function importDatabaseAsync() {
   const result = await DocumentPicker.getDocumentAsync();
-  console.log(result);
   if (result.type === "success") {
     const data = await FileSystem.readAsStringAsync(result.uri);
-    console.log(data);
     try {
       PourStore.loadFromJSON(data);
       alert("Imported data successfully");
