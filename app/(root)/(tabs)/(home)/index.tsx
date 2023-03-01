@@ -105,6 +105,7 @@ function PourRow({ item }) {
       <UnthemedView style={{ flexDirection: "row" }}>
         <Photo
           uri={item.photo_url}
+          sharedTransition
           blurhash={item.blurhash}
           containerStyle={{
             height: 100,

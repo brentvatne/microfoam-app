@@ -29,31 +29,15 @@ export default function ShowPour({ route }) {
           backgroundColor: TailwindColor["black"],
         }}
       >
-        {pour.blurhash ? (
-          <Blurhash
-            blurhash={pour.blurhash}
-            style={{ flex: 1, opacity: 0.5 }}
-          />
-        ) : null}
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "transparent",
-            },
-          ]}
-        >
-          <Photo
-            uri={pour.photo_url}
-            containerStyle={{
-              width: targetImageWidth,
-              height: targetImageHeight,
-            }}
-            resizeMode="contain"
-          />
-        </View>
+        <Photo
+          sharedTransition
+          uri={pour.photo_url}
+          containerStyle={{
+            width: targetImageWidth,
+            height: targetImageHeight,
+          }}
+          resizeMode="contain"
+        />
       </View>
 
       <View

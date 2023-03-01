@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "jsEngine": "hermes",
     "scheme": "microfoam",
     "backgroundColor": "#1e1e1e",
     "splash": {
@@ -18,7 +17,6 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/f19296df-44bd-482a-90bb-2af254c6ac42"
     },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
@@ -27,6 +25,7 @@
         "usesNonExemptEncryption": false
       }
     },
+    "assetBundlePatterns": ["node_modules/expo-router/**/*"],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

@@ -1,23 +1,23 @@
-import { useState } from "react";
-import { StyleSheet, View, ViewProps } from "react-native";
-import { Blurhash } from "react-native-blurhash";
-import { AnimatePresence, MotiView } from "moti";
+import { StyleSheet, ViewProps } from "react-native";
+import { View } from "~/components/Themed";
 import { Image } from "expo-image";
 import * as FileSystem from "expo-file-system";
-import { TailwindColor } from "~/constants/colors";
+import Animated from "react-native-reanimated";
 
 import { PHOTOS_DIRECTORY, isLocalFile } from "~/storage/fs";
+
+Animated.createAnimatedComponent(Image);
 
 type Props = {
   blurhash?: string;
   uri: string;
   containerStyle?: ViewProps["style"];
   resizeMode?: "cover" | "contain";
+  sharedTransition?: boolean;
 };
 
 export default function Photo(props: Props) {
-  const { blurhash, uri, resizeMode, containerStyle } = props;
-  const [isLoaded, setIsLoaded] = useState(isLocalFile(uri));
+  const { blurhash, uri, resizeMode, containerStyle, sharedTransition } = props;
 
   let maybeLocalUri = uri;
 
@@ -32,43 +32,18 @@ export default function Photo(props: Props) {
   }
 
   return (
-    <View style={containerStyle}>
-      <MotiView
-        from={{ opacity: 0 }}
-        animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ type: "timing", duration: 400 }}
-        style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
-      >
-        <Image
-          onLoad={() => setIsLoaded(true)}
-          onError={() => console.log(`error loading image: ${uri}`)}
-          source={{ uri: maybeLocalUri }}
-          contentFit={resizeMode}
-          style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
-        />
-      </MotiView>
-
-      <AnimatePresence>
-        {!isLoaded &&
-          (blurhash ? (
-            <MotiView
-              from={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: "timing", duration: 400 }}
-              style={[StyleSheet.absoluteFill]}
-            >
-              <Blurhash blurhash={blurhash} style={{ flex: 1 }} />
-            </MotiView>
-          ) : (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: TailwindColor["neutral-300"] },
-              ]}
-            />
-          ))}
-      </AnimatePresence>
+    <View style={containerStyle} darkColor="black" lightColor="white">
+      <Animated.Image
+        sharedTransitionTag={sharedTransition ? `shared-tag-${uri}` : undefined}
+        onError={() => console.log(`error loading image: ${uri}`)}
+        source={{ uri: maybeLocalUri }}
+        /* @ts-ignore */
+        /* .. this crashes reanimated? */
+        // placeholder={blurhash}
+        /* @ts-ignore */
+        contentFit={resizeMode}
+        style={[StyleSheet.absoluteFillObject, { backgroundColor: "white" }]}
+      />
     </View>
   );
 }
