@@ -11,6 +11,7 @@ import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
 import * as Settings from "expo-settings";
 
+
 const CustomDarkTheme = {
   ...DarkTheme,
   colors: {
