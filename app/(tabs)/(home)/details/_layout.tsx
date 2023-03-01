@@ -16,7 +16,7 @@ export default function DetailsLayout() {
             <BorderlessButton
               hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
               onPress={() => {
-                router.push(`/${params.id}`);
+                router.push(`/edit/${params.id}`);
               }}
             >
               <AntDesign name="edit" size={24} />
