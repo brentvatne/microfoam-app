@@ -1,10 +1,11 @@
-import { Stack, useLink, Children } from "expo-router";
+import { Stack, useRouter, Slot, useSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { AntDesign } from "~/components/Themed";
 
-export default function DetailsLayout({ route }) {
-  const link = useLink();
+export default function DetailsLayout() {
+  const params = useSearchParams();
+  const router = useRouter();
 
   return (
     <>
@@ -15,7 +16,7 @@ export default function DetailsLayout({ route }) {
             <BorderlessButton
               hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
               onPress={() => {
-                link.push(`/${route.params.id}`);
+                router.push(`/${params.id}`);
               }}
             >
               <AntDesign name="edit" size={24} />
@@ -23,7 +24,7 @@ export default function DetailsLayout({ route }) {
           ),
         }}
       />
-      <Children />
+      <Slot />
     </>
   );
 }

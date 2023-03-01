@@ -257,30 +257,31 @@ function PhotoPickerForm({ onChange, photoUri }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
-    if (result.cancelled === true) {
+    if (result.canceled === true) {
       return;
     }
 
     let creationTime = null;
-    if (result.assetId) {
+    const asset = result.assets[0];
+    if (asset.assetId) {
       try {
-        const assetInfo = await MediaLibrary.getAssetInfoAsync(result.assetId);
+        const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.assetId);
         if (assetInfo?.creationTime) {
           creationTime = new Date(assetInfo.creationTime);
         }
       } catch (e) {
         console.warn(
-          `Unable to get asset info for ID "${result.assetId}": ${e.message}`
+          `Unable to get asset info for ID "${asset.assetId}": ${e.message}`
         );
       }
     }
 
     onChange({
-      uri: result.uri,
+      uri: asset.uri,
       creationTime,
-      width: result.width,
-      height: result.height,
-      exif: result.exif,
+      width: asset.width,
+      height: asset.height,
+      exif: asset.exif,
     });
   };
 
@@ -474,6 +475,7 @@ function RatingPicker({ onChange, rating }) {
   const colorScheme = useColorScheme();
 
   return (
+    // @ts-ignore: this library is not maintained ...
     <SegmentedControl
       appearance={colorScheme ?? "light"}
       values={["1", "2", "3", "4", "5"]}

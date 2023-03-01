@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { Stack, RootContainer } from "expo-router";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
+import { Stack } from "expo-router";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as ReactNavigationThemeProvider,
+} from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
 import * as Settings from "expo-settings";
@@ -37,12 +41,13 @@ export default function Root() {
   return (
     <>
       <StatusBar style={resolvedColorScheme === "light" ? "dark" : "light"} />
-      <RootContainer
-        theme={resolvedColorScheme === "dark" ? CustomDarkTheme : DefaultTheme}
-      />
-      <ThemeContext.Provider value={resolvedColorScheme}>
-        <Stack screenOptions={{ presentation: "modal" }} />
-      </ThemeContext.Provider>
+      <ReactNavigationThemeProvider
+        value={resolvedColorScheme === "dark" ? CustomDarkTheme : DefaultTheme}
+      >
+        <ThemeContext.Provider value={resolvedColorScheme}>
+          <Stack screenOptions={{ presentation: "modal" }} />
+        </ThemeContext.Provider>
+      </ReactNavigationThemeProvider>
     </>
   );
 }

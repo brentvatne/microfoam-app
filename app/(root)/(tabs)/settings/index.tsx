@@ -4,7 +4,7 @@ import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
-import { Stack, useLink } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { setTheme, Theme } from "expo-settings";
 
 import * as db from "~/storage/db";
@@ -17,14 +17,14 @@ import { useAuthSession } from "~/storage/supabase";
 
 function AuthButton() {
   const session = useAuthSession();
-  const link = useLink();
+  const router = useRouter();
 
   if (session) {
     return (
       <View style={{ flexDirection: "column", alignItems: "center" }}>
         <Button
           title="Manage session"
-          onPress={() => link.push("/settings/auth")}
+          onPress={() => router.push("/settings/auth")}
         />
 
         <View
@@ -59,7 +59,7 @@ function AuthButton() {
     );
   } else {
     return (
-      <Button title="Sign in" onPress={() => link.push("/settings/auth")} />
+      <Button title="Sign in" onPress={() => router.push("/settings/auth")} />
     );
   }
 }
@@ -215,7 +215,7 @@ export default function Settings() {
 }
 
 function UploadButton() {
-  const link = useLink();
+  const router = useRouter();
   const pours = PourStore.usePours();
   const numPoursWithLocalPhotos = pours.filter((p) =>
     isLocalFile(p.photo_url)
@@ -231,7 +231,7 @@ function UploadButton() {
     <View style={{ flexDirection: "column", alignItems: "center" }}>
       <Button
         title="Upload photos"
-        onPress={() => link.push("/settings/upload")}
+        onPress={() => router.push("/settings/upload")}
       />
 
       <View

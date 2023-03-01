@@ -1,16 +1,17 @@
 import { useRef } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLink, Stack } from "expo-router";
+import { useRouter, Stack, useSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import * as PourStore from "~/storage/PourStore";
 import LogForm, { LogFormHandle } from "~/components/LogForm";
 import { AntDesign } from "~/components/Themed";
 
-export default function EditPourScreen({ route }) {
-  const id = parseInt(route.params?.id, 10);
-  const link = useLink();
+export default function EditPourScreen() {
+  const params = useSearchParams();
+  const id = parseInt(params.id as string, 10);
+  const router = useRouter();
   const pours = PourStore.all();
   const pour = pours.find((p) => p.id === id);
   const ref = useRef<LogFormHandle>(null);
@@ -27,7 +28,7 @@ export default function EditPourScreen({ route }) {
     });
 
     // Go back to tabs from the modal
-    link.back();
+    router.back();
   };
 
   return (
@@ -44,7 +45,7 @@ export default function EditPourScreen({ route }) {
               }}
               borderless={false}
               onPress={() => {
-                link.back();
+                router.back();
               }}
             >
               <AntDesign name="close" size={24} />
@@ -75,7 +76,7 @@ export default function EditPourScreen({ route }) {
         onSave={handleSaveAsync}
         onDelete={() => {
           PourStore.destroy({ id });
-          link.push("/");
+          router.push("/");
         }}
       />
 

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useLink, Stack } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { AntDesign } from "~/components/Themed";
 
@@ -9,7 +9,7 @@ import * as PourStore from "~/storage/PourStore";
 import LogForm, { LogFormHandle } from "~/components/LogForm";
 
 export default function NewPourScreen() {
-  const link = useLink();
+  const router = useRouter();
   const ref = useRef<LogFormHandle>(null);
   const [hasPickedPhoto, setHasPickedPhoto] = useState(false);
   const handleSaveAsync = async (data) => {
@@ -27,9 +27,9 @@ export default function NewPourScreen() {
     });
 
     // Go back to tabs from the modal (not sure if desirable?)
-    // link.push(`/details/${row.id}`);
+    // router.push(`/details/${row.id}`);
 
-    link.push(`/`);
+    router.push(`/`);
   };
 
   return (
@@ -46,7 +46,7 @@ export default function NewPourScreen() {
               }}
               borderless={false}
               onPress={() => {
-                link.back();
+                router.back();
               }}
             >
               <AntDesign name="close" size={24} />

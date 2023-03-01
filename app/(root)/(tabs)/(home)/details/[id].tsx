@@ -1,15 +1,15 @@
-import { StyleSheet } from "react-native";
-import { Blurhash } from "react-native-blurhash";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
+import { useSearchParams } from "expo-router";
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import Photo from "~/components/Photo";
 import { ScrollView, Text, View } from "~/components/Themed";
 import { humanDate } from "~/utils/formatDate";
 
-export default function ShowPour({ route }) {
-  const { id } = route.params;
+export default function ShowPour() {
+  const params = useSearchParams();
+  const id = parseInt(params.id as string, 10);
   const frame = useSafeAreaFrame();
   const pour = PourStore.usePour(id);
 

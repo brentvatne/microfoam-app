@@ -12,6 +12,8 @@ export async function getLocalPhotoInfoAsync(uri: string) {
 
   const localPath = getPathToPhoto(uri);
   const info = await FileSystem.getInfoAsync(localPath);
+
+  assert(info.exists, "File does not exist");
   return { size: info.size, modificationTime: info.modificationTime };
 }
 

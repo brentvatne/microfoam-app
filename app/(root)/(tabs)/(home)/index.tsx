@@ -5,7 +5,7 @@ import {
   Platform,
   View as UnthemedView,
 } from "react-native";
-import { Stack, useLink } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
 import { MotiView } from "moti";
@@ -18,7 +18,7 @@ import { humanDate } from "~/utils/formatDate";
 
 export default function LogListScreen() {
   const pours = PourStore.usePours();
-  const link = useLink();
+  const router = useRouter();
   const ref = useRef(null);
   useScrollToTop(ref);
 
@@ -26,7 +26,7 @@ export default function LogListScreen() {
     <BorderlessButton
       hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
       onPress={() => {
-        link.push("/new");
+        router.push("/new");
       }}
     >
       <AntDesign
@@ -75,7 +75,7 @@ export default function LogListScreen() {
 }
 
 function PourRow({ item }) {
-  const link = useLink();
+  const router = useRouter();
 
   return (
     <RectButton
@@ -84,7 +84,7 @@ function PourRow({ item }) {
         paddingHorizontal: Padding[3],
       }}
       onPress={() => {
-        link.push(`/details/${item.id}`);
+        router.push(`/details/${item.id}`);
       }}
       onLongPress={() => {
         // TODO: bottom sheet with view / share / edit / delete options
@@ -168,7 +168,7 @@ function PourRow({ item }) {
 const renderItem = ({ item }) => <PourRow item={item} />;
 
 function EmptyState() {
-  const link = useLink();
+  const router = useRouter();
 
   return (
     <View
@@ -195,7 +195,7 @@ function EmptyState() {
       <BorderlessButton
         borderless={false}
         onPress={() => {
-          link.push("/new");
+          router.push("/new");
         }}
       >
         <View
