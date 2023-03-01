@@ -33,7 +33,7 @@
     "expo-image-picker": "~14.1.1",
     "expo-linking": "~4.0.1",
     "expo-media-library": "~15.2.2",
-    "expo-router": "^0.0.35",
+    "expo-router": "~1.2.0",
     "expo-settings": "^0.1.0",
     "expo-sharing": "~11.2.1",
     "expo-splash-screen": "~0.18.1",
