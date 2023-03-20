@@ -3622,10 +3622,10 @@ expo-manifests@~0.5.0:
   dependencies:
     expo-json-utils "~0.5.0"
 
-expo-media-library@~15.2.2:
-  version "15.2.2"
-  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-15.2.2.tgz#71ece905e425f606422cd16019d78b135040e003"
-  integrity sha512-GebBavV9H+m0Qzoy4G7++BWmwUcddLnCee1qGYkCyHT6CvuLNhXUgC3FV9NINEwlii3HGAuCzk1auaEY60SGDA==
+expo-media-library@~15.2.3:
+  version "15.2.3"
+  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-15.2.3.tgz#188f3c77f58b354f0ea6250f6756ac1e1a226291"
+  integrity sha512-Oz8b8Xsvfj7YcutUBtI84NUIqSnt7iCM5HZ5DyKoWKKiDK/+aUuj3RXNQELG8jUw6pQPgEwgbZ1+J8SdH/y9jw==
 
 expo-modules-autolinking@1.1.2:
   version "1.1.2"
@@ -3666,10 +3666,10 @@ expo-settings@^0.1.0:
   resolved "https://registry.yarnpkg.com/expo-settings/-/expo-settings-0.1.0.tgz#a8e0c28838e1760a07a8aa6f011afd52bfb398fc"
   integrity sha512-R1h0i/sqEDCRm63n5SJ3PuRdG07uUKgfqoM0oghTyJ9Qdy/WOGrn7TeMrTK6kmR2NX6GgIerK80eDI37JXz+kw==
 
-expo-sharing@~11.2.1:
-  version "11.2.1"
-  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-11.2.1.tgz#5f08463cfd2b67ccd3569600d4b7badbce01365e"
-  integrity sha512-eKURYrXSO0BaPENFg50hJkQqibZq3JhVmhHAID3wGq6KzUHwBpOjkisRjWfHu7wOze9YS64CUa7xVVLPBxuzxQ==
+expo-sharing@~11.2.2:
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-11.2.2.tgz#7d9e387f1a902e6dd6838c22d9599dae9e7432cf"
+  integrity sha512-4Lhm1eS/CFIzX+JPuxMUTWBt9rv/WdvJvpQ9y+71bL/9w9dhvsdt9tv0SsNZATz4hk0tbrYD8ZEUsgiHiT1KkQ==
 
 expo-splash-screen@~0.18.1:
   version "0.18.1"
@@ -6346,10 +6346,10 @@ react-native-quick-sqlite@8.0.0-beta.1:
   resolved "https://registry.yarnpkg.com/react-native-quick-sqlite/-/react-native-quick-sqlite-8.0.0-beta.1.tgz#eafe69d6c023500d9c40dfa852ecab521023d739"
   integrity sha512-yXaGRyrKmF1gTR4xNLa7HMXZ6deSxsaKlxQ3t9CxOlSFKenzo5l6GE4hHOFYw1JReE6Z5+BICHm9fxlPI9AZGg==
 
-react-native-reanimated@3:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.0.0.tgz#03389efd8464b0ee1da18eb4e0bac28157c2b258"
-  integrity sha512-GPyUrLZHK+kou0I5PTMWNUkAaJ26ndk/MD2hcA1F8U69RSMmtzJuKUxK2C7uz3Y72W1eFunuDgsNCoLi0+W1vg==
+react-native-reanimated@~3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.0.2.tgz#8f7284fab2b0cd949779429e48f32d19a966bbd6"
+  integrity sha512-8Et90yTI9yxchGbDP79k391XZqc/64zNbASbGy8X3Vgv4EbZ1M3IkKwcIbZmbVwpA804VJ6V9nJAGUh9fP0LrA==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
