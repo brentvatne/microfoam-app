@@ -6,7 +6,7 @@
   "build": {
     "base": {
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "m-large"
       }
     },
     "development": {
