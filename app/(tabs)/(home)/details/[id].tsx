@@ -30,7 +30,6 @@ export default function ShowPour() {
         }}
       >
         <Photo
-          sharedTransition
           uri={pour.photo_url}
           containerStyle={{
             width: targetImageWidth,
