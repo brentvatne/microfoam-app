@@ -1382,10 +1382,10 @@
     resolve-from "^5.0.0"
     sucrase "^3.20.0"
 
-"@expo/metro-runtime@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-1.0.1.tgz#cb30d80e5424b3dd1b5e1ba5b35562ec90588d87"
-  integrity sha512-1vNXj5N92WuQ9zp2rAATe4YYYaLV3X9WYleAuzWEhfrPM85uHD3PUUGL3XJ0RC6t3fUeZuGpajElCTjJiAL66A==
+"@expo/metro-runtime@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-2.0.2.tgz#9460b60a6765735acab0bfc77c0995c756f0860b"
+  integrity sha512-kGlBMcDaZNewAz1dGtNHbjOInp81Li6iRMgPRC9JB+PLKSDPUEoPeWmo3Gy+ouQDg+lgvSHM0UCqgZ0c0Ah41Q==
   dependencies:
     "@bacons/react-views" "^1.1.3"
     qs "^6.10.3"
@@ -3659,18 +3659,19 @@ expo-modules-core@1.2.6:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-router@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-1.2.1.tgz#2bce42060175be21269ef48dbe6961009db31344"
-  integrity sha512-w0+f+GO99+uYJ6ndOk1DDNYEbwYPwSmGgN+wUMb7gdnUPKpsJ+hVAozfG6EzTzf9ClHarhGEcbl8V0tafYOgWQ==
+expo-router@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-1.4.2.tgz#74cd7b526893de0367951d4e4ed1b49f3dc018ed"
+  integrity sha512-u64zGQYgXrIS2vgDKKBnJFQLDxRortwn0wwRO0d03EJS47lfid5XCHiC6l+wkjBxZ3fCKG49uV2SOq4HnySO/Q==
   dependencies:
     "@bacons/react-views" "^1.1.3"
-    "@expo/metro-runtime" "1.0.1"
+    "@expo/metro-runtime" "2.0.2"
     "@radix-ui/react-slot" "^1.0.0"
     "@react-navigation/bottom-tabs" "~6.5.7"
     "@react-navigation/native" "~6.1.6"
     "@react-navigation/native-stack" "~6.9.12"
     expo-splash-screen "~0.18.1"
+    query-string "7.1.3"
     react-helmet-async "^1.3.0"
     url "^0.11.0"
 
@@ -6315,7 +6316,7 @@ qs@6.11.0, qs@^6.10.3, qs@^6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@^7.1.3:
+query-string@7.1.3, query-string@^7.1.3:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.3.tgz#a1cf90e994abb113a325804a972d98276fe02328"
   integrity sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==
@@ -6466,11 +6467,6 @@ react-native-gradle-plugin@^0.71.16:
   version "0.71.17"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.17.tgz#cf780a27270f0a32dca8184eff91555d7627dd00"
   integrity sha512-OXXYgpISEqERwjSlaCiaQY6cTY5CH6j73gdkWpK0hedxtiWMWgH+i5TOi4hIGYitm9kQBeyDu+wim9fA8ROFJA==
-
-react-native-quick-sqlite@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-quick-sqlite/-/react-native-quick-sqlite-8.0.2.tgz#67ad0a330ede647f9cd02c83115810722d5bd828"
-  integrity sha512-w5m4y0q5ggaiVS8vHmN0ihynD9hMPgLNAZJA7ZRcXs6WwR+VSW9WXUlEn1N0fgIrmoYRLNXyU5TjXx/IiKPlMA==
 
 react-native-reanimated@~2.14.4:
   version "2.14.4"

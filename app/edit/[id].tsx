@@ -10,19 +10,17 @@ import { AntDesign } from "~/components/Themed";
 
 export default function EditPourScreen() {
   const params = useSearchParams();
-  const id = parseInt(params.id as string, 10);
+  const id = params.id as string;
   const router = useRouter();
-  const pours = PourStore.all();
-  const pour = pours.find((p) => p.id === id);
+  const pour = PourStore.usePour(id);
   const ref = useRef<LogFormHandle>(null);
 
   const handleSaveAsync = async (data) => {
-    // TODO: verify it was successful
     await PourStore.updateAsync(id, {
       id,
-      date_time: data.dateTime.getTime(),
+      dateTime: data.dateTime.getTime(),
       rating: data.rating,
-      photo_url: data.photoUri,
+      photoUrl: data.photoUri,
       notes: data.notes,
       pattern: data.pattern,
     });

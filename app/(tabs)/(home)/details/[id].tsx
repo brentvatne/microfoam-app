@@ -9,7 +9,7 @@ import { humanDate } from "~/utils/formatDate";
 
 export default function ShowPour() {
   const params = useSearchParams();
-  const id = parseInt(params.id as string, 10);
+  const id = params.id as string;
   const frame = useSafeAreaFrame();
   const pour = PourStore.usePour(id);
 
@@ -30,7 +30,7 @@ export default function ShowPour() {
         }}
       >
         <Photo
-          uri={pour.photo_url}
+          uri={pour.photoUrl}
           containerStyle={{
             width: targetImageWidth,
             height: targetImageHeight,
@@ -99,7 +99,7 @@ export default function ShowPour() {
               lineHeight: FontSize.lg * 1.5,
             }}
           >
-            {humanDate(pour.date_time)}
+            {humanDate(pour.dateTime)}
           </Text>
         </View>
       </View>

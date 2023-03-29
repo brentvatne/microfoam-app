@@ -127,7 +127,6 @@ const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   );
 
   const placeholderTextColor = Color(color).alpha(0.3).toString();
-  console.log({ color, placeholderTextColor });
 
   return (
     <DefaultTextInput

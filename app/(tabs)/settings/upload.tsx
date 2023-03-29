@@ -25,7 +25,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
   useEffect(() => {
     async function getFileInfoAsync() {
       try {
-        const info = await getLocalPhotoInfoAsync(item.photo_url);
+        const info = await getLocalPhotoInfoAsync(item.photoUrl);
         setFileInfo({
           error: null,
           size: prettyBytes(info.size),
@@ -90,7 +90,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
           }}
         >
           <Photo
-            uri={item.photo_url}
+            uri={item.photoUrl}
             containerStyle={[StyleSheet.absoluteFill]}
           />
           <View
@@ -111,7 +111,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
           </View>
         </View>
         <View style={{ flex: 1, paddingLeft: Padding[3], padding: Padding[2] }}>
-          <Text style={{ marginBottom: Margin[1] }}>{item.photo_url}</Text>
+          <Text style={{ marginBottom: Margin[1] }}>{item.photoUrl}</Text>
           <Text style={{ fontWeight: "bold" }}>
             {fileInfo?.size ?? "Unknown"}
           </Text>
@@ -159,7 +159,7 @@ export default function Upload() {
   const [uploadAll, setUploadAll] = useState(false);
   const pours = PourStore.usePours();
   const poursWithLocalPhotos = pours.filter((pour) =>
-    isLocalFile(pour.photo_url)
+    isLocalFile(pour.photoUrl)
   );
   const session = useAuthSession();
 
@@ -233,8 +233,8 @@ export default function Upload() {
 
 async function syncPhotoAsync(pour: PourStore.PourRecord, userId: string) {
   try {
-    const url = await uploadImageAsync(pour.photo_url, userId);
-    PourStore.updateAsync(pour.id, { ...pour, photo_url: url });
+    const url = await uploadImageAsync(pour.photoUrl, userId);
+    PourStore.updateAsync(pour.id, { ...pour, photoUrl: url });
   } catch (e) {
     alert(e.message);
   }

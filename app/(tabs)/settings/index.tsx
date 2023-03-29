@@ -218,7 +218,7 @@ function UploadButton() {
   const router = useRouter();
   const pours = PourStore.usePours();
   const numPoursWithLocalPhotos = pours.filter((p) =>
-    isLocalFile(p.photo_url)
+    isLocalFile(p.photoUrl)
   ).length;
 
   const word = numPoursWithLocalPhotos === 1 ? "photo" : "photos";
@@ -274,7 +274,7 @@ async function importDatabaseAsync() {
 async function maybeExportDatabaseAsync() {
   const pours = PourStore.all();
   const poursWithLocalPhotos = pours.filter((pour) =>
-    isLocalFile(pour.photo_url)
+    isLocalFile(pour.photoUrl)
   );
 
   if (poursWithLocalPhotos.length > 0) {

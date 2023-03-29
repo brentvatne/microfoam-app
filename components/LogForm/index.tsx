@@ -54,11 +54,11 @@ type Props = {
 function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
   const [dateTimePickerVisible, setDateTimePickerVisible] = useState(false);
   const [dateTime, setDateTime] = useState(
-    maybeDate(initialData?.date_time) ?? new Date()
+    maybeDate(initialData?.dateTime) ?? new Date()
   );
   const [rating, setRating] = useState(initialData?.rating ?? 3);
   const [photoUri, setPhotoUri] = useState<string | undefined>(
-    initialData?.photo_url
+    initialData?.photoUrl
   );
   const [notes, setNotes] = useState<string | undefined>(initialData?.notes);
   const [pattern, setPattern] = useState<string | undefined>(

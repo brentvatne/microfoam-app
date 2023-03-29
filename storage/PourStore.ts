@@ -2,15 +2,29 @@ import { useSyncExternalStore, useCallback } from "react";
 import { Blurhash } from "react-native-blurhash";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
+import { v4 as uuid } from "uuid";
 
-import { exec } from "./db";
 import { maybeCopyPhotoToDocumentsAsync } from "./fs";
 
+let state: PourRecord[] = [];
+
+// let state: PourRecord[] = [
+//   {
+//     blurhash: "LRH1i1^*0LaLxuS2NGWV9bR+%KW.",
+//     dateTime: 1677528137014,
+//     id: "8c48e51a-43ad-405c-a8eb-0b316225cbe2",
+//     notes: "Some test data",
+//     pattern: "Tulip",
+//     photoUrl: "270E6703-076F-4B01-8996-71BB4D54CABB.jpg",
+//     rating: 3,
+//   },
+// ];
+
 export type PourRecord = {
-  id: number;
-  date_time: number;
+  id: string;
+  dateTime: number;
   /* Web URL or local filename (not full path) from documents directory */
-  photo_url?: string;
+  photoUrl?: string;
   rating: number;
   notes?: string;
   blurhash?: string;
@@ -18,81 +32,39 @@ export type PourRecord = {
 };
 
 export function toJSON() {
-  return JSON.stringify(
-    all().map((item) => ({
-      ...item,
-    }))
-  );
-}
-
-function toRow(pour: PourRecord) {
-  return [
-    pour.id,
-    pour.date_time,
-    pour.photo_url,
-    pour.rating,
-    pour.notes,
-    pour.blurhash,
-    pour.pattern,
-  ];
+  return JSON.stringify(state);
 }
 
 export function loadFromJSON(json: string) {
-  // gross?
-  const rows = JSON.parse(json).map((item) =>
-    toRow({
-      ...item,
-      date_time: parseInt(item.date_time, 10),
-    })
-  );
+  const nextState = JSON.parse(json).map((item) => ({
+    ...item,
+    id: item.id.toString(),
+    photoUrl: item.photoUrl ?? item.photo_url,
+    dateTime: parseInt(item.dateTime ?? item.date_time, 10),
+  }));
 
-  // ok now clear it
-  destroyAll();
-
-  rows.forEach((row) => {
-    exec(
-      `
-    INSERT INTO pours (id, date_time, photo_url, rating, notes, blurhash, pattern)
-      VALUES (?, ?, ?, ?, ?, ?, ?);
-  `,
-      row
-    );
-  });
-
-  store.setState(() => all());
+  store.setState(() => nextState);
 }
 
 export function all() {
-  const { rows } = exec(`SELECT * FROM pours ORDER BY DATE_TIME DESC;`);
-
-  return rows._array as PourRecord[];
+  return state;
 }
 
-// TODO: make pour accept Partial<PourRecord>
-export async function updateAsync(id: number, pour: PourRecord) {
+export async function updateAsync(id: string, pour: PourRecord) {
   const { photoUrl, blurhash } = await processImageAsync({
-    uri: pour.photo_url,
+    uri: pour.photoUrl,
     blurhash: pour.blurhash,
   });
 
-  exec(
-    `
-    UPDATE pours
-      SET date_time = ?, photo_url = ?, rating = ?, notes = ?, blurhash = ?, pattern = ?
-      WHERE id = ?;
-  `,
-    [
-      pour.date_time,
-      photoUrl,
-      pour.rating,
-      pour.notes,
-      blurhash,
-      pour.pattern,
-      id,
-    ]
-  );
+  const nextPour = {
+    ...pour,
+    photoUrl: photoUrl,
+    blurhash,
+  };
 
-  store.setState(() => all());
+  const idx = state.findIndex((p) => p.id === id);
+  const nextState = [...state].splice(idx, 1, nextPour);
+  store.setState(() => nextState);
 }
 
 async function processImageAsync(pour: { uri: string; blurhash?: string }) {
@@ -137,33 +109,33 @@ async function maybeShrinkImageAsync(uri: string, dimensions: Dimensions) {
 }
 
 export async function createAsync(data: Omit<PourRecord, "id">) {
+  const id = uuid();
   const { photoUrl, blurhash } = await processImageAsync({
-    uri: data.photo_url,
+    uri: data.photoUrl,
     blurhash: data.blurhash,
   });
 
-  const { rows } = exec(
-    `
-    INSERT INTO pours (date_time, photo_url, rating, notes, blurhash, pattern)
-      VALUES (?, ?, ?, ?, ?, ?)
-      RETURNING id;
-  `,
-    [data.date_time, photoUrl, data.rating, data.notes, blurhash, data.pattern]
-  );
+  const pour = {
+    id,
+    ...data,
+    photoUrl: photoUrl,
+    blurhash,
+  };
 
-  store.setState(() => all());
+  const nextState = [...state, pour];
+  store.setState(() => nextState);
 
-  return { id: rows._array[0].id };
-}
-
-export function destroy(data: Pick<PourRecord, "id">) {
-  exec(`DELETE FROM pours WHERE id = ?;`, [data.id]);
-  store.setState(() => all());
+  return { id };
 }
 
 export function destroyAll() {
-  exec(`DELETE FROM pours;`);
-  store.setState(() => all());
+  const nextState = [];
+  store.setState(() => nextState);
+}
+
+export function destroy(data: Pick<PourRecord, "id">) {
+  const nextState = state.filter(({ id }) => id !== data.id);
+  store.setState(() => nextState);
 }
 
 /** "yikes" below */
@@ -194,14 +166,11 @@ const useStore = (selector) => {
 const store = createStore();
 
 export function usePours() {
-  let state = useStore((state) => state);
-  return state;
+  return useStore((_state) => _state);
 }
 
 export function usePour(pourId: string | number) {
-  // dumb, should always be number - but we get it from the route params which are strings
-  const id = parseInt(pourId.toString(), 10);
   let state = usePours();
-  let pour = state.find((p) => p.id === id);
+  let pour = state.find((p) => p.id === pourId);
   return pour;
 }

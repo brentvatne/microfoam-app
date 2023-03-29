@@ -19,9 +19,9 @@ export default function NewPourScreen() {
     }
 
     await PourStore.createAsync({
-      date_time: data.dateTime.getTime(),
+      dateTime: data.dateTime.getTime(),
       rating: data.rating,
-      photo_url: data.photoUri,
+      photoUrl: data.photoUri,
       notes: data.notes,
       pattern: data.pattern,
     });

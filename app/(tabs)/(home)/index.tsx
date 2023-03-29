@@ -104,7 +104,7 @@ function PourRow({ item }) {
     >
       <UnthemedView style={{ flexDirection: "row" }}>
         <Photo
-          uri={item.photo_url}
+          uri={item.photoUrl}
           blurhash={item.blurhash}
           containerStyle={{
             height: 100,
@@ -155,7 +155,7 @@ function PourRow({ item }) {
               lightColor={TailwindColor["gray-600"]}
               style={{ fontSize: FontSize.base }}
             >
-              {humanDate(item.date_time)}
+              {humanDate(item.dateTime)}
             </Text>
           </UnthemedView>
         </UnthemedView>
