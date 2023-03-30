@@ -30,7 +30,7 @@
     "expo-image-picker": "~14.1.1",
     "expo-linking": "~4.0.1",
     "expo-media-library": "~15.2.3",
-    "expo-router": "^1.4.2",
+    "expo-router": "^1.4.3",
     "expo-settings": "^0.1.0",
     "expo-sharing": "~11.2.2",
     "expo-splash-screen": "~0.18.1",
@@ -61,6 +61,10 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "prettier": "^2.7.1",
     "typescript": "^4.9.4"
+  },
+  "resolutions": {
+    "metro": "0.76.0",
+    "metro-resolver": "0.76.0"
   },
   "private": true
 }
