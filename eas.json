@@ -7,6 +7,9 @@
     "base": {
       "ios": {
         "resourceClass": "m-large"
+      },
+      "env": {
+        "EAS_BUILD_ENABLE_COCOAPODS_CACHE": "1"
       }
     },
     "development": {

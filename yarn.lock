@@ -3566,10 +3566,10 @@ expo-constants@~14.2.1:
     "@expo/config" "~8.0.0"
     uuid "^3.3.2"
 
-expo-document-picker@~11.2.1:
-  version "11.2.1"
-  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.2.1.tgz#78eab81f546fd8b6f618f71dfb5b31601c65785f"
-  integrity sha512-mFm3wDU9cuAs3jv6782GEm1h0r4KbNKs6O0y4jU97M9eYpWit31GgZZGfUQi8Fo1PkuaqJvN40r66TOXq5SrUw==
+expo-document-picker@~11.2.2:
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.2.2.tgz#707ff994a1c0b38505e12b2c9fe6b67715e6f41c"
+  integrity sha512-EeonRKxkK9E20LEAh93IvlwFjNkUCJKnhBEama9PmIDYWW7RyANZ8eP9C2PupThTDbivzRDNp7Ec7dIeyDAWjw==
 
 expo-eas-client@~0.5.0:
   version "0.5.0"
