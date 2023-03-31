@@ -7,7 +7,6 @@ import * as Updates from "expo-updates";
 import { Stack, useRouter } from "expo-router";
 import { setTheme, Theme } from "expo-settings";
 
-import * as db from "~/storage/db";
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
@@ -123,7 +122,7 @@ export default function Settings() {
                   text: "Cancel",
                   style: "cancel",
                 },
-                { text: "OK", onPress: () => PourStore.destroyAll() },
+                { text: "OK", onPress: () => PourStore.destroyAllAsync() },
               ],
               { cancelable: true }
             );
@@ -144,8 +143,7 @@ export default function Settings() {
                 {
                   text: "OK",
                   onPress: () => {
-                    PourStore.destroyAll();
-                    db.clear();
+                    PourStore.destroyAllAsync();
                   },
                 },
               ],
@@ -263,7 +261,7 @@ async function importDatabaseAsync() {
   if (result.type === "success") {
     const data = await FileSystem.readAsStringAsync(result.uri);
     try {
-      PourStore.loadFromJSON(data);
+      PourStore.loadExternalJSONAsync(data);
       alert("Imported data successfully");
     } catch (e) {
       alert("Import failed");

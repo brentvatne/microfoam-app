@@ -9,6 +9,7 @@ import {
 } from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
+import { useDataIsReady } from '~/storage/PourStore';
 import * as Settings from "expo-settings";
 
 
@@ -25,6 +26,7 @@ const CustomDarkTheme = {
 export default function Root() {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
+  const dataIsReady = useDataIsReady();
 
   useEffect(() => {
     const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
@@ -37,6 +39,10 @@ export default function Root() {
   let resolvedColorScheme = colorScheme;
   if (theme !== Settings.Theme.System) {
     resolvedColorScheme = theme === Settings.Theme.Dark ? "dark" : "light";
+  }
+
+  if (!dataIsReady) {
+    return null;
   }
 
   return (

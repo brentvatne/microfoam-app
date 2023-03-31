@@ -1,24 +1,10 @@
-import { useSyncExternalStore, useCallback } from "react";
 import { Blurhash } from "react-native-blurhash";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
-import { v4 as uuid } from "uuid";
+import { createStore, createCustomPersister } from "tinybase";
+import { useRow, useTable, useValue } from "tinybase/lib/ui-react";
 
 import { maybeCopyPhotoToDocumentsAsync } from "./fs";
-
-let state: PourRecord[] = [];
-
-// let state: PourRecord[] = [
-//   {
-//     blurhash: "LRH1i1^*0LaLxuS2NGWV9bR+%KW.",
-//     dateTime: 1677528137014,
-//     id: "8c48e51a-43ad-405c-a8eb-0b316225cbe2",
-//     notes: "Some test data",
-//     pattern: "Tulip",
-//     photoUrl: "270E6703-076F-4B01-8996-71BB4D54CABB.jpg",
-//     rating: 3,
-//   },
-// ];
 
 export type PourRecord = {
   id: string;
@@ -32,22 +18,30 @@ export type PourRecord = {
 };
 
 export function toJSON() {
-  return JSON.stringify(state);
+  console.log(store.getJson());
+  return store.getJson();
 }
 
-export function loadFromJSON(json: string) {
-  const nextState = JSON.parse(json).map((item) => ({
-    ...item,
-    id: item.id.toString(),
-    photoUrl: item.photoUrl ?? item.photo_url,
-    dateTime: parseInt(item.dateTime ?? item.date_time, 10),
-  }));
+export async function loadExternalJSONAsync(json: string) {
+  await destroyAllAsync();
 
-  store.setState(() => nextState);
-}
+  // Migrate old data if needed!
+  const data = JSON.parse(json);
+  if (data[0].id) { // id isn't a field on the row in the new format
+    for (const item of data) {
+      const { id, date_time, photo_url, ...pour  } = item;
 
-export function all() {
-  return state;
+      pour.photoUrl = pour.photoUrl ?? photo_url;
+      pour.dateTime = parseInt(pour.dateTime ?? date_time, 10);
+
+      // TODO: don't write to disk every time...
+      await createAsync(pour);
+    }
+  } else {
+    // Otherwise just load it
+    store.setJson(json);
+    persister.save();
+  }
 }
 
 export async function updateAsync(id: string, pour: PourRecord) {
@@ -62,9 +56,10 @@ export async function updateAsync(id: string, pour: PourRecord) {
     blurhash,
   };
 
-  const idx = state.findIndex((p) => p.id === id);
-  const nextState = [...state].splice(idx, 1, nextPour);
-  store.setState(() => nextState);
+  store.setRow("pours", id, nextPour);
+
+  // Don't wait for it to return..
+  persister.save();
 }
 
 async function processImageAsync(pour: { uri: string; blurhash?: string }) {
@@ -109,68 +104,104 @@ async function maybeShrinkImageAsync(uri: string, dimensions: Dimensions) {
 }
 
 export async function createAsync(data: Omit<PourRecord, "id">) {
-  const id = uuid();
   const { photoUrl, blurhash } = await processImageAsync({
     uri: data.photoUrl,
     blurhash: data.blurhash,
   });
 
   const pour = {
-    id,
     ...data,
     photoUrl: photoUrl,
     blurhash,
   };
 
-  const nextState = [...state, pour];
-  store.setState(() => nextState);
+  const result = store.addRow("pours", pour);
 
-  return { id };
+  // Don't wait for it to return..
+  persister.save();
+
+  // Return the ID
+  return Object.keys(result)[0];
 }
 
-export function destroyAll() {
-  const nextState = [];
-  store.setState(() => nextState);
+export async function destroyAllAsync() {
+  store.delTable("pours");
+  return await deletePersistedDataAsync();
 }
 
 export function destroy(data: Pick<PourRecord, "id">) {
-  const nextState = state.filter(({ id }) => id !== data.id);
-  store.setState(() => nextState);
+  store.delRow("pours", data.id);
+  persister.save();
 }
-
-/** "yikes" below */
-
-const createStore = () => {
-  let state = all();
-  const getState = () => state;
-  const listeners = new Set();
-  const setState = (fn) => {
-    state = fn(state);
-    // @ts-ignore
-    listeners.forEach((l) => l());
-  };
-  const subscribe = (listener) => {
-    listeners.add(listener);
-    return () => listeners.delete(listener);
-  };
-  return { getState, setState, subscribe };
-};
-
-const useStore = (selector) => {
-  return useSyncExternalStore(
-    store.subscribe,
-    useCallback(() => selector(store.getState(), [store, selector]), [])
-  );
-};
 
 const store = createStore();
 
-export function usePours() {
-  return useStore((_state) => _state);
+const DB_FILE_NAME = `${FileSystem.documentDirectory}microfoam.json`;
+
+async function deletePersistedDataAsync() {
+  const info = await FileSystem.getInfoAsync(DB_FILE_NAME);
+  if (info.exists) {
+    await FileSystem.deleteAsync(DB_FILE_NAME);
+  }
 }
 
-export function usePour(pourId: string | number) {
-  let state = usePours();
-  let pour = state.find((p) => p.id === pourId);
-  return pour;
+async function loadPersistedDataAsync() {
+  if (!(await FileSystem.getInfoAsync(DB_FILE_NAME)).exists) {
+    return null;
+  }
+  return FileSystem.readAsStringAsync(DB_FILE_NAME);
 }
+
+async function persistJsonAsync(json: string) {
+  try {
+    await FileSystem.writeAsStringAsync(DB_FILE_NAME, json);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+const persister = createCustomPersister(
+  store,
+  async () => loadPersistedDataAsync(),
+  async (json) => await persistJsonAsync(json),
+  (didChange) => {},
+  () => {}
+);
+
+export function usePours() {
+  const result = useTable("pours", store);
+  const records = Object.keys(result).map((id) => ({ id, ...result[id] }));
+  return records as PourRecord[];
+}
+
+export function all() {
+  const result = store.getTable("pours");
+  const records = Object.keys(result).map((id) => ({ id, ...result[id] }));
+  return records as PourRecord[];
+}
+
+export function usePour(id: string) {
+  const row = useRow("pours", id, store);
+  return { id, ...row } as PourRecord;
+}
+
+// Can use this before rendering any UI...
+export function useDataIsReady() {
+  return Boolean(useValue("initialized", store));
+}
+
+// Would prefer for this to be synchronous
+async function init() {
+  try {
+    await persister.load();
+  } catch (e) {
+    console.log(`Failed to load persisted data:`);
+    console.log(e);
+  } finally {
+    store.setValue("initialized", true);
+  }
+  console.log("Loaded persisted data");
+}
+
+init();

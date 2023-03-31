@@ -1,6 +1,6 @@
 // Side effect
 import { LogBox } from 'react-native';
-import * as db from "./storage/db";
+import PourStore from './storage/PourStore';
 import "react-native-url-polyfill/auto";
 import "react-native-get-random-values";
 

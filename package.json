@@ -9,7 +9,8 @@
     "prebuild:ios": "expo prebuild -p ios --clean",
     "prebuild:android": "expo prebuild -p android --clean",
     "web": "expo start --web",
-    "prettier:fix": "prettier app components constants storage index.js -w"
+    "prettier:fix": "prettier app components constants storage index.js -w",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4",
@@ -38,6 +39,8 @@
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.2",
     "moti": "^0.20.0",
+    "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
     "pretty-bytes": "^6.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -52,6 +55,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-web": "~0.18.7",
+    "tinybase": "^3.0.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
