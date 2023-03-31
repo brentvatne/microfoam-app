@@ -171,7 +171,7 @@ const persister = createCustomPersister(
 
 export function usePours() {
   const result = useTable("pours", store);
-  const records = Object.keys(result).map((id) => ({ id, ...result[id] }));
+  const records = Object.keys(result).map((id) => ({ id, ...result[id] })).sort((a: PourRecord, b: PourRecord) => b.dateTime - a.dateTime);
   return records as PourRecord[];
 }
 
