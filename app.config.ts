@@ -13,6 +13,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.android,
     package: getPackage(config),
   },
+  updates: {
+    fallbackToCacheTimeout: 0,
+    url: getUpdatesUrl(),
+  },
   extra: {
     eas: {
       projectId: process.env.EAS_PROJECT_ID,
@@ -29,6 +33,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
 });
+
+function getUpdatesUrl() {
+  if (process.env.EXPO_STAGING) {
+    return "https://staging-u.expo.dev/6122a374-f53d-4d9e-ac78-1fef59eeb937";
+  } else {
+    return "https://u.expo.dev/f19296df-44bd-482a-90bb-2af254c6ac42";
+  }
+}
 
 function getName(config: Partial<ExpoConfig>) {
   const name = config.name;

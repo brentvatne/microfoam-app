@@ -13,10 +13,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#232323"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/f19296df-44bd-482a-90bb-2af254c6ac42"
-    },
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
