@@ -12,7 +12,7 @@ import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import { ScrollView, Text, View } from "~/components/Themed";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
-import { useAuthSession } from "~/storage/supabase";
+import { supabase, useAuthSession } from "~/storage/supabase";
 
 function AuthButton() {
   const session = useAuthSession();
@@ -64,6 +64,8 @@ function AuthButton() {
 }
 
 export default function Settings() {
+  const session = useAuthSession();
+
   return (
     <>
       <Stack.Screen options={{ title: "Settings" }} />
@@ -77,7 +79,19 @@ export default function Settings() {
 
         <AuthButton />
 
-        <UploadButton />
+        <UploadPhotosButton />
+        <Button
+          title="Upload data to server"
+          disabled={!session}
+          onPress={() => maybeUploadDatabaseAsync()}
+        />
+        <Button
+          title="Download data from server"
+          disabled={!session}
+          onPress={() => maybeDownloadDabaseAsync()}
+        />
+
+        <Text style={styles.header}>Debug tools</Text>
 
         <Button
           title="Export data as JSON"
@@ -87,8 +101,6 @@ export default function Settings() {
           title="Import database from JSON"
           onPress={() => importDatabaseAsync()}
         />
-
-        <Text style={styles.header}>Debug tools</Text>
 
         <Button
           title="Use light theme"
@@ -212,7 +224,7 @@ export default function Settings() {
   );
 }
 
-function UploadButton() {
+function UploadPhotosButton() {
   const router = useRouter();
   const pours = PourStore.usePours();
   const numPoursWithLocalPhotos = pours.filter((p) =>
@@ -256,6 +268,57 @@ function UploadButton() {
   );
 }
 
+async function getUserAsync() {
+  // Get the current user
+  const response = await supabase.auth.getUser();
+  const user = response?.data?.user;
+
+  // Check if the user is signed in
+  if (!user) {
+    console.error("User is not signed in");
+    return;
+  }
+
+  return user;
+}
+
+async function maybeUploadDatabaseAsync() {
+  const user = await getUserAsync();
+
+  try {
+    const { error } = await supabase
+      .from("snapshots")
+      .insert({ data: PourStore.toJSON(), user_id: user.id });
+    if (!error) {
+      Alert.alert("Success", "Data uploaded successfully");
+    } else {
+      Alert.alert("Error", `Data upload failed: ${error.message}`);
+    }
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+async function maybeDownloadDabaseAsync() {
+  const user = await getUserAsync();
+
+  const { data, error } = await supabase
+    .from("snapshots")
+    .select("data")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Error fetching data:", error.message);
+  } else {
+    // Access the data column of the most recent row (if any)
+    const mostRecentData = data.length > 0 ? data[0].data : null;
+    await PourStore.loadExternalJSONAsync(mostRecentData);
+    alert("Data downloaded successfully");
+  }
+}
+
 async function importDatabaseAsync() {
   const result = await DocumentPicker.getDocumentAsync();
   if (result.type === "success") {
@@ -269,11 +332,12 @@ async function importDatabaseAsync() {
   }
 }
 
+function getPoursWithLocalPhotos() {
+  return PourStore.all().filter((pour) => isLocalFile(pour.photoUrl));
+}
+
 async function maybeExportDatabaseAsync() {
-  const pours = PourStore.all();
-  const poursWithLocalPhotos = pours.filter((pour) =>
-    isLocalFile(pour.photoUrl)
-  );
+  const poursWithLocalPhotos = getPoursWithLocalPhotos();
 
   if (poursWithLocalPhotos.length > 0) {
     Alert.alert(
@@ -305,18 +369,6 @@ async function exportDatabaseAsync() {
   } catch (e) {
     alert(e.message);
   }
-}
-
-function Header({ children }) {
-  return (
-    <Text
-      darkColor={TailwindColor["gray-100"]}
-      lightColor={TailwindColor["gray-700"]}
-      style={styles.header}
-    >
-      {children}
-    </Text>
-  );
 }
 
 const styles = StyleSheet.create({
