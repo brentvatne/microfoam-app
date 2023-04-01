@@ -283,6 +283,17 @@ async function getUserAsync() {
 }
 
 async function maybeUploadDatabaseAsync() {
+  const poursWithLocalPhotos = getPoursWithLocalPhotos();
+
+  // Just take care of this automatically in next pass, move photo upload to debug tools
+  if (poursWithLocalPhotos.length > 0) {
+    Alert.alert(
+      "Upload photos first",
+      "Please upload all photos before uploading the database"
+    );
+    return;
+  }
+
   const user = await getUserAsync();
 
   try {
