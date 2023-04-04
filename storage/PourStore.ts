@@ -70,10 +70,16 @@ async function generateBlurhashAsync(
   componentsY = 3
 ) {
   try {
-    const { uri: localUri } = await FileSystem.downloadAsync(
-      imageUri,
-      `${FileSystem.cacheDirectory}/${uuid()})`
-    );
+    let localUri = imageUri;
+
+    if (!imageUri.startsWith(FileSystem.cacheDirectory)) {
+      const { uri } = await FileSystem.downloadAsync(
+        imageUri,
+        `${FileSystem.cacheDirectory}/${uuid()})`
+      );
+      localUri = uri;
+    }
+
     const thumbnail = await shrinkImageAsync(localUri, {
       width: 50,
       height: 50,
