@@ -94,9 +94,15 @@ export default function Settings() {
         <Text style={styles.header}>Debug tools</Text>
 
         <Button
+          title="Re-generate blurhashes"
+          onPress={() => regenerateBlurhashesAsync()}
+        />
+
+        <Button
           title="Export data as JSON"
           onPress={() => maybeExportDatabaseAsync()}
         />
+
         <Button
           title="Import database from JSON"
           onPress={() => importDatabaseAsync()}
@@ -369,6 +375,16 @@ async function maybeExportDatabaseAsync() {
   } else {
     exportDatabaseAsync();
   }
+}
+
+async function regenerateBlurhashesAsync() {
+  const pours = PourStore.all().filter((pour) => !pour.blurhash);
+  for (const pour of pours) {
+    console.log(`before: ${JSON.stringify(pour)}`);
+    const result = await PourStore.regenerateBlurhashAsync(pour);
+    console.log(`after: ${JSON.stringify(result)}`);
+  }
+  alert(`done! ${pours.length} blurhashes regenerated`);
 }
 
 async function exportDatabaseAsync() {

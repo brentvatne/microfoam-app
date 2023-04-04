@@ -1,18 +1,16 @@
 import { StyleSheet, ViewProps } from "react-native";
 import { View } from "~/components/Themed";
-import { Image } from "expo-image";
+import { Image, ImageProps } from "expo-image";
 import * as FileSystem from "expo-file-system";
-import Animated from "react-native-reanimated";
 
 import { PHOTOS_DIRECTORY, isLocalFile } from "~/storage/fs";
-
-Animated.createAnimatedComponent(Image);
 
 type Props = {
   blurhash?: string;
   uri: string;
   containerStyle?: ViewProps["style"];
   resizeMode?: "cover" | "contain";
+  transition: ImageProps["transition"]
 };
 
 export default function Photo(props: Props) {
@@ -32,14 +30,12 @@ export default function Photo(props: Props) {
 
   return (
     <View style={containerStyle} darkColor="black" lightColor="white">
-      <Animated.Image
+      <Image
         onError={() => console.log(`error loading image: ${uri}`)}
         source={{ uri: maybeLocalUri }}
-        /* @ts-ignore */
-        /* .. this crashes reanimated? */
-        // placeholder={blurhash}
-        /* @ts-ignore */
+        placeholder={blurhash}
         contentFit={resizeMode}
+        transition={props.transition}
         style={[StyleSheet.absoluteFillObject, { backgroundColor: "white" }]}
       />
     </View>

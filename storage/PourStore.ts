@@ -3,6 +3,7 @@ import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import { createStore, createCustomPersister } from "tinybase";
 import { useRow, useTable, useValue } from "tinybase/lib/ui-react";
+import { v4 as uuid } from "uuid";
 
 import { maybeCopyPhotoToDocumentsAsync } from "./fs";
 
@@ -25,23 +26,23 @@ export function toJSON() {
 export async function loadExternalJSONAsync(json: string) {
   await destroyAllAsync();
 
-  // Migrate old data if needed!
-  const data = JSON.parse(json);
-  if (data[0].id) { // id isn't a field on the row in the new format
-    for (const item of data) {
-      const { id, date_time, photo_url, ...pour  } = item;
+  store.setJson(json);
+  persister.save();
+}
 
-      pour.photoUrl = pour.photoUrl ?? photo_url;
-      pour.dateTime = parseInt(pour.dateTime ?? date_time, 10);
+export async function regenerateBlurhashAsync(pour: PourRecord) {
+  const blurhash = await generateBlurhashAsync(pour.photoUrl);
 
-      // TODO: don't write to disk every time...
-      await createAsync(pour);
-    }
-  } else {
-    // Otherwise just load it
-    store.setJson(json);
-    persister.save();
-  }
+  const nextPour = {
+    ...pour,
+    blurhash,
+  };
+
+  store.setRow("pours", pour.id, nextPour);
+
+  // Don't wait for it to return..
+  persister.save();
+  return nextPour;
 }
 
 export async function updateAsync(id: string, pour: PourRecord) {
@@ -52,7 +53,7 @@ export async function updateAsync(id: string, pour: PourRecord) {
 
   const nextPour = {
     ...pour,
-    photoUrl: photoUrl,
+    photoUrl,
     blurhash,
   };
 
@@ -60,24 +61,50 @@ export async function updateAsync(id: string, pour: PourRecord) {
 
   // Don't wait for it to return..
   persister.save();
+  return nextPour;
+}
+
+async function generateBlurhashAsync(
+  imageUri: string,
+  componentsX = 4,
+  componentsY = 3
+) {
+  try {
+    const { uri: localUri } = await FileSystem.downloadAsync(
+      imageUri,
+      `${FileSystem.cacheDirectory}/${uuid()})`
+    );
+    const thumbnail = await shrinkImageAsync(localUri, {
+      width: 50,
+      height: 50,
+    });
+    const blurhash = await Blurhash.encode(thumbnail, componentsX, componentsY);
+    return blurhash;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 }
 
 async function processImageAsync(pour: { uri: string; blurhash?: string }) {
-  const { uri } = pour;
+  try {
+    const { uri } = pour;
 
-  // Bail out if file is remote
-  if (!uri.startsWith(FileSystem.cacheDirectory)) {
-    return { photoUrl: uri, blurhash: pour.blurhash };
+    // Bail out if file is remote
+    if (!uri.startsWith(FileSystem.cacheDirectory)) {
+      return { photoUrl: uri, blurhash: pour.blurhash };
+    }
+
+    const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
+    const blurhash = await generateBlurhashAsync(resizedUri);
+    const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
+    const filename = photoUrl.split("/").pop();
+
+    return { photoUrl: filename, blurhash };
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
-
-  const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
-  const thumbnail = await shrinkImageAsync(uri, { width: 50, height: 50 });
-
-  const blurhash = await Blurhash.encode(thumbnail, 4, 3);
-  const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
-  const filename = photoUrl.split("/").pop();
-
-  return { photoUrl: filename, blurhash };
 }
 
 type Dimensions =
@@ -171,7 +198,9 @@ const persister = createCustomPersister(
 
 export function usePours() {
   const result = useTable("pours", store);
-  const records = Object.keys(result).map((id) => ({ id, ...result[id] })).sort((a: PourRecord, b: PourRecord) => b.dateTime - a.dateTime);
+  const records = Object.keys(result)
+    .map((id) => ({ id, ...result[id] }))
+    .sort((a: PourRecord, b: PourRecord) => b.dateTime - a.dateTime);
   return records as PourRecord[];
 }
 

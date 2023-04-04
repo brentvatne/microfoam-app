@@ -31,6 +31,8 @@ export default function ShowPour() {
       >
         <Photo
           uri={pour.photoUrl}
+          blurhash={pour.blurhash}
+          transition={500}
           containerStyle={{
             width: targetImageWidth,
             height: targetImageHeight,
