@@ -55,7 +55,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-web": "~0.18.7",
-    "tinybase": "^3.0.3",
+    "tinybase": "^3.0.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

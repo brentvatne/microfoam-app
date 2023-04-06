@@ -10,7 +10,7 @@ type Props = {
   uri: string;
   containerStyle?: ViewProps["style"];
   resizeMode?: "cover" | "contain";
-  transition: ImageProps["transition"]
+  transition?: ImageProps["transition"]
 };
 
 export default function Photo(props: Props) {
