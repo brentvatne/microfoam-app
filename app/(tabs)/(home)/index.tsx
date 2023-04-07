@@ -13,11 +13,10 @@ import { MotiView } from "moti";
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
-import { AntDesign, FlatList, Text, View } from "~/components/Themed";
-import { humanDate } from "~/utils/formatDate";
+import { AntDesign, SectionList, Text, View } from "~/components/Themed";
 
 export default function LogListScreen() {
-  const pours = PourStore.usePours();
+  const pours = PourStore.usePoursGroupedByDate();
   const router = useRouter();
   const ref = useRef(null);
   useScrollToTop(ref);
@@ -53,9 +52,10 @@ export default function LogListScreen() {
           transition={{ type: "timing", duration: 500 }}
           style={{ flex: 1 }}
         >
-          <FlatList
-            data={pours}
+          <SectionList
+            sections={pours}
             renderItem={renderItem}
+            renderSectionHeader={renderSectionHeader}
             ref={ref}
             ItemSeparatorComponent={() => (
               <View
@@ -117,15 +117,14 @@ function PourRow({ item }) {
         />
 
         <UnthemedView
-          style={{ flexDirection: "column", paddingTop: Padding[1], flex: 1 }}
+          style={{ flexDirection: "column", paddingTop: Padding[2], flex: 1 }}
         >
-          <UnthemedView style={{ flex: 1, marginBottom: Margin[2] }}>
+          <UnthemedView style={{ flex: 1 }}>
             <Text numberOfLines={2} style={{ flex: 1, fontSize: FontSize.lg }}>
               {item.notes ?? (
                 <Text
                   darkColor={TailwindColor["gray-100"]}
                   lightColor={TailwindColor["gray-400"]}
-                  style={{ fontStyle: "italic" }}
                 >
                   No notes
                 </Text>
@@ -133,7 +132,7 @@ function PourRow({ item }) {
             </Text>
           </UnthemedView>
 
-          <UnthemedView style={{ flex: 1 }}>
+          <UnthemedView style={{ paddingBottom: Padding[2] }}>
             <Text
               darkColor={TailwindColor["gray-300"]}
               lightColor={TailwindColor["gray-600"]}
@@ -150,13 +149,6 @@ function PourRow({ item }) {
             >
               Rating: {item.rating} / 5
             </Text>
-            <Text
-              darkColor={TailwindColor["gray-300"]}
-              lightColor={TailwindColor["gray-600"]}
-              style={{ fontSize: FontSize.base }}
-            >
-              {humanDate(item.dateTime)}
-            </Text>
           </UnthemedView>
         </UnthemedView>
       </UnthemedView>
@@ -165,6 +157,26 @@ function PourRow({ item }) {
 }
 
 const renderItem = ({ item }) => <PourRow item={item} />;
+
+const renderSectionHeader = ({ section }) => (
+  <View
+    style={{
+      paddingLeft: Padding[3],
+      padding: 9,
+      paddingBottom: 7,
+      opacity: 0.95,
+    }}
+    lightColor={TailwindColor["zinc-100"]}
+    darkColor={TailwindColor["zinc-800"]}
+  >
+    <Text
+      lightColor={TailwindColor["zinc-600"]}
+      darkColor={TailwindColor["zinc-300"]}
+    >
+      {section.title}
+    </Text>
+  </View>
+);
 
 function EmptyState() {
   const router = useRouter();

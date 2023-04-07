@@ -2,6 +2,7 @@ import { forwardRef, createContext, useContext } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
+  SectionList as DefaultSectionList,
   TextInput as DefaultTextInput,
 } from "react-native";
 import {
@@ -45,6 +46,7 @@ export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 export type ScrollViewProps = ThemeProps & DefaultScrollView["props"];
 export type FlatListProps = ThemeProps & DefaultFlatList["props"];
+export type SectionListProps = ThemeProps & DefaultSectionList["props"];
 export type AntDesignProps = ThemeProps &
   React.ComponentProps<typeof DefaultAntDesign>;
 export type TextInputProps = LayeredThemeProps & DefaultTextInput["props"];
@@ -107,6 +109,22 @@ const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
   );
 });
 
+const SectionList = forwardRef<DefaultSectionList, SectionListProps>((props, ref) => {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "view"
+  );
+
+  return (
+    <DefaultSectionList
+      style={[{ backgroundColor }, style]}
+      {...otherProps}
+      ref={ref}
+    />
+  );
+});
+
 const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   const {
     style,
@@ -138,4 +156,4 @@ const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   );
 });
 
-export { FlatList, ScrollView, TextInput };
+export { FlatList, SectionList, ScrollView, TextInput };

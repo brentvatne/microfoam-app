@@ -38,6 +38,7 @@
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",
+    "lodash": "^4.17.21",
     "moti": "^0.20.0",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0",

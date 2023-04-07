@@ -7,10 +7,7 @@ export function humanDate(maybeDate: Date | number | string) {
     return "Today";
   } else if (isYesterday(date)) {
     return "Yesterday";
-  } else if (isThisWeek(date)) {
-    // Just tell me the date of the week if it's this week
-    return format(date, "EEEE");
-  } else if (isThisYear(date)) {
+  } else if (isThisWeek(date) || isThisYear(date)) {
     // I don't want to see the year if it's this year
     return format(date, "EEEE, MMMM do");
   } else {
