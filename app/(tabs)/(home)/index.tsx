@@ -9,14 +9,28 @@ import { Stack, useRouter } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
 import { MotiView } from "moti";
+import { FlashList } from "@shopify/flash-list";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
 import * as PourStore from "~/storage/PourStore";
 import Photo from "~/components/Photo";
-import { AntDesign, SectionList, Text, View } from "~/components/Themed";
+import { AntDesign, Text, View } from "~/components/Themed";
 
 export default function LogListScreen() {
   const pours = PourStore.usePoursGroupedByDate();
+
+  // TODO: Move this into PourStore..
+  const listData = pours.map((entry) => [entry.title, ...entry.data]).flat();
+  const stickyHeaderIndices = listData
+    .map((item, index) => {
+      if (typeof item === "string") {
+        return index;
+      } else {
+        return null;
+      }
+    })
+    .filter((item) => item !== null) as number[];
+
   const router = useRouter();
   const ref = useRef(null);
   useScrollToTop(ref);
@@ -52,25 +66,29 @@ export default function LogListScreen() {
           transition={{ type: "timing", duration: 500 }}
           style={{ flex: 1 }}
         >
-          <SectionList
-            sections={pours}
+          <FlashList
+            data={listData}
             renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
+            stickyHeaderIndices={stickyHeaderIndices}
             ref={ref}
-            ItemSeparatorComponent={() => (
-              <View
-                darkColor={TailwindColor["zinc-700"]}
-                lightColor={TailwindColor["gray-100"]}
-                style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={EmptyState}
+            keyExtractor={(item) => (typeof item === "string" ? item : item.id)}
+            ItemSeparatorComponent={ItemSeparatorComponent}
             style={{ flex: 1 }}
+            ListEmptyComponent={EmptyState}
           />
         </MotiView>
       </View>
     </>
+  );
+}
+
+function ItemSeparatorComponent() {
+  return (
+    <View
+      darkColor={TailwindColor["zinc-700"]}
+      lightColor={TailwindColor["gray-100"]}
+      style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
+    />
   );
 }
 
@@ -156,9 +174,15 @@ function PourRow({ item }) {
   );
 }
 
-const renderItem = ({ item }) => <PourRow item={item} />;
+const renderItem = ({ item }) => {
+  if (typeof item === "string") {
+    return <SectionHeader title={item} />;
+  }
 
-const renderSectionHeader = ({ section }) => (
+  return <PourRow item={item} />;
+};
+
+const SectionHeader = ({ title }) => (
   <View
     style={{
       paddingLeft: Padding[3],
@@ -173,7 +197,7 @@ const renderSectionHeader = ({ section }) => (
       lightColor={TailwindColor["zinc-600"]}
       darkColor={TailwindColor["zinc-300"]}
     >
-      {section.title}
+      {title}
     </Text>
   </View>
 );
