@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import {
   Alert,
   StyleSheet,
@@ -21,15 +21,7 @@ export default function LogListScreen() {
 
   // TODO: Move this into PourStore..
   const listData = pours.map((entry) => [entry.title, ...entry.data]).flat();
-  const stickyHeaderIndices = listData
-    .map((item, index) => {
-      if (typeof item === "string") {
-        return index;
-      } else {
-        return null;
-      }
-    })
-    .filter((item) => item !== null) as number[];
+  const { stickyHeaderIndices } = useUpdateStickyHeaders(listData);
 
   const router = useRouter();
   const ref = useRef(null);
@@ -72,8 +64,8 @@ export default function LogListScreen() {
             stickyHeaderIndices={stickyHeaderIndices}
             ref={ref}
             keyExtractor={(item) => (typeof item === "string" ? item : item.id)}
+            estimatedItemSize={85}
             ItemSeparatorComponent={ItemSeparatorComponent}
-            style={{ flex: 1 }}
             ListEmptyComponent={EmptyState}
           />
         </MotiView>
@@ -255,3 +247,48 @@ function EmptyState() {
     </View>
   );
 }
+
+// Workaround for flash-list bug
+// https://github.com/Shopify/flash-list/issues/615#issuecomment-1413734042
+const useUpdateStickyHeaders = (data: any[]) => {
+  const [stickyHeadersUpdate, triggerStickyHeadersUpdate] =
+    useState<boolean>(false);
+  const [, triggerRerender] = useState<boolean>(false);
+
+  const stickyHeaderIndices = useRef<number[] | undefined>(undefined);
+  const actualStickyHeaderIndices = useRef<number[] | undefined>(undefined);
+
+  actualStickyHeaderIndices.current = data
+    .map((item, index) => {
+      if (typeof item === "string") {
+        return index;
+      } else {
+        return null;
+      }
+    })
+    .filter((item) => item !== null) as number[];
+
+  useEffect(() => {
+    stickyHeaderIndices.current = actualStickyHeaderIndices.current;
+    triggerRerender((value) => !value);
+  }, [stickyHeadersUpdate, triggerRerender]);
+
+  const updateStickyHeaders = useCallback(() => {
+    stickyHeaderIndices.current = undefined;
+    triggerStickyHeadersUpdate((value) => !value);
+  }, [triggerStickyHeadersUpdate]);
+
+  const hasSetStickyHeadersInitially = useRef<boolean>(false);
+  useEffect(() => {
+    if ((actualStickyHeaderIndices.current?.length ?? 0) > 0 && !hasSetStickyHeadersInitially.current) {
+      hasSetStickyHeadersInitially.current = true;
+      stickyHeaderIndices.current = actualStickyHeaderIndices.current;
+      triggerRerender(value => !value);
+    }
+  }, [data, triggerRerender]);
+
+  return {
+    updateStickyHeaders,
+    stickyHeaderIndices: stickyHeaderIndices.current,
+  };
+};
