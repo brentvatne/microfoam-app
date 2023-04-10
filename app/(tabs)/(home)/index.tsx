@@ -17,11 +17,13 @@ import Photo from "~/components/Photo";
 import { AntDesign, Text, View } from "~/components/Themed";
 
 export default function LogListScreen() {
-  const pours = PourStore.usePoursGroupedByDate();
+  const data = PourStore.usePoursInFlashList();
+  const { stickyHeaderIndices, updateStickyHeaders } =
+    useUpdateStickyHeaders(data);
 
-  // TODO: Move this into PourStore..
-  const listData = pours.map((entry) => [entry.title, ...entry.data]).flat();
-  const { stickyHeaderIndices } = useUpdateStickyHeaders(listData);
+  useEffect(() => {
+    updateStickyHeaders();
+  }, [data]);
 
   const router = useRouter();
   const ref = useRef(null);
@@ -59,7 +61,7 @@ export default function LogListScreen() {
           style={{ flex: 1 }}
         >
           <FlashList
-            data={listData}
+            data={data}
             renderItem={renderItem}
             stickyHeaderIndices={stickyHeaderIndices}
             ref={ref}
@@ -277,15 +279,6 @@ const useUpdateStickyHeaders = (data: any[]) => {
     stickyHeaderIndices.current = undefined;
     triggerStickyHeadersUpdate((value) => !value);
   }, [triggerStickyHeadersUpdate]);
-
-  const hasSetStickyHeadersInitially = useRef<boolean>(false);
-  useEffect(() => {
-    if ((actualStickyHeaderIndices.current?.length ?? 0) > 0 && !hasSetStickyHeadersInitially.current) {
-      hasSetStickyHeadersInitially.current = true;
-      stickyHeaderIndices.current = actualStickyHeaderIndices.current;
-      triggerRerender(value => !value);
-    }
-  }, [data, triggerRerender]);
 
   return {
     updateStickyHeaders,

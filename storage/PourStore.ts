@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { SectionListData } from 'react-native';
+import { useMemo } from "react";
+import { SectionListData } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
@@ -7,7 +7,7 @@ import { createStore, createCustomPersister } from "tinybase";
 import { useRow, useTable, useValue } from "tinybase/lib/ui-react";
 import { v4 as uuid } from "uuid";
 import groupBy from "lodash/groupBy";
-import { humanDate } from '~/utils/formatDate';
+import { humanDate } from "~/utils/formatDate";
 
 import { maybeCopyPhotoToDocumentsAsync } from "./fs";
 
@@ -208,10 +208,11 @@ const persister = createCustomPersister(
 
 export function usePours() {
   const result = useTable("pours", store);
-  const records = Object.keys(result)
-    .map((id) => ({ id, ...result[id] }))
-    .sort((a: PourRecord, b: PourRecord) => b.dateTime - a.dateTime);
-  return records as PourRecord[];
+  return useMemo(() => {
+    return Object.keys(result)
+      .map((id) => ({ id, ...result[id] }))
+      .sort((a: PourRecord, b: PourRecord) => b.dateTime - a.dateTime);
+  }, [result]) as PourRecord[];
 }
 
 export function usePoursGroupedByDate(): SectionListData<PourRecord>[] {
@@ -226,6 +227,13 @@ export function usePoursGroupedByDate(): SectionListData<PourRecord>[] {
     }));
 
     return formattedForSectionList;
+  }, [pours]);
+}
+
+export function usePoursInFlashList(): PourRecord[] {
+  const pours = usePoursGroupedByDate();
+  return useMemo(() => {
+    return pours.map((entry) => [entry.title, ...entry.data]).flat();
   }, [pours]);
 }
 
