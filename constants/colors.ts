@@ -229,7 +229,7 @@ export const ThemeColors = {
     text: TailwindColor.black,
     view: TailwindColor.white,
     viewAccent: TailwindColor.white,
-    tint: TailwindColor["blue-400"],
+    tint: TailwindColor["zinc-800"],
     textInputBackground: TailwindColor["gray-100"],
     textInputText: TailwindColor.black,
   },

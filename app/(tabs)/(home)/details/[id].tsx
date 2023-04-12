@@ -1,16 +1,18 @@
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { Stack, useRouter, useSearchParams } from "expo-router";
+import { BorderlessButton } from "react-native-gesture-handler";
 
-import { useSearchParams } from "expo-router";
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import Photo from "~/components/Photo";
-import { ScrollView, Text, View } from "~/components/Themed";
+import { AntDesign, ScrollView, Text, View } from "~/components/Themed";
 import { humanDate } from "~/utils/formatDate";
 
 export default function ShowPour() {
   const params = useSearchParams();
   const id = params.id as string;
   const frame = useSafeAreaFrame();
+  const router = useRouter();
   const pour = PourStore.usePour(id);
 
   if (!pour) {
@@ -22,6 +24,23 @@ export default function ShowPour() {
 
   return (
     <ScrollView style={{ flex: 1 }}>
+      <Stack.Screen
+        options={{
+          title: null,
+          headerTransparent: true,
+          headerTintColor: "white",
+          headerRight: () => (
+            <BorderlessButton
+              hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
+              onPress={() => {
+                router.push(`/edit/${params.id}`);
+              }}
+            >
+              <AntDesign name="edit" size={24} color="white" />
+            </BorderlessButton>
+          ),
+        }}
+      />
       <View
         style={{
           width: "100%",

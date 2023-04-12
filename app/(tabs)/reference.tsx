@@ -43,7 +43,10 @@ export default function Reference() {
         <Row title="Monk's head">
           <Paragraph>
             This is the most basic design. You need to do be able to do this
-            before you can do other things.
+            before you can do other things. It typically consists of a single,
+            circular white shape created by the milk foam on the surface of the
+            espresso. The pattern is characterized by its rounded, smooth form
+            and its resemblance to a bald head, hence the name "Monk's head."
           </Paragraph>
         </Row>
         <Row title="Heart">
@@ -74,7 +77,7 @@ export default function Reference() {
 }
 
 function Row({ title, children }: { title: string; children?: any }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const iconColor = useThemeColor({
     light: TailwindColor["gray-900"],
     dark: TailwindColor["gray-300"],

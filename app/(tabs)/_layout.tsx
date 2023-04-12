@@ -19,6 +19,8 @@ export default function TabsContainer() {
         <Tabs.Screen
           name="reference"
           options={{
+            // Hide the reference tab for now
+            href: null,
             title: "Reference",
             tabBarIcon: ({ color, size }) => {
               return <AntDesign name="book" size={size} color={color} />;

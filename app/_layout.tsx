@@ -12,6 +12,13 @@ import { ThemeContext } from "~/components/Themed";
 import { useDataIsReady } from '~/storage/PourStore';
 import * as Settings from "expo-settings";
 
+const CustomLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#000',
+  }
+}
 
 const CustomDarkTheme = {
   ...DarkTheme,
@@ -49,7 +56,7 @@ export default function Root() {
     <>
       <StatusBar style={resolvedColorScheme === "light" ? "dark" : "light"} />
       <ReactNavigationThemeProvider
-        value={resolvedColorScheme === "dark" ? CustomDarkTheme : DefaultTheme}
+        value={resolvedColorScheme === "dark" ? CustomDarkTheme : CustomLightTheme}
       >
         <ThemeContext.Provider value={resolvedColorScheme}>
           <Stack screenOptions={{ presentation: "modal" }} />
