@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet, ViewProps } from "react-native";
 import { View } from "~/components/Themed";
 import { Image, ImageProps } from "expo-image";
@@ -10,10 +11,18 @@ type Props = {
   uri: string;
   containerStyle?: ViewProps["style"];
   resizeMode?: "cover" | "contain";
-  transition?: ImageProps["transition"]
+  transition?: ImageProps["transition"];
 };
 
-export default function Photo(props: Props) {
+// A class component is required to support wrapping with
+// Animated.createAnimatedComponent
+export default class Photo extends React.Component<Props> {
+  render() {
+    return <PhotoComponent {...this.props} />;
+  }
+}
+
+function PhotoComponent(props: Props) {
   const { blurhash, uri, resizeMode, containerStyle } = props;
 
   let maybeLocalUri = uri;

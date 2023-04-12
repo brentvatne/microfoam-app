@@ -1,6 +1,12 @@
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
@@ -8,12 +14,29 @@ import Photo from "~/components/Photo";
 import { AntDesign, ScrollView, Text, View } from "~/components/Themed";
 import { humanDate } from "~/utils/formatDate";
 
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+const AnimatedPhoto = Animated.createAnimatedComponent(Photo);
+
 export default function ShowPour() {
   const params = useSearchParams();
   const id = params.id as string;
+  const pour = PourStore.usePour(id);
   const frame = useSafeAreaFrame();
   const router = useRouter();
-  const pour = PourStore.usePour(id);
+  const scrollOffsetY = useSharedValue(0);
+
+  // Probably could just use useScrollViewOffset instead
+  const handler = useAnimatedScrollHandler({
+    onScroll: (e) => {
+      scrollOffsetY.value = e.contentOffset.y;
+    },
+  });
+
+  const scrollViewAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: Math.max(1, 1 - scrollOffsetY.value / 100) }],
+    };
+  });
 
   if (!pour) {
     return null;
@@ -23,7 +46,12 @@ export default function ShowPour() {
   const targetImageHeight = Math.min(400, targetImageWidth);
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <AnimatedScrollView
+      scrollEventThrottle={16}
+      onScroll={handler}
+      contentContainerStyle={{ minHeight: "100%" }}
+      style={[{ flex: 1 }]}
+    >
       <Stack.Screen
         options={{
           title: null,
@@ -41,14 +69,19 @@ export default function ShowPour() {
           ),
         }}
       />
-      <View
-        style={{
-          width: "100%",
-          height: targetImageHeight,
-          backgroundColor: TailwindColor["black"],
-        }}
+      <StatusBar style="inverted" />
+
+      <Animated.View
+        style={[
+          {
+            width: "100%",
+            height: targetImageHeight,
+            backgroundColor: TailwindColor["black"],
+          },
+          scrollViewAnimatedStyle,
+        ]}
       >
-        <Photo
+        <AnimatedPhoto
           uri={pour.photoUrl}
           blurhash={pour.blurhash}
           transition={500}
@@ -58,72 +91,73 @@ export default function ShowPour() {
           }}
           resizeMode="contain"
         />
+      </Animated.View>
+
+      <Description pour={pour} />
+    </AnimatedScrollView>
+  );
+}
+
+function Description({ pour }) {
+  return (
+    <View
+      style={{
+        paddingTop: Padding[4],
+        paddingHorizontal: Padding[4],
+        flex: 1,
+      }}
+    >
+      <View style={{ marginBottom: Margin[2] }}>
+        <Text
+          style={{
+            flex: 1,
+            fontSize: FontSize.lg,
+            lineHeight: FontSize.lg * 1.5,
+          }}
+        >
+          {pour.notes ?? (
+            <Text
+              style={{
+                fontStyle: "italic",
+                color: TailwindColor["gray-400"],
+              }}
+            >
+              No notes
+            </Text>
+          )}
+        </Text>
       </View>
 
-      <View
+      <Text
+        darkColor={TailwindColor["gray-300"]}
+        lightColor={TailwindColor["gray-600"]}
         style={{
-          flexDirection: "column",
-          paddingTop: Padding[4],
-          paddingHorizontal: Padding[4],
-          flex: 1,
+          fontSize: FontSize.lg,
+          lineHeight: FontSize.lg * 1.5,
         }}
       >
-        <View style={{ marginBottom: Margin[2], flex: 1 }}>
-          <Text
-            style={{
-              flex: 1,
-              fontSize: FontSize.lg,
-              lineHeight: FontSize.lg * 1.5,
-            }}
-          >
-            {pour.notes ?? (
-              <Text
-                style={{
-                  fontStyle: "italic",
-                  color: TailwindColor["gray-400"],
-                }}
-              >
-                No notes
-              </Text>
-            )}
-          </Text>
-        </View>
-
-        <View>
-          <Text
-            darkColor={TailwindColor["gray-300"]}
-            lightColor={TailwindColor["gray-600"]}
-            style={{
-              fontSize: FontSize.lg,
-              lineHeight: FontSize.lg * 1.5,
-            }}
-          >
-            {pour.pattern ?? "Formless blob"}
-          </Text>
-          <Text
-            darkColor={TailwindColor["gray-300"]}
-            lightColor={TailwindColor["gray-600"]}
-            style={{
-              fontSize: FontSize.lg,
-              lineHeight: FontSize.lg * 1.5,
-            }}
-          >
-            Rating: {pour.rating} / 5
-          </Text>
-        </View>
-        <View>
-          <Text
-            darkColor={TailwindColor["gray-300"]}
-            lightColor={TailwindColor["gray-600"]}
-            style={{
-              fontSize: FontSize.lg,
-              lineHeight: FontSize.lg * 1.5,
-            }}
-          >
-            {humanDate(pour.dateTime)}
-          </Text>
-        </View>
-      </View>
-    </ScrollView>
+        {pour.pattern ?? "Formless blob"}
+      </Text>
+      <Text
+        darkColor={TailwindColor["gray-300"]}
+        lightColor={TailwindColor["gray-600"]}
+        style={{
+          fontSize: FontSize.lg,
+          lineHeight: FontSize.lg * 1.5,
+        }}
+      >
+        Rating: {pour.rating} / 5
+      </Text>
+      <Text
+        darkColor={TailwindColor["gray-300"]}
+        lightColor={TailwindColor["gray-600"]}
+        style={{
+          fontSize: FontSize.lg,
+          lineHeight: FontSize.lg * 1.5,
+        }}
+      >
+        {humanDate(pour.dateTime)}
+      </Text>
+    </View>
   );
 }
