@@ -69,7 +69,7 @@ export default function ShowPour() {
           ),
         }}
       />
-      <StatusBar style="inverted" />
+      <StatusBar style="light" />
 
       <Animated.View
         style={[
