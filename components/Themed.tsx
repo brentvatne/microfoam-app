@@ -1,4 +1,10 @@
-import { forwardRef, createContext, useContext } from "react";
+import {
+  forwardRef,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -9,12 +15,32 @@ import {
   FlatList as DefaultFlatList,
   ScrollView as DefaultScrollView,
 } from "react-native-gesture-handler";
+
+import * as Settings from "expo-settings";
 import DefaultAntDesign from "@expo/vector-icons/AntDesign";
 import Color from "color";
 
 import { ThemeColors } from "~/constants/colors";
 
 export const ThemeContext = createContext<"light" | "dark">("light");
+
+export function useUnresolvedTheme(): Settings.Theme {
+  const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
+
+  useEffect(() => {
+    const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
+      setTheme(newTheme);
+    });
+
+    return () => subscription.remove();
+  }, [setTheme]);
+
+  return theme;
+}
+
+export function useTheme() {
+  return useContext(ThemeContext);
+}
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -109,21 +135,23 @@ const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
   );
 });
 
-const SectionList = forwardRef<DefaultSectionList, SectionListProps>((props, ref) => {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "view"
-  );
+const SectionList = forwardRef<DefaultSectionList, SectionListProps>(
+  (props, ref) => {
+    const { style, lightColor, darkColor, ...otherProps } = props;
+    const backgroundColor = useThemeColor(
+      { light: lightColor, dark: darkColor },
+      "view"
+    );
 
-  return (
-    <DefaultSectionList
-      style={[{ backgroundColor }, style]}
-      {...otherProps}
-      ref={ref}
-    />
-  );
-});
+    return (
+      <DefaultSectionList
+        style={[{ backgroundColor }, style]}
+        {...otherProps}
+        ref={ref}
+      />
+    );
+  }
+);
 
 const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   const {

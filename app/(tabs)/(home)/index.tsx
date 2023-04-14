@@ -96,6 +96,11 @@ function PourRow({ item }) {
         paddingHorizontal: Padding[3],
       }}
       onPress={() => {
+        async () => {
+          let result = await fetch('https://expo.dev');
+          let text = await result.text();
+          console.log(text)
+        }
         router.push(`/details/${item.id}`);
       }}
       onLongPress={() => {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import * as Application from "expo-application";
 import * as Sharing from "expo-sharing";
@@ -6,13 +7,76 @@ import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
 import { Stack, useRouter } from "expo-router";
 import { setTheme, Theme } from "expo-settings";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
-import { ScrollView, Text, View } from "~/components/Themed";
-import { FontSize, Margin, TailwindColor } from "~/constants/styles";
+import {
+  ScrollView,
+  Text,
+  View,
+  useTheme,
+  useUnresolvedTheme,
+} from "~/components/Themed";
+import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
+
+export default function Settings() {
+  const session = useAuthSession();
+  const theme = useTheme();
+  const unresolvedTheme = useUnresolvedTheme();
+  const [showDebugTools, setShowDebugTools] = useState(false);
+
+  return (
+    <>
+      <Stack.Screen options={{ title: "Settings" }} />
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ minHeight: "100%", paddingTop: Padding[5] }}
+      >
+        <AuthButton />
+
+        <UploadPhotosButton />
+        <Button
+          title="Upload data to server"
+          disabled={!session}
+          onPress={() => maybeUploadDatabaseAsync()}
+        />
+        <Button
+          title="Download data from server"
+          disabled={!session}
+          onPress={() => maybeDownloadDabaseAsync()}
+        />
+
+        <Button
+          title={theme === "dark" ? "Use light theme" : "Use dark theme"}
+          onPress={() => {
+            setTheme(theme === "dark" ? Theme.Light : Theme.Dark);
+          }}
+        />
+
+        <Button
+          title={
+            unresolvedTheme === Theme.System
+              ? "Disable using system theme"
+              : "Use system theme"
+          }
+          onPress={() => {
+            setTheme(
+              unresolvedTheme === Theme.System ? Theme.Light : Theme.System
+            );
+          }}
+        />
+
+        <ApplicationInfo
+          onTripleTap={() => setShowDebugTools(!showDebugTools)}
+        />
+        {showDebugTools ? <DebugTools /> : null}
+      </ScrollView>
+    </>
+  );
+}
 
 function AuthButton() {
   const session = useAuthSession();
@@ -63,173 +127,6 @@ function AuthButton() {
   }
 }
 
-export default function Settings() {
-  const session = useAuthSession();
-
-  return (
-    <>
-      <Stack.Screen options={{ title: "Settings" }} />
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ minHeight: "100%" }}
-      >
-        <Text style={[styles.header, { marginTop: Margin[7] }]}>
-          Data Management
-        </Text>
-
-        <AuthButton />
-
-        <UploadPhotosButton />
-        <Button
-          title="Upload data to server"
-          disabled={!session}
-          onPress={() => maybeUploadDatabaseAsync()}
-        />
-        <Button
-          title="Download data from server"
-          disabled={!session}
-          onPress={() => maybeDownloadDabaseAsync()}
-        />
-
-        <Text style={styles.header}>Debug tools</Text>
-
-        <Button
-          title="Re-generate blurhashes"
-          onPress={() => regenerateBlurhashesAsync()}
-        />
-
-        <Button
-          title="Export data as JSON"
-          onPress={() => maybeExportDatabaseAsync()}
-        />
-
-        <Button
-          title="Import database from JSON"
-          onPress={() => importDatabaseAsync()}
-        />
-
-        <Button
-          title="Use light theme"
-          onPress={() => {
-            setTheme(Theme.Light);
-          }}
-        />
-
-        <Button
-          title="Use dark theme"
-          onPress={() => {
-            setTheme(Theme.Dark);
-          }}
-        />
-
-        <Button
-          title="Use system theme"
-          onPress={() => {
-            setTheme(Theme.System);
-          }}
-        />
-
-        <Button
-          title="Clear data"
-          onPress={() => {
-            Alert.alert(
-              "Clear data?",
-              "All data will be lost. Make sure you have backed up anything important first!",
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-                { text: "OK", onPress: () => PourStore.destroyAllAsync() },
-              ],
-              { cancelable: true }
-            );
-          }}
-        />
-
-        <Button
-          title="Drop and re-initialize database"
-          onPress={() => {
-            Alert.alert(
-              "Drop and re-initialize database?",
-              "All data will be lost. Make sure you have backed up anything important first!",
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-                {
-                  text: "OK",
-                  onPress: () => {
-                    PourStore.destroyAllAsync();
-                  },
-                },
-              ],
-              { cancelable: true }
-            );
-          }}
-        />
-
-        <Button
-          title="Check for update"
-          onPress={async () => {
-            const result = await Updates.fetchUpdateAsync();
-            if (result.isNew) {
-              Alert.alert(
-                "New update available",
-                "Restart the app to apply the update",
-                [
-                  { text: "Cancel", style: "cancel" },
-                  { text: "Restart", onPress: () => Updates.reloadAsync() },
-                ],
-                { cancelable: true }
-              );
-            } else {
-              alert("No update available");
-            }
-          }}
-        />
-
-        <Text style={styles.header}>Debug info</Text>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            marginTop: Margin[1],
-            fontSize: FontSize.base,
-            textAlign: "center",
-          }}
-        >
-          Version: {Application.nativeApplicationVersion} (
-          {Application.nativeBuildVersion})
-        </Text>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            marginTop: Margin[1],
-            fontSize: FontSize.base,
-            textAlign: "center",
-          }}
-        >
-          ID: {Updates.updateId ?? "(no update id)"}
-        </Text>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            fontSize: FontSize.base,
-            textAlign: "center",
-            marginTop: Margin[1],
-          }}
-        >
-          Released: {Updates.manifest.createdAt ?? "(no release date)"}
-        </Text>
-      </ScrollView>
-    </>
-  );
-}
-
 function UploadPhotosButton() {
   const router = useRouter();
   const pours = PourStore.usePours();
@@ -271,6 +168,140 @@ function UploadPhotosButton() {
         </Text>
       </View>
     </View>
+  );
+}
+
+function ApplicationInfo({ onTripleTap }: { onTripleTap: () => void }) {
+  const gesture = Gesture.Tap()
+    .numberOfTaps(3)
+    .runOnJS(true)
+    .onStart(() => {
+      onTripleTap();
+    });
+
+  return (
+    <GestureDetector gesture={gesture}>
+      <View>
+        <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
+          style={{
+            marginTop: Margin[1],
+            fontSize: FontSize.base,
+            textAlign: "center",
+          }}
+        >
+          Version: {Application.nativeApplicationVersion} (
+          {Application.nativeBuildVersion})
+        </Text>
+        <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
+          style={{
+            marginTop: Margin[1],
+            fontSize: FontSize.base,
+            textAlign: "center",
+          }}
+        >
+          ID: {Updates.updateId ?? "(no update id)"}
+        </Text>
+        <Text
+          darkColor={TailwindColor["gray-100"]}
+          lightColor={TailwindColor["gray-700"]}
+          style={{
+            fontSize: FontSize.base,
+            textAlign: "center",
+            marginTop: Margin[1],
+          }}
+        >
+          Released: {Updates.manifest.createdAt ?? "(no release date)"}
+        </Text>
+      </View>
+    </GestureDetector>
+  );
+}
+
+function DebugTools() {
+  return (
+    <>
+      <Text style={styles.header}>Debug tools</Text>
+
+      <Button
+        title="Re-generate blurhashes"
+        onPress={() => regenerateBlurhashesAsync()}
+      />
+
+      <Button
+        title="Export data as JSON"
+        onPress={() => maybeExportDatabaseAsync()}
+      />
+
+      <Button
+        title="Import database from JSON"
+        onPress={() => importDatabaseAsync()}
+      />
+
+      <Button
+        title="Clear data"
+        onPress={() => {
+          Alert.alert(
+            "Clear data?",
+            "All data will be lost. Make sure you have backed up anything important first!",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => PourStore.destroyAllAsync() },
+            ],
+            { cancelable: true }
+          );
+        }}
+      />
+
+      <Button
+        title="Drop and re-initialize database"
+        onPress={() => {
+          Alert.alert(
+            "Drop and re-initialize database?",
+            "All data will be lost. Make sure you have backed up anything important first!",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => {
+                  PourStore.destroyAllAsync();
+                },
+              },
+            ],
+            { cancelable: true }
+          );
+        }}
+      />
+
+      <Button
+        title="Check for update"
+        onPress={async () => {
+          const result = await Updates.fetchUpdateAsync();
+          if (result.isNew) {
+            Alert.alert(
+              "New update available",
+              "Restart the app to apply the update",
+              [
+                { text: "Cancel", style: "cancel" },
+                { text: "Restart", onPress: () => Updates.reloadAsync() },
+              ],
+              { cancelable: true }
+            );
+          } else {
+            alert("No update available");
+          }
+        }}
+      />
+    </>
   );
 }
 
