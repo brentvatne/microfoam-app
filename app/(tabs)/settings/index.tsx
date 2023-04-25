@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Alert } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { setTheme, Theme } from "expo-settings";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
+import * as Alert from "~/utils/alert";
 import { DebugTools, ApplicationInfo } from "~/components/Settings";
 import {
   ScrollView,
@@ -185,10 +185,9 @@ async function maybeUploadDatabaseAsync() {
 
   // Just take care of this automatically in next pass, move photo upload to debug tools
   if (poursWithLocalPhotos.length > 0) {
-    Alert.alert(
-      "Upload photos first",
-      "Please upload all photos before uploading the database"
-    );
+    Alert.error({
+      message: "Please upload all photos before uploading the database",
+    });
     return;
   }
 
@@ -199,9 +198,11 @@ async function maybeUploadDatabaseAsync() {
       .from("snapshots")
       .insert({ data: PourStore.toJSON(), user_id: user.id });
     if (!error) {
-      Alert.alert("Success", "Data uploaded successfully");
+      Alert.success({ message: "Data uploaded successfully" });
     } else {
-      Alert.alert("Error", `Data upload failed: ${error.message}`);
+      Alert.error({
+        message: `Data upload failed: ${error.message}`,
+      });
     }
   } catch (e) {
     alert(e.message);
@@ -219,12 +220,16 @@ async function maybeDownloadDabaseAsync() {
     .limit(1);
 
   if (error) {
-    console.error("Error fetching data:", error.message);
+    Alert.error({
+      message: `Unable to fetch data: ${error.message}`,
+    });
   } else {
     // Access the data column of the most recent row (if any)
     const mostRecentData = data.length > 0 ? data[0].data : null;
     await PourStore.loadExternalJSONAsync(mostRecentData);
-    alert("Data downloaded successfully");
+    Alert.success({
+      message: "The latest snapshot has been downloaded and loaded",
+    });
   }
 }
 

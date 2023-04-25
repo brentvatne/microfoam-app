@@ -29,6 +29,7 @@ import {
   TextInput,
   View,
   useThemeColor,
+  useTheme,
 } from "~/components/Themed";
 import { ThemeColors } from "~/constants/colors";
 
@@ -242,7 +243,7 @@ function maybeDate(date: number | undefined) {
 
 function PhotoPickerForm({ onChange, photoUri }) {
   const [response, requestPermissionAsync] = MediaLibrary.usePermissions();
-  const colorScheme = useColorScheme();
+  const colorScheme = useTheme();
 
   const launchPickerAsync = async () => {
     // Only required in order to get back the assetId from the ImagePicker response
@@ -472,12 +473,12 @@ function Option({ label, onPress, selection }) {
 }
 
 function RatingPicker({ onChange, rating }) {
-  const colorScheme = useColorScheme();
+  const colorScheme = useTheme();
 
   return (
     // @ts-ignore: this library is not maintained ...
     <SegmentedControl
-      appearance={colorScheme ?? "light"}
+      appearance={colorScheme}
       values={["1", "2", "3", "4", "5"]}
       selectedIndex={rating - 1}
       onChange={(event) => {
