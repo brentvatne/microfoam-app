@@ -22,6 +22,9 @@
       "extends": "base",
       "channel": "preview",
       "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
       "env": {
         "PREVIEW": "1"
       }
