@@ -9,16 +9,16 @@ import {
 } from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
-import { useDataIsReady } from '~/storage/PourStore';
+import { useDataIsReady } from "~/storage/PourStore";
 import * as Settings from "expo-settings";
 
 const CustomLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#000',
-  }
-}
+    primary: "#000",
+  },
+};
 
 const CustomDarkTheme = {
   ...DarkTheme,
@@ -56,7 +56,9 @@ export default function Root() {
     <>
       <StatusBar style={resolvedColorScheme === "light" ? "dark" : "light"} />
       <ReactNavigationThemeProvider
-        value={resolvedColorScheme === "dark" ? CustomDarkTheme : CustomLightTheme}
+        value={
+          resolvedColorScheme === "dark" ? CustomDarkTheme : CustomLightTheme
+        }
       >
         <ThemeContext.Provider value={resolvedColorScheme}>
           <Stack screenOptions={{ presentation: "modal" }} />
