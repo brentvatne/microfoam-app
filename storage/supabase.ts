@@ -15,6 +15,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
+// Side effect! Get the session right away so it's cached when we need it later.
+supabase.auth.getSession();
+
 export function useAuthSession() {
   const [session, setSession] = useState<Session | null>(null);
 
