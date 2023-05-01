@@ -7590,10 +7590,10 @@ through@2:
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
 
-tinybase@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/tinybase/-/tinybase-3.0.4.tgz#620e10210afb4c273e510a7e7099e4a4ccc680da"
-  integrity sha512-AgIF4TxrlGY0ouoKRv7YTN4vC+m5ieQ5Lfr61THCW5TVcSnc4pBUk4K+xukAIt4UuPOjcXIZMA+Foz8fE82pQg==
+tinybase@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/tinybase/-/tinybase-3.1.1.tgz#720d5287e657d038b17bb769a3c0c8cb6efa8412"
+  integrity sha512-yVbegijZMry+xvlrzbOZzkD4FjFrhR/VpkND4+J24kgythWOMZyl56zJE0X/IuriAs9KNzEEmR3wmaQYvrY93A==
 
 tmp@^0.0.33:
   version "0.0.33"
