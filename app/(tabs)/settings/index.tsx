@@ -8,13 +8,15 @@ import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import * as Alert from "~/utils/alert";
 import { DebugTools, ApplicationInfo, AuthButton } from "~/components/Settings";
+import { List, ListItem, ListSeparator } from "~/components/Lists";
 import {
+  AntDesign,
   ScrollView,
   Text,
   useTheme,
   useUnresolvedTheme,
 } from "~/components/Themed";
-import { FontSize, Padding, TailwindColor } from "~/constants/styles";
+import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
 
 export default function Settings() {
@@ -33,37 +35,56 @@ export default function Settings() {
       >
         <AuthButton />
 
-        <UploadPhotosButton />
-        <Button
-          title="Upload data to server"
-          disabled={!session}
-          onPress={() => maybeUploadDatabaseAsync()}
-        />
-        <Button
-          title="Download data from server"
-          disabled={!session}
-          onPress={() => maybeDownloadDabaseAsync()}
-        />
-
-        <Button
-          title={theme === "dark" ? "Use light theme" : "Use dark theme"}
-          onPress={() => {
-            setTheme(theme === "dark" ? Theme.Light : Theme.Dark);
-          }}
-        />
-
-        <Button
-          title={
-            unresolvedTheme === Theme.System
-              ? "Disable using system theme"
-              : "Use system theme"
-          }
-          onPress={() => {
-            setTheme(
-              unresolvedTheme === Theme.System ? Theme.Light : Theme.System
-            );
-          }}
-        />
+        <List>
+          <View style={{ marginTop: Margin[1] }} />
+          <UploadPhotosButton />
+          <ListSeparator />
+          <ListItem
+            title="Upload data to server"
+            disabled={!session}
+            renderIcon={() => <AntDesign name="upload" size={24} />}
+            renderRight={() => null}
+            subtitle="Uploads all data to the server. This will overwrite any data on the server."
+            onPress={() => maybeUploadDatabaseAsync()}
+          />
+          <ListSeparator />
+          <ListItem
+            title="Download data from server"
+            disabled={!session}
+            renderRight={() => null}
+            renderIcon={() => <AntDesign name="download" size={24} />}
+            subtitle="Downloads all data from the server. This will overwrite any local data."
+            onPress={() => maybeDownloadDabaseAsync()}
+          />
+          <ListSeparator />
+          <ListItem
+            title={theme === "dark" ? "Use light theme" : "Use dark theme"}
+            renderRight={() => null}
+            renderIcon={() => (
+              <AntDesign name="bulb1" size={24} />
+            )}
+            subtitle="Changes the theme of the app."
+            onPress={() => {
+              setTheme(theme === "dark" ? Theme.Light : Theme.Dark);
+            }}
+          />
+          <ListSeparator />
+          <ListItem
+            title={
+              unresolvedTheme === Theme.System
+                ? "Disable using system theme"
+                : "Use system theme"
+            }
+            renderRight={() => null}
+            renderIcon={() => <AntDesign name="iconfontdesktop" size={24} />}
+            onPress={() => {
+              setTheme(
+                unresolvedTheme === Theme.System ? Theme.Light : Theme.System
+              );
+            }}
+          />
+          <View style={{ marginBottom: Margin[1] }} />
+        </List>
 
         <ApplicationInfo
           onTripleTap={() => setShowDebugTools(!showDebugTools)}
@@ -84,37 +105,16 @@ function UploadPhotosButton() {
   const word = numPoursWithLocalPhotos === 1 ? "photo" : "photos";
   const message =
     numPoursWithLocalPhotos === 0
-      ? `✅ All ${word} are synced`
+      ? `All ${word} are synced`
       : `⚠️ ${numPoursWithLocalPhotos} ${word} not yet synced`;
 
   return (
-    <View style={{ flexDirection: "column", alignItems: "center" }}>
-      <Button
-        title="Upload photos"
-        onPress={() => router.push("/settings/upload")}
-      />
-
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 3,
-        }}
-      >
-        <Text
-          darkColor={TailwindColor["gray-400"]}
-          lightColor={TailwindColor["gray-600"]}
-          style={{
-            marginTop: -10,
-            marginBottom: 15,
-            fontSize: FontSize.lg,
-          }}
-        >
-          {message}
-        </Text>
-      </View>
-    </View>
+    <ListItem
+      onPress={() => router.push("/settings/upload")}
+      title="Upload photos"
+      renderIcon={() => <AntDesign name="picture" size={24} />}
+      subtitle={message}
+    />
   );
 }
 
