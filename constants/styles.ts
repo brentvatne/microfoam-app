@@ -5,6 +5,18 @@ export const FontSize = {
   xxl: 14 * 1.35,
 };
 
+export const BorderRadius = {
+  1: 2,
+  2: 6,
+  3: 12,
+  4: 16,
+  5: 24,
+  6: 32,
+  7: 40,
+  8: 48,
+  9: 56,
+};
+
 export const Padding = {
   1: 2,
   2: 6,

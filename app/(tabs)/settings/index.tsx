@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { setTheme, Theme } from "expo-settings";
 
@@ -6,11 +7,10 @@ import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import * as Alert from "~/utils/alert";
-import { DebugTools, ApplicationInfo } from "~/components/Settings";
+import { DebugTools, ApplicationInfo, AuthButton } from "~/components/Settings";
 import {
   ScrollView,
   Text,
-  View,
   useTheme,
   useUnresolvedTheme,
 } from "~/components/Themed";
@@ -27,6 +27,7 @@ export default function Settings() {
     <>
       <Stack.Screen options={{ title: "Settings" }} />
       <ScrollView
+        lightColor="#f2f2f2"
         style={{ flex: 1 }}
         contentContainerStyle={{ minHeight: "100%", paddingTop: Padding[5] }}
       >
@@ -71,55 +72,6 @@ export default function Settings() {
       </ScrollView>
     </>
   );
-}
-
-function AuthButton() {
-  const session = useAuthSession();
-  const router = useRouter();
-
-  if (session) {
-    return (
-      <View style={{ flexDirection: "column", alignItems: "center" }}>
-        <Button
-          title="Manage session"
-          onPress={() => router.push("/settings/auth")}
-        />
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 3,
-          }}
-        >
-          <Text
-            darkColor={TailwindColor["gray-400"]}
-            lightColor={TailwindColor["gray-600"]}
-            numberOfLines={1}
-            style={{
-              marginTop: -10,
-              marginBottom: 15,
-              fontSize: FontSize.lg,
-            }}
-          >
-            Signed in as{" "}
-            <Text
-              darkColor={TailwindColor["gray-400"]}
-              lightColor={TailwindColor["gray-600"]}
-              style={{ fontWeight: "bold" }}
-            >
-              {session.user.email}
-            </Text>
-          </Text>
-        </View>
-      </View>
-    );
-  } else {
-    return (
-      <Button title="Sign in" onPress={() => router.push("/settings/auth")} />
-    );
-  }
 }
 
 function UploadPhotosButton() {

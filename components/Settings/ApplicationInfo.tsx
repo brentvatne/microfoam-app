@@ -1,8 +1,9 @@
+import { View } from "react-native";
 import * as Application from "expo-application";
 import * as Updates from "expo-updates";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
-import { Text, View } from "~/components/Themed";
+import { Text } from "~/components/Themed";
 import { FontSize, Margin, TailwindColor } from "~/constants/styles";
 
 export default function ApplicationInfo({
