@@ -132,6 +132,10 @@ async function getUserAsync() {
   return user;
 }
 
+function getPoursWithLocalPhotos() {
+  return PourStore.all().filter((pour) => isLocalFile(pour.photoUrl));
+}
+
 async function maybeUploadDatabaseAsync() {
   const poursWithLocalPhotos = getPoursWithLocalPhotos();
 
@@ -183,8 +187,4 @@ async function maybeDownloadDabaseAsync() {
       message: "The latest snapshot has been downloaded and loaded",
     });
   }
-}
-
-function getPoursWithLocalPhotos() {
-  return PourStore.all().filter((pour) => isLocalFile(pour.photoUrl));
 }

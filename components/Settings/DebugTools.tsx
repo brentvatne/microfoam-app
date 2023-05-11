@@ -4,6 +4,7 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
 
+import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
 import Button from "~/components/Button";
 import { Text } from "~/components/Themed";
@@ -101,6 +102,10 @@ async function regenerateBlurhashesAsync() {
     console.log(`after: ${JSON.stringify(result)}`);
   }
   alert(`done! ${pours.length} blurhashes regenerated`);
+}
+
+function getPoursWithLocalPhotos() {
+  return PourStore.all().filter((pour) => isLocalFile(pour.photoUrl));
 }
 
 async function maybeExportDatabaseAsync() {
