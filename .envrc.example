@@ -5,3 +5,5 @@ export EAS_PROJECT_ID="f19296df-44bd-482a-90bb-2af254c6ac42"
 
 # Use the experimental inspector proxy 👀
 EXPO_USE_CUSTOM_INSPECTOR_PROXY=true
+
+VEXO_API_KEY="YOUR_KEY_HERE"
