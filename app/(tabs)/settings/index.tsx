@@ -5,18 +5,16 @@ import { setTheme, Theme } from "expo-settings";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
-import Button from "~/components/Button";
 import * as Alert from "~/utils/alert";
 import { DebugTools, ApplicationInfo, AuthButton } from "~/components/Settings";
 import { List, ListItem, ListSeparator } from "~/components/Lists";
 import {
   AntDesign,
   ScrollView,
-  Text,
   useTheme,
   useUnresolvedTheme,
 } from "~/components/Themed";
-import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
+import { Margin, Padding } from "~/constants/styles";
 import { supabase, useAuthSession } from "~/storage/supabase";
 
 export default function Settings() {
@@ -37,7 +35,7 @@ export default function Settings() {
 
         <List>
           <View style={{ marginTop: Margin[1] }} />
-          <UploadPhotosButton />
+          <UploadPhotosButton disabled={!session} />
           <ListSeparator />
           <ListItem
             title="Upload data to server"
@@ -60,9 +58,7 @@ export default function Settings() {
           <ListItem
             title={theme === "dark" ? "Use light theme" : "Use dark theme"}
             renderRight={() => null}
-            renderIcon={() => (
-              <AntDesign name="bulb1" size={24} />
-            )}
+            renderIcon={() => <AntDesign name="bulb1" size={24} />}
             subtitle="Changes the theme of the app."
             onPress={() => {
               setTheme(theme === "dark" ? Theme.Light : Theme.Dark);
@@ -95,7 +91,7 @@ export default function Settings() {
   );
 }
 
-function UploadPhotosButton() {
+function UploadPhotosButton({ disabled }: { disabled: boolean }) {
   const router = useRouter();
   const pours = PourStore.usePours();
   const numPoursWithLocalPhotos = pours.filter((p) =>
@@ -106,12 +102,13 @@ function UploadPhotosButton() {
   const message =
     numPoursWithLocalPhotos === 0
       ? `All ${word} are synced`
-      : `⚠️ ${numPoursWithLocalPhotos} ${word} not yet synced`;
+      : `${numPoursWithLocalPhotos} ${word} not yet synced`;
 
   return (
     <ListItem
       onPress={() => router.push("/settings/upload")}
       title="Upload photos"
+      disabled={disabled}
       renderIcon={() => <AntDesign name="picture" size={24} />}
       subtitle={message}
     />

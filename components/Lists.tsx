@@ -5,19 +5,32 @@ import { AntDesign, Text, View as ThemedView } from "~/components/Themed";
 import { TailwindColor } from "~/constants/colors";
 import { FontSize } from "~/constants/styles";
 
-export function List({ children }: { children: React.ReactNode }) {
+export function List({
+  children,
+  renderFooter,
+}: {
+  children: React.ReactNode;
+  renderFooter?: () => React.ReactNode;
+}) {
   return (
-    <ThemedView
-      lightColor="white"
-      darkColor={TailwindColor["neutral-900"]}
-      style={{
-        borderRadius: BorderRadius[3],
-        marginHorizontal: Margin[3],
-        marginBottom: Margin[4],
-      }}
-    >
-      {children}
-    </ThemedView>
+    <>
+      <ThemedView
+        lightColor="white"
+        darkColor={TailwindColor["zinc-800"]}
+        style={{
+          borderRadius: BorderRadius[3],
+          marginHorizontal: Margin[4],
+          marginBottom: renderFooter ? Margin[1] : Margin[4],
+          paddingTop: Padding[1],
+          paddingBottom: Padding[2],
+        }}
+      >
+        {children}
+      </ThemedView>
+      {renderFooter ? (
+        <View style={{ marginHorizontal: Margin[4] }}>{renderFooter()}</View>
+      ) : null}
+    </>
   );
 }
 
@@ -125,7 +138,9 @@ function renderListItemContents({
 
   return (
     <>
-      <View style={{ height: "100%", paddingTop: Padding[1] }}>{iconElement}</View>
+      <View style={{ height: "100%", paddingTop: Padding[1] }}>
+        {iconElement}
+      </View>
       <View style={{ marginLeft: Margin[3] }} />
       <View style={{ flex: 1 }}>
         {titleElement}
@@ -140,8 +155,8 @@ function renderListItemContents({
 export function ListSeparator() {
   return (
     <ThemedView
-      darkColor={TailwindColor["neutral-800"]}
-      lightColor={TailwindColor["gray-200"]}
+      darkColor={TailwindColor["zinc-600"]}
+      lightColor={TailwindColor["zinc-200"]}
       style={{
         height: StyleSheet.hairlineWidth,
         // marginLeft: Margin[3],
