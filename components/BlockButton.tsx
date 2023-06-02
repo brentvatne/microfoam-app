@@ -36,7 +36,6 @@ export default function BlockButton({
             color: destructive
               ? TailwindColor["red-500"]
               : TailwindColor["blue-500"],
-            fontWeight: "500",
             fontSize: FontSize.xl,
           }}
         >
