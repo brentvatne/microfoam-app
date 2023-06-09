@@ -32,13 +32,14 @@ export default function AuthButton() {
               lightColor={TailwindColor["zinc-700"]}
               darkColor={TailwindColor["zinc-300"]}
               style={{
-                textAlign: 'center',
+                textAlign: "center",
                 marginHorizontal: Margin[3],
                 marginTop: Margin[2],
                 marginBottom: Margin[6],
               }}
             >
-              No sign up required. All we ask for is your email address, we send a code there for you to sign in.
+              No sign up required. All we ask for is your email address, we send
+              a code there for you to sign in.
             </Text>
           )}
         >

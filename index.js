@@ -7,7 +7,7 @@ import "react-native-get-random-values";
 // Register app entry through Expo Router
 import "expo-router/entry";
 
-import { vexo } from 'vexo-analytics'
+import { vexo } from "vexo-analytics";
 
 if (!__DEV__) {
   vexo(process.env.VEXO_API_KEY);

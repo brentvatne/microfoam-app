@@ -42,7 +42,10 @@ export default function Auth() {
       <>
         <View style={styles.container} lightColor="#fff">
           <Text style={styles.title}>Authenticate by email</Text>
-          <Text style={styles.subtitle}>Ensure you have access to the email, you'll need it to complete sign in.</Text>
+          <Text style={styles.subtitle}>
+            Ensure you have access to the email, you'll need it to complete sign
+            in.
+          </Text>
           <TextInput
             autoFocus
             value={email}
@@ -64,7 +67,7 @@ export default function Auth() {
             }}
           />
         </View>
-        <UnthemedView style={{marginHorizontal: Margin[4]}}>
+        <UnthemedView style={{ marginHorizontal: Margin[4] }}>
           <BlockButton
             label="Send authentication code"
             onPress={async () => {
@@ -176,8 +179,7 @@ const styles = StyleSheet.create({
   subtitle: {
     marginBottom: Margin[4],
     lineHeight: FontSize.base * 1.3,
-    color: TailwindColor['zinc-500'],
+    color: TailwindColor["zinc-500"],
     fontSize: FontSize.base,
-
-  }
+  },
 });
