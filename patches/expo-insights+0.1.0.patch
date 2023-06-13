@@ -9,7 +9,7 @@ index 2fe05b2..1ade657 100644
 +import { requireNativeModule } from 'expo-modules-core';
 +export default requireNativeModule('ExpoInsights');
 diff --git a/node_modules/expo-insights/ios/InsightsModule.swift b/node_modules/expo-insights/ios/InsightsModule.swift
-index c77e4dd..b11de28 100644
+index c77e4dd..ab32b45 100644
 --- a/node_modules/expo-insights/ios/InsightsModule.swift
 +++ b/node_modules/expo-insights/ios/InsightsModule.swift
 @@ -21,6 +21,18 @@ public final class InsightsModule: Module {
@@ -39,3 +39,12 @@ index c77e4dd..b11de28 100644
  }
  
  /**
+@@ -100,7 +113,7 @@ private func getLaunchEventData(projectId: String) -> [String: String?] {
+     "event_name": "APP_LAUNCH",
+     "eas_client_id": EASClientID.uuid().uuidString,
+     "project_id": projectId,
+-    "app_version": info?["CFBundleVersion"] as? String,
++    "app_version": info?["CFBundleShortVersionString"] as? String,
+     "platform": "iOS",
+     "os_version": UIDevice.current.systemVersion
+   ]
