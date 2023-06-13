@@ -38,6 +38,7 @@
     "expo-linking": "~4.0.1",
     "expo-media-library": "~15.2.3",
     "expo-router": "^1.5.2",
+    "expo-screen-orientation": "^6.0.0-beta.1",
     "expo-settings": "^0.1.0",
     "expo-sharing": "~11.2.2",
     "expo-splash-screen": "~0.18.2",

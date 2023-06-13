@@ -3769,6 +3769,11 @@ expo-router@^1.5.2:
     react-helmet-async "^1.3.0"
     url "^0.11.0"
 
+expo-screen-orientation@^6.0.0-beta.1:
+  version "6.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-6.0.0-beta.1.tgz#4647790d06ef8021c69cda8d46ee025c4dd28028"
+  integrity sha512-dF3sE8pZFjjrHaDwdoPGaiZFpU71apFb4ipVySgf0hKJov9UJ9TBfbl7TF0Gyf/9nnGuC38B0KEMcwQ9umQPzQ==
+
 expo-settings@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/expo-settings/-/expo-settings-0.1.0.tgz#a8e0c28838e1760a07a8aa6f011afd52bfb398fc"
