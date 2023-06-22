@@ -30,18 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           ? "Production"
           : "Development",
       },
-    ],
-    [
-      "expo-build-properties",
-      {
-        android: {
-          unstable_networkInspector: true,
-        },
-        ios: {
-          unstable_networkInspector: true,
-        },
-      },
-    ],
+    ]
   ],
 });
 

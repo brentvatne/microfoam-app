@@ -2,7 +2,7 @@ import { Alert, StyleSheet } from "react-native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import Insights from "expo-insights";
 
 import { isLocalFile } from "~/storage/fs";
@@ -15,11 +15,11 @@ export default function DebugTools() {
   return (
     <>
       <Text style={{ fontFamily: "Courier", textAlign: "center" }}>
-        Insights payload:{" "}
+        {/* Insights payload:{" "}
         {
           // @ts-ignore
           JSON.stringify(Insights.getDebugConfig(), null, 2)
-        }
+        } */}
       </Text>
       <Text style={styles.header}>Debug tools</Text>
 
@@ -82,20 +82,20 @@ export default function DebugTools() {
       <Button
         title="Check for update"
         onPress={async () => {
-          const result = await Updates.fetchUpdateAsync();
-          if (result.isNew) {
-            Alert.alert(
-              "New update available",
-              "Restart the app to apply the update",
-              [
-                { text: "Cancel", style: "cancel" },
-                { text: "Restart", onPress: () => Updates.reloadAsync() },
-              ],
-              { cancelable: true }
-            );
-          } else {
-            alert("No update available");
-          }
+          // const result = await Updates.fetchUpdateAsync();
+          // if (result.isNew) {
+          //   Alert.alert(
+          //     "New update available",
+          //     "Restart the app to apply the update",
+          //     [
+          //       { text: "Cancel", style: "cancel" },
+          //       { text: "Restart", onPress: () => Updates.reloadAsync() },
+          //     ],
+          //     { cancelable: true }
+          //   );
+          // } else {
+          //   alert("No update available");
+          // }
         }}
       />
     </>
