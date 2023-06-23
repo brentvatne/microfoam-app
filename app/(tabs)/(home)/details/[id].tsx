@@ -1,6 +1,6 @@
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedScrollHandler,
@@ -18,12 +18,14 @@ const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedPhoto = Animated.createAnimatedComponent(Photo);
 
 export default function ShowPour() {
-  const params = useSearchParams();
+  const params = useLocalSearchParams();
   const id = params.id as string;
   const pour = PourStore.usePour(id);
   const frame = useSafeAreaFrame();
   const router = useRouter();
   const scrollOffsetY = useSharedValue(0);
+
+  console.log({ id });
 
   // Probably could just use useScrollViewOffset instead
   const handler = useAnimatedScrollHandler({

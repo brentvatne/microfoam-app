@@ -30,6 +30,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           ? "Production"
           : "Development",
       },
+    ],
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "kotlinVersion": "1.8.10",
+        }
+      }
     ]
   ],
 });

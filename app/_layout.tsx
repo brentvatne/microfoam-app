@@ -10,7 +10,7 @@ import {
 import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
-import * as Settings from "expo-settings";
+import * as Settings from "~/modules/expo-settings";
 
 const CustomLightTheme = {
   ...DefaultTheme,

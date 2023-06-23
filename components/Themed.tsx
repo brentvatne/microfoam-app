@@ -16,7 +16,7 @@ import {
   ScrollView as DefaultScrollView,
 } from "react-native-gesture-handler";
 
-import * as Settings from "expo-settings";
+import * as Settings from "~/modules/expo-settings";
 import DefaultAntDesign from "@expo/vector-icons/AntDesign";
 import Color from "color";
 
