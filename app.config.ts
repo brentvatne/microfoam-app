@@ -40,7 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
-    ["sentry-expo"],
+    // ["sentry-expo"],
   ],
 });
 

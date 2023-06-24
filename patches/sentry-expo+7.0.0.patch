@@ -42,7 +42,7 @@ index 37d2549..b2e2969 100644
              manifest,
              deviceYearClass: Device.deviceYearClass,
 diff --git a/node_modules/sentry-expo/build/sentry.js b/node_modules/sentry-expo/build/sentry.js
-index 9e53d6b..4131173 100644
+index 9e53d6b..e442eed 100644
 --- a/node_modules/sentry-expo/build/sentry.js
 +++ b/node_modules/sentry-expo/build/sentry.js
 @@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
@@ -83,3 +83,26 @@ index 9e53d6b..4131173 100644
  }
  /**
   * We assign the appropriate release based on if the app is running in development,
+@@ -80,14 +81,15 @@ function getDefaultRelease() {
+     if (__DEV__) {
+         return 'DEVELOPMENT';
+     }
+-    else if (MANIFEST.revisionId) {
+-        // Want to make sure this still exists in EAS update: equal on iOS & Android
+-        return MANIFEST.revisionId;
+-    }
+-    else {
++
++    return `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
++    // else if (MANIFEST.revisionId) {
++    //     // Want to make sure this still exists in EAS update: equal on iOS & Android
++    //     return MANIFEST.revisionId;
++    // }
++    // else {
+         // This is the default set by Sentry's native Xcode & Gradle scripts
+-        return `${Application.applicationId}@${Application.nativeApplicationVersion}+${Application.nativeBuildVersion}`;
+-    }
++    // }
+ }
+ const init = (options = {}) => {
+     const defaultExpoIntegrations = [

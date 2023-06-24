@@ -5,14 +5,14 @@
   },
   "build": {
     "base": {
-      // "node": "14.2.0",
       "ios": {
         "resourceClass": "large"
       },
       "env": {
         "SENTRY_ORG": "brents",
         "SENTRY_PROJECT": "microfoam",
-        "EAS_BUILD_ENABLE_COCOAPODS_CACHE": "1"
+        "EAS_BUILD_DISABLE_NPM_CACHE": "1",
+        "EAS_BUILD_DISABLE_COCOAPODS_CACHE": "1"
         // "NVM_NODEJS_ORG_MIRROR": "https://nodejs.raccoon-tw.dev/release"
       }
     },
