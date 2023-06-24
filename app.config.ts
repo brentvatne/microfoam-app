@@ -31,14 +31,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
+    ["expo-router"],
     [
       "expo-build-properties",
       {
-        "android": {
-          "kotlinVersion": "1.8.10",
-        }
-      }
-    ]
+        android: {
+          kotlinVersion: "1.8.10",
+        },
+      },
+    ],
   ],
 });
 
