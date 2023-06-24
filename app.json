@@ -29,8 +29,8 @@
       },
       "package": "com.brents.microfoam"
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    // "runtimeVersion": {
+    //   "policy": "appVersion"
+    // }
   }
 }

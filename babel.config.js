@@ -10,14 +10,14 @@ module.exports = function (api) {
           "VEXO_API_KEY"
         ]
       }],
-      [require.resolve("babel-plugin-module-resolver"),
-      {
-        root: ["./"],
-        alias: {
-          "~": "./"
-        }
-      }],
-     'react-native-reanimated/plugin',
+      ["babel-plugin-module-resolver",
+        {
+          root: ["./"],
+          alias: {
+            "~": "./"
+          }
+        }],
+      'react-native-reanimated/plugin',
     ],
   };
 };

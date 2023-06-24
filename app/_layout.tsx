@@ -11,6 +11,7 @@ import { ThemeColors } from "~/constants/colors";
 import { ThemeContext } from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
 import * as Settings from "~/modules/expo-settings";
+import * as Sentry from "@sentry/react-native";
 
 const CustomLightTheme = {
   ...DefaultTheme,
@@ -30,7 +31,7 @@ const CustomDarkTheme = {
   },
 };
 
-export default function Root() {
+function Root() {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
   const dataIsReady = useDataIsReady();
@@ -67,3 +68,5 @@ export default function Root() {
     </>
   );
 }
+
+export default Sentry.wrap(Root);

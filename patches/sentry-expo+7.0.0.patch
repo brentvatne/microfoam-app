@@ -1,0 +1,85 @@
+diff --git a/node_modules/sentry-expo/build/integrations/bare.js b/node_modules/sentry-expo/build/integrations/bare.js
+index cc982a5..204c5ff 100644
+--- a/node_modules/sentry-expo/build/integrations/bare.js
++++ b/node_modules/sentry-expo/build/integrations/bare.js
+@@ -30,7 +30,6 @@ exports.ExpoBareIntegration = void 0;
+ const react_native_1 = require("react-native");
+ const expo_constants_1 = __importDefault(require("expo-constants"));
+ const Device = __importStar(require("expo-device"));
+-const Updates = __importStar(require("expo-updates"));
+ const react_native_2 = require("@sentry/react-native");
+ const DEFAULT_TAGS = [
+     {
+@@ -54,7 +53,7 @@ class ExpoBareIntegration {
+     static id = 'ExpoBareIntegration';
+     name = ExpoBareIntegration.id;
+     setupOnce() {
+-        const manifest = Updates.manifest;
++        const manifest = expo_constants_1.expoConfig;
+         (0, react_native_2.setExtras)({
+             manifest,
+             deviceYearClass: Device.deviceYearClass,
+diff --git a/node_modules/sentry-expo/build/integrations/managed.js b/node_modules/sentry-expo/build/integrations/managed.js
+index 37d2549..b2e2969 100644
+--- a/node_modules/sentry-expo/build/integrations/managed.js
++++ b/node_modules/sentry-expo/build/integrations/managed.js
+@@ -30,7 +30,7 @@ exports.ExpoManagedIntegration = void 0;
+ const react_native_1 = require("react-native");
+ const expo_constants_1 = __importDefault(require("expo-constants"));
+ const Device = __importStar(require("expo-device"));
+-const Updates = __importStar(require("expo-updates"));
++// const Updates = __importStar(require("expeo-updates"));
+ const react_native_2 = require("@sentry/react-native");
+ const DEFAULT_TAGS = [
+     {
+@@ -54,7 +54,7 @@ class ExpoManagedIntegration {
+     static id = 'ExpoManagedIntegration';
+     name = ExpoManagedIntegration.id;
+     setupOnce() {
+-        const manifest = Updates.manifest;
++        const manifest = expo_constants_1.expoConfig;
+         (0, react_native_2.setExtras)({
+             manifest,
+             deviceYearClass: Device.deviceYearClass,
+diff --git a/node_modules/sentry-expo/build/sentry.js b/node_modules/sentry-expo/build/sentry.js
+index 9e53d6b..4131173 100644
+--- a/node_modules/sentry-expo/build/sentry.js
++++ b/node_modules/sentry-expo/build/sentry.js
+@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.init = exports.Native = void 0;
+ const react_native_1 = require("react-native");
+-const Updates = __importStar(require("expo-updates"));
++// const Updates = __importStar(require("expo-updates"));
+ const expo_constants_1 = __importStar(require("expo-constants"));
+ const Application = __importStar(require("expo-application"));
+ const integrations_1 = require("@sentry/integrations");
+@@ -49,7 +49,7 @@ const defaultSdkInfo = {
+     ],
+     version: version_1.SENTRY_EXPO_VERSION,
+ };
+-const MANIFEST = Updates.manifest;
++const MANIFEST = expo_constants_1.expoConfig;
+ const IS_BARE_WORKFLOW = expo_constants_1.default.executionEnvironment === expo_constants_1.ExecutionEnvironment.Bare;
+ const DEFAULT_OPTIONS = {
+     enableNativeNagger: false,
+@@ -65,12 +65,13 @@ const DEFAULT_OPTIONS = {
+  * For modern manifest OTA updates, the updateId is used.
+  */
+ function getDist() {
+-    if (Updates.isEmbeddedLaunch) {
+-        return MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`;
+-    }
+-    else {
+-        return Updates.updateId;
+-    }
++  return `${Application.nativeBuildVersion}`;
++    // if (Updates.isEmbeddedLaunch) {
++    //     return MANIFEST.revisionId ? MANIFEST.version : `${Application.nativeBuildVersion}`;
++    // }
++    // else {
++    //     return Updates.updateId;
++    // }
+ }
+ /**
+  * We assign the appropriate release based on if the app is running in development,
