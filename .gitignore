@@ -12,8 +12,8 @@ web-build/
 .envrc
 
 # Ignore native projects, generate them with prebuild
-ios
-android
+/ios
+/android
 
 # macOS
 .DS_Store
