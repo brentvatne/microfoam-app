@@ -6,11 +6,11 @@ import "react-native-get-random-values";
 
 // Register app entry through Expo Router
 import "expo-router/entry";
-import * as Sentry from 'sentry-expo';
+// import * as Sentry from 'sentry-expo';
 
-Sentry.init({
-  dsn: "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504",
-});
+// Sentry.init({
+//   dsn: "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504",
+// });
 
 // import { vexo } from "vexo-analytics";
 
