@@ -12,10 +12,10 @@ import "expo-router/entry";
 //   dsn: "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504",
 // });
 
-// import { vexo } from "vexo-analytics";
+import { vexo } from "vexo-analytics";
 
-// if (!__DEV__) {
-//   vexo(process.env.VEXO_API_KEY);
-// }
+if (!__DEV__) {
+  vexo(process.env.EXPO_PUBLIC_VEXO_API_KEY);
+}
 
 LogBox.ignoreLogs(["Constants.platform.ios.model"]);
