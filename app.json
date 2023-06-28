@@ -37,8 +37,8 @@
     //     }
     //   ]
     // }
-    // "runtimeVersion": {
-    //   "policy": "appVersion"
-    // }
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }

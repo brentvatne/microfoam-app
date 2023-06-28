@@ -13,10 +13,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.android,
     package: getPackage(config),
   },
-  // updates: {
-  //   fallbackToCacheTimeout: 0,
-  //   url: getUpdatesUrl(),
-  // },
+  updates: {
+    fallbackToCacheTimeout: 0,
+    url: getUpdatesUrl(),
+  },
   extra: {
     eas: {
       projectId: process.env.EAS_BUILD_PROJECT_ID,

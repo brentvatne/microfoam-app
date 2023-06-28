@@ -4126,6 +4126,11 @@ expo-status-bar@~1.6.0:
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.6.0.tgz#e79ffdb9a84d2e0ec9a0dc7392d9ab364fefa9cf"
   integrity sha512-e//Oi2WPdomMlMDD3skE4+1ZarKCJ/suvcB4Jo/nO427niKug5oppcPNYO+csR6y3ZglGuypS+3pp/hJ+Xp6fQ==
 
+expo-structured-headers@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-3.3.0.tgz#9f0b041a1d243a22a4a23d9eb19f02ace3c5258c"
+  integrity sha512-t+h5Zqaukd3Tn97LaWPpibVsmiC/TFP8F+8sAUliwCSMzgcb5TATRs2NcAB+JcIr8EP3JJDyYXJrZle1cjs4mQ==
+
 expo-system-ui@~2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-2.4.0.tgz#bf809172726cf661ab4f526129eb427bb5f6e4d4"
@@ -4139,7 +4144,24 @@ expo-updates-interface@~0.10.0:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.10.0.tgz#780b5e3438d1d9b0d6350bd83169762d240d8d07"
   integrity sha512-NlxCQJoVk1mbFJ7meN+vaBL4PYpWzeXFsuHwhZcT7AWTs28cX5WHtKOaKREhVO2d+cDThNZIWpAt2vkcTAmFkA==
 
-expo@~49.0.0-alpha.10:
+expo-updates@0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.18.5.tgz#12d8a26cd260919f22675731de19282a5f796360"
+  integrity sha512-ZU6JtaCvGqWxoH7M4CP+f0Lw2xSbghawhyiJWDLIhg4DPdZuINpEHNHPgL3JL/xl7ihYQ4/PC1VGCd1gWqZ88w==
+  dependencies:
+    "@expo/code-signing-certificates" "0.0.5"
+    "@expo/config" "~8.1.0"
+    "@expo/config-plugins" "~7.2.0"
+    "@expo/metro-config" "~0.10.0"
+    arg "4.1.0"
+    expo-eas-client "~0.6.0"
+    expo-manifests "~0.7.0"
+    expo-structured-headers "~3.3.0"
+    expo-updates-interface "~0.10.0"
+    fbemitter "^3.0.0"
+    resolve-from "^5.0.0"
+
+expo@~49.0.0-alpha.8:
   version "49.0.0-alpha.10"
   resolved "https://registry.yarnpkg.com/expo/-/expo-49.0.0-alpha.10.tgz#776808927e97e9e812de0c6dd9e98d4f3037476d"
   integrity sha512-Pwrt4/YUJqtHDviQiQB0b1diGJGG5Jr7rQlCsu5dwotkMBL5fSXaYPW5J2HCCo/GCaiUwaNLUWnzkZJh3vT+iQ==
@@ -7711,10 +7733,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.3.tgz#8d84219244a6b40b6fb2b33cc1c062f715b9e826"
-  integrity sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==
+typescript@^4.9.4:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 ua-parser-js@^0.7.33:
   version "0.7.35"
