@@ -17,13 +17,12 @@
     },
     "development": {
       "extends": "base",
-      // "channel": "development",
       "distribution": "internal",
       "developmentClient": true
     },
     "preview": {
       "extends": "base",
-      // "channel": "preview",
+      "channel": "preview",
       "distribution": "internal",
       "ios": {
         "simulator": true
@@ -34,7 +33,7 @@
     },
     "production": {
       "extends": "base",
-      // "channel": "production",
+      "channel": "production",
       "autoIncrement": true,
       "env": {
         "RELEASE": "1"

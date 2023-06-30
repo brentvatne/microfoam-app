@@ -19,7 +19,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     eas: {
-      projectId: process.env.EAS_BUILD_PROJECT_ID,
+      projectId: process.env.EAS_BUILD_PROJECT_ID ?? "f19296df-44bd-482a-90bb-2af254c6ac42",
     },
   },
   plugins: [
