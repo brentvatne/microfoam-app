@@ -263,7 +263,6 @@ async function init() {
     console.log(`Failed to load persisted data:`);
     console.log(e);
   } finally {
-    console.log('set initialized to true');
     store.setValue("initialized", true);
   }
   console.log("Loaded persisted data");

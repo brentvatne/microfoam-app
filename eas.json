@@ -12,7 +12,7 @@
         "SENTRY_ORG": "brents",
         "SENTRY_PROJECT": "microfoam",
         "EXPO_PUBLIC_VEXO_API_KEY": "1003c65c-f56a-4769-9ed9-8da11754b0af",
-        "EAS_BUILD_PROJECT_ID": "f19296df-44bd-482a-90bb-2af254c6ac42"
+        "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
       }
     },
     "development": {
