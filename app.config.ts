@@ -40,15 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     ["expo-router"],
-    [
-      "expo-build-properties",
-      {
-        android: {
-          kotlinVersion: "1.8.10",
-        },
-      },
-    ],
-    // ["sentry-expo"],
+    ["sentry-expo"],
   ],
 });
 
