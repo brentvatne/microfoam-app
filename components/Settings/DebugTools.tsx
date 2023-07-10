@@ -15,11 +15,11 @@ export default function DebugTools() {
   return (
     <>
       <Text style={{ fontFamily: "Courier", textAlign: "center" }}>
-        Insights payload:{" "}
+        {/* Insights payload:{" "}
         {
           // @ts-ignore
           JSON.stringify(Insights.getDebugConfig(), null, 2)
-        }
+        } */}
       </Text>
       <Text style={styles.header}>Debug tools</Text>
 
@@ -83,7 +83,10 @@ export default function DebugTools() {
         title="Check for update"
         onPress={async () => {
           const result = await Updates.fetchUpdateAsync();
-          if (result.isNew) {
+          if (
+            ("isNew" in result && result.isNew) ||
+            ("isRollbackToEmbedded" in result && result.isRollbackToEmbedded)
+          ) {
             Alert.alert(
               "New update available",
               "Restart the app to apply the update",

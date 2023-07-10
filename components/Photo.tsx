@@ -43,7 +43,7 @@ function PhotoComponent(props: Props) {
         onError={() => console.log(`error loading image: ${uri}`)}
         source={{ uri: maybeLocalUri }}
         placeholder={blurhash}
-        contentFit={resizeMode}
+        contentFit="fill"
         transition={props.transition}
         style={[StyleSheet.absoluteFillObject, { backgroundColor: "white" }]}
       />

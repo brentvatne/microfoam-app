@@ -5,18 +5,18 @@
   },
   "build": {
     "base": {
-      // "node": "14.2.0",
       "ios": {
         "resourceClass": "large"
       },
       "env": {
-        "EAS_BUILD_ENABLE_COCOAPODS_CACHE": "1"
-        // "NVM_NODEJS_ORG_MIRROR": "https://nodejs.raccoon-tw.dev/release"
+        "SENTRY_ORG": "brents",
+        "SENTRY_PROJECT": "microfoam",
+        "EXPO_PUBLIC_VEXO_API_KEY": "1003c65c-f56a-4769-9ed9-8da11754b0af",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
       }
     },
     "development": {
       "extends": "base",
-      "channel": "development",
       "distribution": "internal",
       "developmentClient": true
     },

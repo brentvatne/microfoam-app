@@ -3,7 +3,6 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      require.resolve("react-native-reanimated/plugin"),
       // NOTE: `expo-router/babel` is a temporary extension to `babel-preset-expo`.
       require.resolve("expo-router/babel"),
       ["transform-inline-environment-variables", {
@@ -11,13 +10,14 @@ module.exports = function (api) {
           "VEXO_API_KEY"
         ]
       }],
-      [require.resolve("babel-plugin-module-resolver"),
-      {
-        root: ["./"],
-        alias: {
-          "~": "./"
-        }
-      }]
+      ["babel-plugin-module-resolver",
+        {
+          root: ["./"],
+          alias: {
+            "~": "./"
+          }
+        }],
+      'react-native-reanimated/plugin',
     ],
   };
 };

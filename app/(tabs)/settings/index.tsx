@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { setTheme, Theme } from "expo-settings";
+import { setTheme, Theme } from "~/modules/expo-settings";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";

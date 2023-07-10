@@ -1,11 +1,7 @@
+import { forwardRef, useState, useEffect } from "react";
 import {
-  forwardRef,
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
-import {
+  Appearance,
+  useColorScheme,
   Text as DefaultText,
   View as DefaultView,
   SectionList as DefaultSectionList,
@@ -16,13 +12,31 @@ import {
   ScrollView as DefaultScrollView,
 } from "react-native-gesture-handler";
 
-import * as Settings from "expo-settings";
+import * as Settings from "~/modules/expo-settings";
 import DefaultAntDesign from "@expo/vector-icons/AntDesign";
 import Color from "color";
 
 import { ThemeColors } from "~/constants/colors";
 
-export const ThemeContext = createContext<"light" | "dark">("light");
+export function useAutoSetAppearanceFromSettingsEffect() {
+  // Set native color scheme based on the selected theme
+  const initialTheme = Settings.getTheme();
+
+  if (initialTheme !== Settings.Theme.System) {
+    Appearance.setColorScheme(initialTheme);
+  }
+
+  useEffect(() => {
+    const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
+      // If the selected theme setting changes, we need to update the color scheme
+      Appearance.setColorScheme(
+        newTheme === Settings.Theme.System ? null : newTheme
+      );
+    });
+
+    return () => subscription.remove();
+  }, []);
+}
 
 export function useUnresolvedTheme(): Settings.Theme {
   const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
@@ -38,15 +52,20 @@ export function useUnresolvedTheme(): Settings.Theme {
   return theme;
 }
 
-export function useTheme() {
-  return useContext(ThemeContext);
+export function useTheme(): "light" | "dark" {
+  const colorScheme = useColorScheme();
+  if (colorScheme === null) {
+    return "light";
+  } else {
+    return colorScheme;
+  }
 }
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName?: keyof typeof ThemeColors.light & keyof typeof ThemeColors.dark
 ) {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const colorFromProps = props[theme];
 
   if (colorFromProps) {

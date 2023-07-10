@@ -22,6 +22,8 @@ export type PourRecord = {
   pattern?: string;
 };
 
+const store = createStore();
+
 export function toJSON() {
   console.log(store.getJson());
   return store.getJson();
@@ -171,8 +173,6 @@ export function destroy(data: Pick<PourRecord, "id">) {
   persister.save();
 }
 
-const store = createStore();
-
 const DB_FILE_NAME = `${FileSystem.documentDirectory}microfoam.json`;
 
 async function deletePersistedDataAsync() {
@@ -250,7 +250,9 @@ export function usePour(id: string) {
 
 // Can use this before rendering any UI...
 export function useDataIsReady() {
-  return Boolean(useValue("initialized", store));
+  let dataIsReady = useValue("initialized", store);
+  console.log({ dataIsReady });
+  return dataIsReady;
 }
 
 // Would prefer for this to be synchronous

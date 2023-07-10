@@ -2,7 +2,7 @@ import { ExpoConfig, ConfigContext } from "@expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  slug: config.slug, // Keep the slug the same to track under one project
+  slug: config.slug, // TypeScript is upset if we don't explicitly provide a slug here
   name: getName(config),
   icon: process.env.RELEASE ? config.icon : "./assets/icon-dev.png",
   ios: {
@@ -19,7 +19,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     eas: {
-      projectId: process.env.EAS_BUILD_PROJECT_ID,
+      // This is a little awkward... I want the project ID to be dynamic, but I
+      // can't use .env for this because it's not available when I first run
+      // `eas build` -- because that is when we need to read the project ID from
+      // the app config to determine what project we are building... This worked
+      // fine with .envrc before because it was always loaded in shell. Maybe
+      // that is a good solution here too?
+      projectId:
+        process.env.EAS_BUILD_PROJECT_ID ??
+        "f19296df-44bd-482a-90bb-2af254c6ac42",
     },
   },
   plugins: [
@@ -31,17 +39,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    [
-      "expo-build-properties",
-      {
-        android: {
-          unstable_networkInspector: true,
-        },
-        ios: {
-          unstable_networkInspector: true,
-        },
-      },
-    ],
+    ["expo-router"],
+    ["sentry-expo"],
   ],
 });
 

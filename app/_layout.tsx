@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack } from "expo-router";
 import {
@@ -8,11 +6,40 @@ import {
   ThemeProvider as ReactNavigationThemeProvider,
 } from "@react-navigation/native";
 import { ThemeColors } from "~/constants/colors";
-import { ThemeContext } from "~/components/Themed";
+import {
+  useTheme,
+  useAutoSetAppearanceFromSettingsEffect,
+} from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
-import * as Settings from "expo-settings";
+import * as Sentry from "@sentry/react-native";
 
-const CustomLightTheme = {
+function Root() {
+  useAutoSetAppearanceFromSettingsEffect();
+
+  const theme = useTheme();
+  const dataIsReady = useDataIsReady();
+
+  if (!dataIsReady) {
+    return null;
+  }
+
+  return (
+    <>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <ReactNavigationThemeProvider
+        value={
+          theme === "dark"
+            ? CustomNavigationDarkTheme
+            : CustomNavigationLightTheme
+        }
+      >
+        <Stack screenOptions={{ presentation: "modal" }} />
+      </ReactNavigationThemeProvider>
+    </>
+  );
+}
+
+const CustomNavigationLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -20,7 +47,7 @@ const CustomLightTheme = {
   },
 };
 
-const CustomDarkTheme = {
+const CustomNavigationDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
@@ -30,40 +57,4 @@ const CustomDarkTheme = {
   },
 };
 
-export default function Root() {
-  const colorScheme = useColorScheme();
-  const [theme, setTheme] = useState<Settings.Theme>(Settings.getTheme());
-  const dataIsReady = useDataIsReady();
-
-  useEffect(() => {
-    const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
-      setTheme(newTheme);
-    });
-
-    return () => subscription.remove();
-  }, [setTheme]);
-
-  let resolvedColorScheme = colorScheme;
-  if (theme !== Settings.Theme.System) {
-    resolvedColorScheme = theme === Settings.Theme.Dark ? "dark" : "light";
-  }
-
-  if (!dataIsReady) {
-    return null;
-  }
-
-  return (
-    <>
-      <StatusBar style={resolvedColorScheme === "light" ? "dark" : "light"} />
-      <ReactNavigationThemeProvider
-        value={
-          resolvedColorScheme === "dark" ? CustomDarkTheme : CustomLightTheme
-        }
-      >
-        <ThemeContext.Provider value={resolvedColorScheme}>
-          <Stack screenOptions={{ presentation: "modal" }} />
-        </ThemeContext.Provider>
-      </ReactNavigationThemeProvider>
-    </>
-  );
-}
+export default Sentry.wrap(Root);
