@@ -4,6 +4,14 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "test": {
+      "ios": {
+        "config": "run-tests.yml"
+      },
+      "android": {
+        "config": "run-tests.yml"
+      }
+    },
     "base": {
       "ios": {
         "resourceClass": "large"

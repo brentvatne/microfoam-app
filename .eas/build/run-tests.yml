@@ -1,0 +1,9 @@
+build:
+  name: Run tests
+  steps:
+    - eas/checkout
+    - eas/use_npm_token
+    - eas/install_node_modules
+    - run:
+        name: yarn test
+        command: yarn test
