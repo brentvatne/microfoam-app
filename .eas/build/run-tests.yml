@@ -8,3 +8,8 @@ build:
     - run:
         name: yarn test
         command: yarn test
+
+functions:
+    validate-env:
+        name: validate-env
+        path: ./validate-env
