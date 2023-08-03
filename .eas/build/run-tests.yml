@@ -4,6 +4,7 @@ build:
     - eas/checkout
     - eas/use_npm_token
     - eas/install_node_modules
+    - validate-env
     - run:
         name: yarn test
         command: yarn test

@@ -5,12 +5,7 @@
   },
   "build": {
     "test": {
-      "ios": {
-        "config": "run-tests.yml"
-      },
-      "android": {
-        "config": "run-tests.yml"
-      }
+      "config": "run-tests.yml"
     },
     "base": {
       "ios": {
