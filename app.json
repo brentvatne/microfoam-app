@@ -8,6 +8,7 @@
     "userInterfaceStyle": "automatic",
     "scheme": "microfoam",
     "backgroundColor": "#1e1e1e",
+    "owner": "brents",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

@@ -15,6 +15,10 @@
         "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
       }
     },
+    "update-production": {
+      "extends": "base",
+      "config": "update.yml"
+    },
     "test": {
       "config": "run-tests.yml",
       "extends": "base"
