@@ -31,14 +31,6 @@ async function validateEnv(
     }
   });
 
-  ctx.logger.info('Validated Sentry environment variables.');
-
-  ['DOES_NOT_EXIST'].forEach((key) => {
-    if (!process.env[key]) {
-      throw new Error(`Missing required environment variable: ${key}`);
-    }
-  });
-
   ctx.logger.info('Validated all environment variables.');
 }
 

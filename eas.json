@@ -4,9 +4,6 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "test": {
-      "config": "run-tests.yml"
-    },
     "base": {
       "ios": {
         "resourceClass": "large"
@@ -17,6 +14,10 @@
         "EXPO_PUBLIC_VEXO_API_KEY": "1003c65c-f56a-4769-9ed9-8da11754b0af",
         "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
       }
+    },
+    "test": {
+      "config": "run-tests.yml",
+      "extends": "base"
     },
     "development": {
       "extends": "base",
