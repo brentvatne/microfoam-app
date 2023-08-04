@@ -11,6 +11,11 @@ npm-debug.*
 web-build/
 .envrc
 
+# Ignore native projects, generate them with prebuild
+/ios
+/android
+**/android/build
+
 # macOS
 .DS_Store
 
