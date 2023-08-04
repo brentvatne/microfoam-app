@@ -17,7 +17,10 @@
     },
     "update-production": {
       "extends": "base",
-      "config": "update.yml"
+      "config": "update.yml",
+      "env": {
+        "EAS_NO_VCS": "1"
+      }
     },
     "test": {
       "config": "run-tests.yml",

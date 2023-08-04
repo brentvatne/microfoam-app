@@ -5,11 +5,5 @@ build:
     - eas/use_npm_token
     - eas/install_node_modules
     - run:
-        name: Initialize git repo (workaround for EAS Update)
-        command: |
-          git init
-          git add -A .
-          git commit -m 'Fake commit'
-    - run:
         name: Publish update to production channel
         command: npx eas-cli update --channel production --message "Automated release from EAS Build"
