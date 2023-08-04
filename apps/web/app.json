@@ -6,7 +6,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "platforms": ["web"],
+    "platforms": [
+      "web"
+    ],
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -18,6 +20,14 @@
     "experiments": {
       "tsconfigPaths": true,
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "678c395c-6391-4294-8ec0-1df5a81c8a59"
+      }
     }
   }
 }

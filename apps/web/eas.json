@@ -1,0 +1,13 @@
+{
+  "cli": {
+    "version": ">= 3.18.3"
+  },
+  "build": {
+    "base": {
+      "resourceClass": "large"
+    },
+    "production": {
+      "config": "deploy.yml"
+    }
+  }
+}

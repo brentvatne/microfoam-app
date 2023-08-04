@@ -1,0 +1,10 @@
+build:
+  name: Deploy to production
+  steps:
+    - eas/checkout
+    - eas/use_npm_token
+    - eas/install_node_modules
+    - run:
+        name: Publish to production
+        command: |
+          echo "hi"
