@@ -28,6 +28,9 @@
       "eas": {
         "projectId": "678c395c-6391-4294-8ec0-1df5a81c8a59"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.brents.microfoamweb"
     }
   }
 }

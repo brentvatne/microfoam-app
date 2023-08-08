@@ -5,6 +5,7 @@ build:
     - eas/use_npm_token
     - eas/install_node_modules
     - run:
-        name: Publish to production
+        name: Deploy to production
         command: |
-          echo "hi"
+          npm i -g vercel
+          cd ../.. && vercel --token $VERCEL_TOKEN
