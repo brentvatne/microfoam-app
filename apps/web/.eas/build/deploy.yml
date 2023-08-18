@@ -1,0 +1,11 @@
+build:
+  name: Deploy to production
+  steps:
+    - eas/checkout
+    - eas/use_npm_token
+    - eas/install_node_modules
+    - run:
+        name: Deploy to production
+        command: |
+          npm i -g vercel
+          cd ../.. && vercel --token $VERCEL_TOKEN

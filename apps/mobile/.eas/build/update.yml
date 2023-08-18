@@ -1,0 +1,9 @@
+build:
+  name: Release update
+  steps:
+    - eas/checkout
+    - eas/use_npm_token
+    - eas/install_node_modules
+    - run:
+        name: Run eas update
+        command: npx eas-cli update --channel ${ eas.job.updates.channel } --message "Automated release from EAS Build"

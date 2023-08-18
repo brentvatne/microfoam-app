@@ -1,0 +1,69 @@
+{
+  "cli": {
+    "version": ">= 2.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "base": {
+      "resourceClass": "large",
+      "env": {
+        "SENTRY_ORG": "brents",
+        "SENTRY_PROJECT": "microfoam",
+        "EXPO_PUBLIC_VEXO_API_KEY": "1003c65c-f56a-4769-9ed9-8da11754b0af",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
+      }
+    },
+    "update-base": {
+      "config": "update.yml",
+      // "resourceClass": "large",
+      "withoutCredentials": "true",
+      "env": {
+        "EAS_NO_VCS": "1"
+      }
+    },
+    "update-production": {
+      "extends": "update-base",
+      "channel": "production"
+    },
+    "update-preview": {
+      "extends": "update-base",
+      "channel": "preview"
+    },
+    "test": {
+      "config": "run-tests.yml",
+      "withoutCredentials": "true",
+      "extends": "base"
+    },
+    "development": {
+      "extends": "base",
+      "distribution": "internal",
+      "developmentClient": true
+    },
+    "preview": {
+      "extends": "base",
+      "channel": "preview",
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "PREVIEW": "1"
+      }
+    },
+    "production": {
+      "extends": "base",
+      "channel": "production",
+      "autoIncrement": true,
+      "env": {
+        "RELEASE": "1"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "1645902499"
+      }
+    }
+  }
+}
