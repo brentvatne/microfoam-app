@@ -26,7 +26,7 @@ PODS:
     - ExpoModulesCore
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - Expo (49.0.0):
+  - Expo (49.0.6):
     - ExpoModulesCore
   - ExpoDevice (5.4.0):
     - ExpoModulesCore
@@ -52,7 +52,7 @@ PODS:
     - ExpoModulesCore
   - ExpoKeepAwake (12.3.0):
     - ExpoModulesCore
-  - ExpoModulesCore (1.5.4):
+  - ExpoModulesCore (1.5.9):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-NativeModulesApple
@@ -877,7 +877,7 @@ SPEC CHECKSUMS:
   EXJSONUtils: 6802be4282d42b97c51682468ddc1026a06f8276
   EXManifests: 8a4a480e3b58891d5657d3996a39229e5c96d912
   EXMediaLibrary: 8ac14ce76f266026b10cac2ab049debe032d7ae7
-  Expo: dc993e0d66e657a31dc45574543ca1ed3d68c617
+  Expo: 5601f86edc81c7e7e1772b9af9ae58fa3b45ad53
   ExpoDevice: 1c1b0c9cad96c292c1de73948649cfd654b2b3c0
   ExpoDocumentPicker: 5cb7389ff935b4addefdd466a606de51a512e922
   ExpoHaptics: 360af6898407ee4e8265d30a1a8fb16491a660eb
@@ -887,7 +887,7 @@ SPEC CHECKSUMS:
   ExpoImagePicker: c58fdf28be551681a8edc550bcec76c397a8dfcd
   ExpoInsights: 690de6c211e0d40846f57d28160bb3a2f07ee582
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
-  ExpoModulesCore: cfc52053496bae101b7ce6cd20a0ebaefbf977c0
+  ExpoModulesCore: e4e437139259c5a73530a8895af69774ff8ec12d
   ExpoScreenOrientation: 5d109570b17835fe0cfb822268a8ff087c2112ad
   ExpoSettings: 390c716fe601290f50d6d850ffa3b5bfd5794f77
   ExpoSharing: 825b2b3fc919a2656f75def0069f584bbd6e359a

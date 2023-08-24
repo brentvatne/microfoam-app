@@ -15,6 +15,10 @@ import "expo-router/entry";
 
 import { vexo } from "vexo-analytics";
 
+LogBox.ignoreLogs([
+  '@supabase/gotrue-js: Stack guards'
+]);
+
 if (!__DEV__) {
   vexo(process.env.EXPO_PUBLIC_VEXO_API_KEY);
 }
