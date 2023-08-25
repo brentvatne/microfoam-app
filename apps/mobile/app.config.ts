@@ -17,7 +17,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
     url: getUpdatesUrl(),
   },
-  owner: process.env.EAS_BUILD_OWNER ?? "brents",
   extra: {
     eas: {
       // This is a little awkward... I want the project ID to be dynamic, but I
