@@ -43,6 +43,14 @@
       "extends": "base",
       "channel": "preview",
       "distribution": "internal",
+      "env": {
+        "PREVIEW": "1"
+      }
+    },
+    "simulator": {
+      "extends": "base",
+      "channel": "preview",
+      "distribution": "internal",
       "ios": {
         "simulator": true
       },
