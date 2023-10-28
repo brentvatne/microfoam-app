@@ -200,8 +200,12 @@ async function persistJsonAsync(json: string) {
 
 const persister = createCustomPersister(
   store,
-  async () => loadPersistedDataAsync(),
-  async (json) => await persistJsonAsync(json),
+  async () => {
+    const json = await loadPersistedDataAsync();
+    let tables = json ? JSON.parse(json) : {};
+    return [tables, {}];
+  },
+  async (getContent) => await persistJsonAsync(JSON.stringify(getContent()[0])),
   (didChange) => {},
   () => {}
 );
