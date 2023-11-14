@@ -3,7 +3,6 @@ import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
-import Insights from "expo-insights";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
@@ -14,13 +13,6 @@ import { FontSize, Margin } from "~/constants/styles";
 export default function DebugTools() {
   return (
     <>
-      <Text style={{ fontFamily: "Courier", textAlign: "center" }}>
-        {/* Insights payload:{" "}
-        {
-          // @ts-ignore
-          JSON.stringify(Insights.getDebugConfig(), null, 2)
-        } */}
-      </Text>
       <Text style={styles.header}>Debug tools</Text>
 
       <Button
