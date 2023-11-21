@@ -30,14 +30,14 @@
       },
       "package": "com.brents.microfoam"
     },
-    // "hooks": {
-    //   "postPublish": [
-    //     {
-    //       "file": "sentry-expo/upload-sourcemaps",
-    //       "config": {}
-    //     }
-    //   ]
-    // },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {}
+        }
+      ]
+    },
     "runtimeVersion": {
       "policy": "appVersion"
     }

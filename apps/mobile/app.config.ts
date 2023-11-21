@@ -39,8 +39,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    // ["sentry-expo"],
-    ["expo-router"]
+    ["sentry-expo"],
+    ["expo-router"],
+    ["expo-dev-client"],
   ],
 });
 
