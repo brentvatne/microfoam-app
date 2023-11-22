@@ -24,6 +24,13 @@ export default function DebugTools() {
       <Text style={styles.header}>Debug tools</Text>
 
       <Button
+        title="Throw error"
+        onPress={() => {
+          throw new Error("Test error");
+        }}
+      />
+
+      <Button
         title="Re-generate blurhashes"
         onPress={() => regenerateBlurhashesAsync()}
       />

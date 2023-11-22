@@ -20,3 +20,4 @@ web-build/
 .DS_Store
 
 .env
+.env.local
