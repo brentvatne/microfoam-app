@@ -50,6 +50,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ["sentry-expo"],
     ["expo-router"],
     ["expo-dev-client"],
+    [
+      "expo-build-properties",
+      {
+        ios: {
+          newArchEnabled: true,
+        },
+        android: {
+          newArchEnabled: true,
+        },
+      },
+    ],
   ],
 });
 
