@@ -38,6 +38,7 @@
     "expo-insights": "0.2.0",
     "expo-linking": "~5.0.2",
     "expo-media-library": "~15.4.0",
+    "expo-quick-actions": "^0.2.3",
     "expo-router": "2.0.0",
     "expo-screen-orientation": "~6.0.6",
     "expo-sharing": "~11.5.0",
