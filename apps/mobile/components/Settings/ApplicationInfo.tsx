@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import * as Application from "expo-application";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { Text } from "~/components/Themed";
@@ -42,7 +42,7 @@ export default function ApplicationInfo({
             textAlign: "center",
           }}
         >
-          ID: {Updates.updateId ?? "(no update id)"}
+          {/* ID: {Updates.updateId ?? "(no update id)"} */}
         </Text>
         <Text
           darkColor={TailwindColor["gray-100"]}
@@ -53,7 +53,7 @@ export default function ApplicationInfo({
             marginTop: Margin[1],
           }}
         >
-          Released: {Updates.manifest.createdAt ?? "(no release date)"}
+          {/* Released: {Updates.manifest.createdAt ?? "(no release date)"} */}
         </Text>
       </View>
     </GestureDetector>

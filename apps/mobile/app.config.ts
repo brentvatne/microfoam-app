@@ -50,18 +50,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     // ["sentry-expo"],
     ["expo-router"],
     // ["expo-dev-client"],
-    [
-      "expo-quick-actions",
-      {
-        "iosActions": [
-          {
-            "id": "1",
-            "title": "Log a new pour",
-            "icon": "compose"
-          }
-        ]
-      }
-    ]
+    // [
+    //   "expo-quick-actions",
+    //   {
+    //     "iosActions": [
+    //       {
+    //         "id": "1",
+    //         "title": "Log a new pour",
+    //         "icon": "compose"
+    //       }
+    //     ]
+    //   }
+    // ]
   ],
 });
 

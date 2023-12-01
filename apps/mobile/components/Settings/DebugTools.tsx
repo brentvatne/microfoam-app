@@ -2,7 +2,7 @@ import { Alert, StyleSheet } from "react-native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import Insights from "expo-insights";
 
 import { isLocalFile } from "~/storage/fs";
@@ -89,23 +89,23 @@ export default function DebugTools() {
       <Button
         title="Check for update"
         onPress={async () => {
-          const result = await Updates.fetchUpdateAsync();
-          if (
-            ("isNew" in result && result.isNew) ||
-            ("isRollbackToEmbedded" in result && result.isRollbackToEmbedded)
-          ) {
-            Alert.alert(
-              "New update available",
-              "Restart the app to apply the update",
-              [
-                { text: "Cancel", style: "cancel" },
-                { text: "Restart", onPress: () => Updates.reloadAsync() },
-              ],
-              { cancelable: true }
-            );
-          } else {
-            alert("No update available");
-          }
+          // const result = await Updates.fetchUpdateAsync();
+          // if (
+          //   ("isNew" in result && result.isNew) ||
+          //   ("isRollbackToEmbedded" in result && result.isRollbackToEmbedded)
+          // ) {
+          //   Alert.alert(
+          //     "New update available",
+          //     "Restart the app to apply the update",
+          //     [
+          //       { text: "Cancel", style: "cancel" },
+          //       { text: "Restart", onPress: () => Updates.reloadAsync() },
+          //     ],
+          //     { cancelable: true }
+          //   );
+          // } else {
+          //   alert("No update available");
+          // }
         }}
       />
     </>

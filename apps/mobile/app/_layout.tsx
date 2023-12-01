@@ -1,6 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { Stack, router } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   DarkTheme,
   DefaultTheme,
@@ -12,7 +13,7 @@ import {
   useAutoSetAppearanceFromSettingsEffect,
 } from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
-import * as QuickActions from "expo-quick-actions";
+// import * as QuickActions from "expo-quick-actions";
 
 // import * as Sentry from "@sentry/react-native";
 
@@ -25,26 +26,28 @@ function Root() {
     return null;
   }
 
-  useQuickActionCallback((action) => {
-    if (action.id === "1") {
-      requestAnimationFrame(() => {
-        router.push("/new");
-      });
-    }
-  });
+  // useQuickActionCallback((action) => {
+  //   if (action.id === "1") {
+  //     requestAnimationFrame(() => {
+  //       router.push("/new");
+  //     });
+  //   }
+  // });
 
   return (
     <>
-      <StatusBar style={theme === "light" ? "dark" : "light"} />
-      <ReactNavigationThemeProvider
-        value={
-          theme === "dark"
-            ? CustomNavigationDarkTheme
-            : CustomNavigationLightTheme
-        }
-      >
-        <Stack screenOptions={{ presentation: "modal" }} />
-      </ReactNavigationThemeProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <StatusBar style={theme === "light" ? "dark" : "light"} />
+        <ReactNavigationThemeProvider
+          value={
+            theme === "dark"
+              ? CustomNavigationDarkTheme
+              : CustomNavigationLightTheme
+          }
+        >
+          <Stack screenOptions={{ presentation: "modal" }} />
+        </ReactNavigationThemeProvider>
+      </GestureHandlerRootView>
     </>
   );
 }
@@ -70,24 +73,24 @@ const CustomNavigationDarkTheme = {
 export default Root;
 // export default Sentry.wrap(Root);
 
-function useQuickActionCallback(
-  callback?: (data: QuickActions.Action) => void | Promise<void>
-) {
-  React.useEffect(() => {
-    let isMounted = true;
+// function useQuickActionCallback(
+//   callback?: (data: QuickActions.Action) => void | Promise<void>
+// ) {
+//   React.useEffect(() => {
+//     let isMounted = true;
 
-    if (QuickActions.initial) {
-      callback?.(QuickActions.initial);
-    }
+//     if (QuickActions.initial) {
+//       callback?.(QuickActions.initial);
+//     }
 
-    const sub = QuickActions.addListener((event) => {
-      if (isMounted) {
-        callback?.(event);
-      }
-    });
-    return () => {
-      isMounted = false;
-      sub.remove();
-    };
-  }, [QuickActions.initial, callback]);
-}
+//     const sub = QuickActions.addListener((event) => {
+//       if (isMounted) {
+//         callback?.(event);
+//       }
+//     });
+//     return () => {
+//       isMounted = false;
+//       sub.remove();
+//     };
+//   }, [QuickActions.initial, callback]);
+// }
