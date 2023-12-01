@@ -30,14 +30,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         "f19296df-44bd-482a-90bb-2af254c6ac42",
     },
   },
-  hooks: {
-    postPublish: [
-      {
-        file: "sentry-expo/upload-sourcemaps",
-        config: {},
-      },
-    ],
-  },
+  // hooks: {
+  //   postPublish: [
+  //     {
+  //       file: "sentry-expo/upload-sourcemaps",
+  //       config: {},
+  //     },
+  //   ],
+  // },
   plugins: [
     [
       "expo-document-picker",
@@ -47,9 +47,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    ["sentry-expo"],
+    // ["sentry-expo"],
     ["expo-router"],
-    ["expo-dev-client"],
+    // ["expo-dev-client"],
     [
       "expo-quick-actions",
       {
