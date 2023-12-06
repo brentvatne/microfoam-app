@@ -1395,25 +1395,25 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@expo/cli@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.0.1-canary-20231130-ede75a7-1.tgz#dab427f20f19669257bf9367db63d95c37450da9"
-  integrity sha512-NJME/B3LJJX3FYKSi6kqnahNkbeZStnMEMEjaW5mjVJHVph4U35bmz0l6caJcc/znP8Io2OAUldt36UbiK8PTA==
+"@expo/cli@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.0.1-canary-20231205-250b31f.tgz#4b1177f6ffd39db633f7ff63bbd178246c1110b3"
+  integrity sha512-anDxi+UJwvwpTfAyiGtezPbEE87G7sFYxYXNH+TvGAGfSXyXq9gzmL0Mi43ISa2q2QU3hg6GP/UojK4EejQVnQ==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/code-signing-certificates" "0.0.5"
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/config-plugins" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/config-plugins" "0.0.1-canary-20231205-250b31f"
     "@expo/devcert" "^1.0.0"
-    "@expo/env" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/metro-config" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/env" "0.0.1-canary-20231205-250b31f"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
+    "@expo/metro-config" "0.0.1-canary-20231205-250b31f"
     "@expo/osascript" "^2.0.31"
-    "@expo/package-manager" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/package-manager" "0.0.1-canary-20231205-250b31f"
     "@expo/plist" "^0.0.20"
-    "@expo/prebuild-config" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/prebuild-config" "0.0.1-canary-20231205-250b31f"
     "@expo/rudder-sdk-node" "1.1.1"
-    "@expo/server" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/server" "0.0.1-canary-20231205-250b31f"
     "@expo/spawn-async" "1.5.0"
     "@expo/xcpretty" "^4.2.1"
     "@urql/core" "2.3.6"
@@ -1479,14 +1479,14 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
-"@expo/config-plugins@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-0.0.1-canary-20231130-ede75a7-1.tgz#cdc37d5002efd8c660c49a491736f6e0c2b20ae4"
-  integrity sha512-Hola/S8gqkMD2lRnStnen8a3YbaFRuMmlv7fsWcr3c6zA+tLCYutkB2yaIPMcTPqrPlxittAtG8ORvPZqkXKqA==
+"@expo/config-plugins@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-0.0.1-canary-20231205-250b31f.tgz#abcf896649d7c83824ebfc7b7bbf5da8bb61aa6f"
+  integrity sha512-IzSXjYZ8RVl99hhkkDLL+apcic/Vzo1i8srGzmJqftef6yvLwPBC1eGms6bR+iYIbUi61beYvkcFA0xTDfMZfQ==
   dependencies:
     "@expo/config-types" "^50.0.0-alpha.1"
-    "@expo/fingerprint" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/fingerprint" "0.0.1-canary-20231205-250b31f"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     "@expo/plist" "^0.0.20"
     "@expo/sdk-runtime-versions" "^1.0.0"
     "@react-native/normalize-color" "^2.0.0"
@@ -1506,15 +1506,15 @@
   resolved "https://registry.yarnpkg.com/@expo/config-types/-/config-types-50.0.0-canary-20231129-c0ec023.tgz#8a0528297c5cca35415706328126c1c28e433d23"
   integrity sha512-9vVIVw3XzFk9wnzsYGMYRuiK+bbM4qYmFWf2R5vwt3+UUzUhQbIBSIR1eNzSULez50d7l7ykoWlOjzxoVNyJdw==
 
-"@expo/config@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/config/-/config-0.0.1-canary-20231130-ede75a7-1.tgz#b81d213883e4ffdb5b582d126ee3faf45c480e31"
-  integrity sha512-HLgknwqNxZpHgL4DswMzQnSkRWc+thaul5bGbupsNxaF5DG7d60PDEkM0bbywn/EX8lKYIzS2tJdjK7uU+YIZA==
+"@expo/config@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/config/-/config-0.0.1-canary-20231205-250b31f.tgz#a5efa4327f4d63fcf5fd2d0c93c5b7e736c06e99"
+  integrity sha512-g6rr5Y2xjCfZaYhDHlKHdKG20KWPHAnl4n5fO9hFHyqBdIbcm2IqIdCTx5fea3i3guFRFL4Ezs64rgzlYpJAPQ==
   dependencies:
     "@babel/code-frame" "~7.10.4"
-    "@expo/config-plugins" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config-plugins" "0.0.1-canary-20231205-250b31f"
     "@expo/config-types" "^50.0.0-alpha.1"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     getenv "^1.0.0"
     glob "7.1.6"
     require-from-string "^2.0.2"
@@ -1542,10 +1542,10 @@
     tmp "^0.0.33"
     tslib "^2.4.0"
 
-"@expo/env@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/env/-/env-0.0.1-canary-20231130-ede75a7-1.tgz#5f68d21ed5b0487abe46ae6d28dd8f57a831712c"
-  integrity sha512-IV3E+ySrqkYsrG0JROsrvq7B0OsFnhXlQgCPqncjzIcgwP/a9jT1YMHdYVBgHuw10VkDSW+QwjQB5oURQW3/mg==
+"@expo/env@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/env/-/env-0.0.1-canary-20231205-250b31f.tgz#a6844ae2ee61b8ac8540401f467b4ccc3f34ad8b"
+  integrity sha512-tio5grR/MvZ0sbgOH+m2U7sLPdvIg9lnooZ2wXXJpBgxkfTeiOy4JHdxb/eOg9CSW7jutkJgcGpSlfij/WLF2g==
   dependencies:
     chalk "^4.0.0"
     debug "^4.3.4"
@@ -1553,10 +1553,10 @@
     dotenv-expand "~10.0.0"
     getenv "^1.0.0"
 
-"@expo/fingerprint@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/fingerprint/-/fingerprint-0.0.1-canary-20231130-ede75a7-1.tgz#8b801d3fd4bfbfde4762f3f06dc19e65a8a0c285"
-  integrity sha512-Cl7BDPxca+liO5Pwgrd0/rMi+n16jK6p/q0ZvhjBzCqXW75qwLa+S5VhRxt+nsBhtilMa/yw+wkwzNobdSCkAg==
+"@expo/fingerprint@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/fingerprint/-/fingerprint-0.0.1-canary-20231205-250b31f.tgz#7a28b36ff6faab2be839a9104a122cbe5a97762e"
+  integrity sha512-BFnjcbo6cuYvLrxfJgSkQPzp7JmOw3AHYVAvtVrKXr8R0DBH1igcimbIPqUHfVaIRbOqqEPiRBXCbZZOiyge9g==
   dependencies:
     "@expo/spawn-async" "^1.5.0"
     chalk "^4.1.2"
@@ -1566,10 +1566,10 @@
     p-limit "^3.1.0"
     resolve-from "^5.0.0"
 
-"@expo/image-utils@0.3.22":
-  version "0.3.22"
-  resolved "https://registry.yarnpkg.com/@expo/image-utils/-/image-utils-0.3.22.tgz#3a45fb2e268d20fcc761c87bca3aca7fd8e24260"
-  integrity sha512-uzq+RERAtkWypOFOLssFnXXqEqKjNj9eXN7e97d/EXUAojNcLDoXc0sL+F5B1I4qtlsnhX01kcpoIBBZD8wZNQ==
+"@expo/image-utils@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/image-utils/-/image-utils-0.0.1-canary-20231205-250b31f.tgz#2b72e7875a74b8701c47b0f19d4bd7b2d234b5c2"
+  integrity sha512-u5HThsixPQxyNIGPJGnL3rhTxIqoDEtK21DNlLcp/crrk3N098Fg5mbxpyD73tNOElwN2vo1QilkuM77TvyKKQ==
   dependencies:
     "@expo/spawn-async" "1.5.0"
     chalk "^4.0.0"
@@ -1600,23 +1600,23 @@
     semver "7.3.2"
     tempy "0.3.0"
 
-"@expo/json-file@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/json-file/-/json-file-0.0.1-canary-20231130-ede75a7-1.tgz#037c58117eb9c232dd674ec4c3ed4474ad43798c"
-  integrity sha512-EhbOlf+kJF2EcCuL2CV3S3cLW8lkwdIlH3kXWfkUuMzOeEjRtkEno5w4mYgRiBj6PvX3IHNvgBYCjfhXFG8FLA==
+"@expo/json-file@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/json-file/-/json-file-0.0.1-canary-20231205-250b31f.tgz#47f094005d151cab7038ce187fc1220160e6d111"
+  integrity sha512-8DUF55gkc7RV4lXQghUUZ52F3MP8ybbnxaKMPAmS0j6J7kby2SkhY+6+EQq7ktW206pwSV89dCywlXz/xFmzMg==
   dependencies:
     "@babel/code-frame" "~7.10.4"
     json5 "^2.2.2"
     write-file-atomic "^2.3.0"
 
-"@expo/metro-config@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/metro-config/-/metro-config-0.0.1-canary-20231130-ede75a7-1.tgz#daef7c655982347baacec81ca3ae53c32d2b6877"
-  integrity sha512-UPNm1Od7RBTiXNN9fDr9fxPz8u4U+mSVr+8/GVRsVT+at6sBR1NHkqnAyXztSFfpLmhGpPW45tSa5ZOhPc3ckg==
+"@expo/metro-config@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/metro-config/-/metro-config-0.0.1-canary-20231205-250b31f.tgz#fdb5ee17073bfe86f4d2318daa13ad22b3f41ad2"
+  integrity sha512-jBH/Uoj4FjlWbwI+lw1G1q3gjnLd5H8BH2gt3qwjqOFVhTzuZrJVWfGxUjfX8kjkcaHP9YCbuvwxuoVTJVilBQ==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/env" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/env" "0.0.1-canary-20231205-250b31f"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     babel-preset-fbjs "^3.4.0"
     chalk "^4.1.0"
     debug "^4.3.2"
@@ -1629,10 +1629,10 @@
     resolve-from "^5.0.0"
     sucrase "^3.20.0"
 
-"@expo/metro-runtime@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-0.0.1-canary-20231130-ede75a7-1.tgz#4b43224529fce573b4a4c17ae7d34e86b707621b"
-  integrity sha512-yO1Eu4/QHzswEL+F+tIWqqU/X9OkB5eaExmiM++a1f1UlRU8S2czhyl6kfUqwdvjruPSKQDQpphIinEJo9UESQ==
+"@expo/metro-runtime@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/metro-runtime/-/metro-runtime-0.0.1-canary-20231205-250b31f.tgz#d78db5bbd0387e22d3964144a80c46aaf47d7123"
+  integrity sha512-XtX/Se5XpHv5QQHoj1FrvVKZCjlIniXx7gSHhwRXnGnuLNZVC6OdIMtkDvUxmREb08sKRnhFSGGJzocYgLTSWw==
 
 "@expo/osascript@^2.0.31":
   version "2.0.33"
@@ -1642,12 +1642,12 @@
     "@expo/spawn-async" "^1.5.0"
     exec-async "^2.2.0"
 
-"@expo/package-manager@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/package-manager/-/package-manager-0.0.1-canary-20231130-ede75a7-1.tgz#550de2d4d300e356b9c3a6a87688e1ab1dc33fe8"
-  integrity sha512-TeKaUQ8bDw45AOtzMuLcgPyQcSFyZCkyelPtyIP+kNj6H8LFh3uk6kws8yDZWrlvoGI922SHbzymREgxVIYOWQ==
+"@expo/package-manager@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/package-manager/-/package-manager-0.0.1-canary-20231205-250b31f.tgz#897444996e8c82ae5cccef0ad453e1b524d3b021"
+  integrity sha512-VJCgHcWecEV2AEtF2vX3aLLmGR7guBid1zgfacMrTKPxgj823RDKz8kDIbO3ntlByZorSx1EHGMIhLT1Qz/7nQ==
   dependencies:
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     "@expo/spawn-async" "^1.5.0"
     ansi-regex "^5.0.0"
     chalk "^4.0.0"
@@ -1668,16 +1668,16 @@
     base64-js "^1.2.3"
     xmlbuilder "^14.0.0"
 
-"@expo/prebuild-config@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-0.0.1-canary-20231130-ede75a7-1.tgz#191f160b334992050fde42f2e85cc0b2ea660ba1"
-  integrity sha512-EYqR4hQrkwbmrLVMBpl3aMtOeQADQPs4uB+eiO4v+RxlfRf1AEwlGXhUhFx+LaQUDE6F7+MyhL79aOKc7+lvqQ==
+"@expo/prebuild-config@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-0.0.1-canary-20231205-250b31f.tgz#eb16291f706f306b9e533b8788d2523c3b709621"
+  integrity sha512-M9mcDLlGK7UWRySN0X+C23fgQVCnFjyeXZyZt0ZkTNh3d5ToR2n8wBb1tZLmBlSpy9WzHAlWtRWGIFZ0vki/pQ==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/config-plugins" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/config-plugins" "0.0.1-canary-20231205-250b31f"
     "@expo/config-types" "^50.0.0-alpha.1"
-    "@expo/image-utils" "0.3.22"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/image-utils" "0.0.1-canary-20231205-250b31f"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     debug "^4.3.1"
     fs-extra "^9.0.0"
     resolve-from "^5.0.0"
@@ -1702,10 +1702,10 @@
   resolved "https://registry.yarnpkg.com/@expo/sdk-runtime-versions/-/sdk-runtime-versions-1.0.0.tgz#d7ebd21b19f1c6b0395e50d78da4416941c57f7c"
   integrity sha512-Doz2bfiPndXYFPMRwPyGa1k5QaKDVpY806UJj570epIiMzWaYyCtobasyfC++qfIXVb5Ocy7r3tP9d62hAQ7IQ==
 
-"@expo/server@0.0.1-canary-20231130-ede75a7-1":
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/@expo/server/-/server-0.0.1-canary-20231130-ede75a7-1.tgz#838127c3f0d075bbb24eb24cec095a2560af320f"
-  integrity sha512-XjFfGKOdGiAFh3kXwHkYRtGL5oaQrV3Y8fORPAX2YS96XQD74TwfbHhzF5YdcLhKvb+nhKSkaSHESxu0wyRMKQ==
+"@expo/server@0.0.1-canary-20231205-250b31f":
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/@expo/server/-/server-0.0.1-canary-20231205-250b31f.tgz#962dbc345592a4fe5d9ac6a5799c4fb7da0f1f0e"
+  integrity sha512-lYnamndKb+c24wpKwcG6thXDLUIsb1DbuHy5mTJ/yED/MnDNiGz9pcx8loEfrvc+BAt+ZN9/EgCGyPxTVS3j6A==
   dependencies:
     "@remix-run/node" "^1.19.3"
     abort-controller "^3.0.0"
@@ -2704,32 +2704,30 @@
     component-type "^1.2.1"
     join-component "^1.1.0"
 
-"@sentry-internal/tracing@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/tracing/-/tracing-7.52.0.tgz#c4e0750ad0c3949c5bb4b59cbb708b0fef274080"
-  integrity sha512-o1YPcRGtC9tjeFCvWRJsbgK94zpExhzfxWaldAKvi3PuWEmPeewSdO/Q5pBIY1QonvSI+Q3gysLRcVlLYHhO5A==
+"@sentry-internal/tracing@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/tracing/-/tracing-7.81.1.tgz#1180365cd8a9e18cb0f92e1ea970161840ec0e2e"
+  integrity sha512-E5xm27xrLXL10knH2EWDQsQYh5nb4SxxZzJ3sJwDGG9XGKzBdlp20UUhKqx00wixooVX9uCj3e4Jg8SvNB1hKg==
   dependencies:
-    "@sentry/core" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
-    tslib "^1.9.3"
+    "@sentry/core" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/browser@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.52.0.tgz#55d266c89ed668389ff687e5cc885c27016ea85c"
-  integrity sha512-Sib0T24cQCqqqAhg+nZdfI7qNYGE03jiM3RbY7yG5UoycdnJzWEwrBVSzRTgg3Uya9TRTEGJ+d9vxPIU5TL7TA==
+"@sentry/browser@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.81.1.tgz#5ee6ae3679ee80f444d2e8c5662430e7a734ae50"
+  integrity sha512-DNtS7bZEnFPKVoGazKs5wHoWC0FwsOFOOMNeDvEfouUqKKbjO7+RDHbr7H6Bo83zX4qmZWRBf8V+3n3YPIiJFw==
   dependencies:
-    "@sentry-internal/tracing" "7.52.0"
-    "@sentry/core" "7.52.0"
-    "@sentry/replay" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
-    tslib "^1.9.3"
+    "@sentry-internal/tracing" "7.81.1"
+    "@sentry/core" "7.81.1"
+    "@sentry/replay" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/cli@2.17.5":
-  version "2.17.5"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.17.5.tgz#d41e24893a843bcd41e14274044a7ddea9332824"
-  integrity sha512-0tXjLDpaKB46851EMJ6NbP0o9/gdEaDSLAyjEtXxlVO6+RyhUj6x6jDwn0vis8n/7q0AvbIjAcJrot+TbZP+WQ==
+"@sentry/cli@2.21.3":
+  version "2.21.3"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.21.3.tgz#2d06411af8163b187d9c52e0fd59892443098dd9"
+  integrity sha512-gv8SNaMVNggiE/+6fPxEj8+y5uj9PqAQ8QS277aZ/HSXFgoidnNecE4QGHh4n+AkT0qCSQ/byxZsojVXkwkC7g==
   dependencies:
     https-proxy-agent "^5.0.0"
     node-fetch "^2.6.7"
@@ -2737,81 +2735,78 @@
     proxy-from-env "^1.1.0"
     which "^2.0.2"
 
-"@sentry/core@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.52.0.tgz#6c820ca48fe2f06bfd6b290044c96de2375f2ad4"
-  integrity sha512-BWdG6vCMeUeMhF4ILpxXTmw70JJvT1MGJcnv09oSupWHTmqy6I19YP6YcEyFuBL4jXPN51eCl7luIdLGJrPbOg==
+"@sentry/core@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.81.1.tgz#082fd9122bf9a488c8e05b1754724ddbc2d5cf30"
+  integrity sha512-tU37yAmckOGCw/moWKSwekSCWWJP15O6luIq+u7wal22hE88F3Vc5Avo8SeF3upnPR+4ejaOFH+BJTr6bgrs6Q==
   dependencies:
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
-    tslib "^1.9.3"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/hub@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-7.52.0.tgz#ffc087d58c745d57108862faa0f701b15503dcc2"
-  integrity sha512-w3d8Pmp3Fx2zbbjz6hAeIbsFEkLyrUs9YTGG2y8oCoTlAtGK+AjdG+Z0H/clAZONflD/je2EmFHCI0EuXE9tEw==
+"@sentry/hub@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-7.81.1.tgz#c49bcc1894bfeb019811bac8e3b6fd81011b6f7c"
+  integrity sha512-25cvsI3HKiRLJBZGFC8ntuy7/yB8M1w8YLTjr3tIqydYmjFUX7f18w0iuWEtd204d8OQSPBJDapbGMdfkE5x6w==
   dependencies:
-    "@sentry/core" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
-    tslib "^1.9.3"
+    "@sentry/core" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/integrations@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-7.52.0.tgz#632aa5e54bdfdab910a24057c2072634a2670409"
-  integrity sha512-tqxYzgc71XdFD8MTCsVMCPef08lPY9jULE5Zi7TzjyV2AItDRJPkixG0qjwjOGwCtN/6KKz0lGPGYU8ZDxvsbg==
+"@sentry/integrations@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-7.81.1.tgz#1b12c0cf3a7fa88224e86c0be46523ed7e3f3a43"
+  integrity sha512-DN5ONn0/LX5HHVPf1EBGHFssIZaZmLgkqUIeMqCNYBpB4DiOrJANnGwTcWKDPphqhdPxjnPv9AGRLaU0PdvvZQ==
   dependencies:
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
+    "@sentry/core" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
     localforage "^1.8.1"
-    tslib "^1.9.3"
 
-"@sentry/react-native@5.5.0":
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.5.0.tgz#b1283f68465b1772ad6059ebba149673cef33f2d"
-  integrity sha512-xrES+OAIu3HFhoQSuJjd16Hh02/mByuNoKUjF7e4WDGIiTew3aqlqeLjU7x4npmg5Vbt+ND5jR12u/NmdfArwg==
+"@sentry/react-native@5.16.0-alpha.1":
+  version "5.16.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.16.0-alpha.1.tgz#1ebc32ca9c8f58207599c5ec39f2899396e8eef5"
+  integrity sha512-OydvOGI7/1CPAvCLttttDt8vhiVBIbklOuapB1D/3sjJNjsqHIBLOKNfZdeGEWiqoz+MfpvLiR7IL8hvw7QM6w==
   dependencies:
-    "@sentry/browser" "7.52.0"
-    "@sentry/cli" "2.17.5"
-    "@sentry/core" "7.52.0"
-    "@sentry/hub" "7.52.0"
-    "@sentry/integrations" "7.52.0"
-    "@sentry/react" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
+    "@sentry/browser" "7.81.1"
+    "@sentry/cli" "2.21.3"
+    "@sentry/core" "7.81.1"
+    "@sentry/hub" "7.81.1"
+    "@sentry/integrations" "7.81.1"
+    "@sentry/react" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/react@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-7.52.0.tgz#d12d270ec82dea0474e69deb9112181affe7c524"
-  integrity sha512-VQxquyFFlvB81k7UER7tTJxjzbczNI2jqsw6nN1TVDrAIDt8/hT2x7m/M0FlWc88roBKuaMmbvzfNGWaL9abyQ==
+"@sentry/react@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-7.81.1.tgz#6a94e8e373a5bf27330cea2eb1a603ae0eb0b8ba"
+  integrity sha512-kk0plP/mf8KgVLOiImIpp1liYysmh3Un8uXcVAToomSuHZPGanelFAdP0XhY+0HlWU9KIfxTjhMte1iSwQ8pYw==
   dependencies:
-    "@sentry/browser" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
+    "@sentry/browser" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
     hoist-non-react-statics "^3.3.2"
-    tslib "^1.9.3"
 
-"@sentry/replay@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/replay/-/replay-7.52.0.tgz#4d78e88282d2c1044ea4b648a68d1b22173e810d"
-  integrity sha512-RRPALjDST2s7MHiMcUJ7Wo4WW7EWfUDYSG0LuhMT8DNc+ZsxQoFsLYX/yz8b3f0IUSr7xKBXP+aPeIy3jDAS2g==
+"@sentry/replay@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/replay/-/replay-7.81.1.tgz#a656d55e2a00b34e42be6eeb79018d21efc223af"
+  integrity sha512-4ueT0C4bYjngN/9p0fEYH10dTMLovHyk9HxJ6zSTgePvGVexhg+cSEHXisoBDwHeRZVnbIvsVM0NA7rmEDXJJw==
   dependencies:
-    "@sentry/core" "7.52.0"
-    "@sentry/types" "7.52.0"
-    "@sentry/utils" "7.52.0"
+    "@sentry-internal/tracing" "7.81.1"
+    "@sentry/core" "7.81.1"
+    "@sentry/types" "7.81.1"
+    "@sentry/utils" "7.81.1"
 
-"@sentry/types@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.52.0.tgz#b7d5372f17355e3991cbe818ad567f3fe277cc6b"
-  integrity sha512-XnEWpS6P6UdP1FqbmeqhI96Iowqd2jM5R7zJ97txTdAd5NmdHHH0pODTR9NiQViA1WlsXDut7ZLxgPzC9vIcMA==
+"@sentry/types@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.81.1.tgz#2b2551fc291e1089651fd574a68f7c4175878bd5"
+  integrity sha512-dvJvGyctiaPMIQqa46k56Re5IODWMDxiHJ1UjBs/WYDLrmWFPGrEbyJ8w8CYLhYA+7qqrCyIZmHbWSTRIxstHw==
 
-"@sentry/utils@7.52.0":
-  version "7.52.0"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.52.0.tgz#cacc36d905036ba7084c14965e964fc44239d7f0"
-  integrity sha512-X1NHYuqW0qpZfP731YcVe+cn36wJdAeBHPYPIkXCl4o4GePCJfH/CM/+9V9cZykNjyLrs2Xy/TavSAHNCj8j7w==
+"@sentry/utils@7.81.1":
+  version "7.81.1"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.81.1.tgz#42f3e77baf90205cec1f8599eb8445a6918030bd"
+  integrity sha512-gq+MDXIirHKxNZ+c9/lVvCXd6y2zaZANujwlFggRH2u9SRiPaIXVilLpvMm4uJqmqBMEcY81ArujExtHvkbCqg==
   dependencies:
-    "@sentry/types" "7.52.0"
-    tslib "^1.9.3"
+    "@sentry/types" "7.81.1"
 
 "@shopify/flash-list@1.6.3":
   version "1.6.3"
@@ -3197,6 +3192,16 @@ ajv-keywords@^5.1.0:
   dependencies:
     fast-deep-equal "^3.1.3"
 
+ajv@8.11.0:
+  version "8.11.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.0.tgz#977e91dd96ca669f54a11e23e378e33b884a565f"
+  integrity sha512-wGgprdCvMalC0BztXvitD2hC04YffAvtsUn93JbGXYLAtCUO4xd17mCCZQxUOItiBwZvJScWo8NIvQMQ71rdpg==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    json-schema-traverse "^1.0.0"
+    require-from-string "^2.0.2"
+    uri-js "^4.2.2"
+
 ajv@^8.0.0, ajv@^8.11.0, ajv@^8.9.0:
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.12.0.tgz#d1a0527323e22f53562c567c00991577dfbe19d1"
@@ -3487,10 +3492,10 @@ babel-preset-current-node-syntax@^1.0.0:
     "@babel/plugin-syntax-optional-chaining" "^7.8.3"
     "@babel/plugin-syntax-top-level-await" "^7.8.3"
 
-babel-preset-expo@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/babel-preset-expo/-/babel-preset-expo-0.0.1-canary-20231130-ede75a7-1.tgz#f44a9c8d81b3033e21ee19ac2120387a2eb778fb"
-  integrity sha512-MEBdjodGRCagLxsIG7GsBCDDeYyCYMJj88Xd1JzL/0T8pT/SMlXZ3MeQU1oo9lu9IpsiTmJcUdYAGc421xWp5w==
+babel-preset-expo@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/babel-preset-expo/-/babel-preset-expo-0.0.1-canary-20231205-250b31f.tgz#3c21d9d90dc06396254b8b2909e8d4ea6948e495"
+  integrity sha512-yjXuotngLCRfEkaNrUCgQ0I6iSkMGvjHxFFWtbMAifokyviRIZl5tG4NMOte16oA6Kyhu97GmN/TaPnhSER+Og==
   dependencies:
     "@babel/plugin-proposal-decorators" "^7.12.9"
     "@babel/plugin-proposal-object-rest-spread" "^7.12.13"
@@ -4582,155 +4587,190 @@ expect@^29.0.0, expect@^29.6.2:
     jest-message-util "^29.6.2"
     jest-util "^29.6.2"
 
-expo-application@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-0.0.1-canary-20231130-ede75a7-1.tgz#db09d60fb30f27deca9e414ec1e6054809fbca13"
-  integrity sha512-6s3bgChBIexF0nDrLmSbGrecm6hA+hKMVW7Y/bJclE5zZbqDwtz1796fr9mN4gWJcaHeLP3QicRPxqdAwaMKEw==
+expo-application@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-0.0.1-canary-20231205-250b31f.tgz#7605c567c0a014b4e501de8e5daca61e42961c2d"
+  integrity sha512-tZPHYkY8cCLfnMGJhsuUDHDrDDNf6r7hGGkcnha66BbjNg2UhMiCFxF6txSXNrJ5MIVSXJWnfAg+Qx+akM9sfQ==
 
-expo-asset@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-0.0.1-canary-20231130-ede75a7-1.tgz#5a91b0cc1bf754a0d2898590b6f0dc4e5ce73548"
-  integrity sha512-xw9F5RGAhBvnQMqj3nqwaZMkEM51j0m9cdeUwyO3hUTZdvxZdGiaDNPBKJJFmDvqyF2eLzbHp5A6AHMdDlIrlA==
+expo-asset@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-0.0.1-canary-20231205-250b31f.tgz#f9a92ed4bc1366d8b758340555cda5fd6bc05844"
+  integrity sha512-2uJlixZZauPsnmT9VYbLscj1xuSlJXdSzJiqd8A8yJ1Yy84RQvFTAkRXNYirQ4JK3et5FhEsoljPfSzZ2umfEA==
   dependencies:
     "@react-native/assets-registry" "~0.73.1"
     blueimp-md5 "^2.10.0"
-    expo-constants "0.0.1-canary-20231130-ede75a7-1"
-    expo-file-system "0.0.1-canary-20231130-ede75a7-1"
+    expo-constants "0.0.1-canary-20231205-250b31f"
+    expo-file-system "0.0.1-canary-20231205-250b31f"
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
-expo-build-properties@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.0.1-canary-20231130-ede75a7-1.tgz#9f4bb58639bca14fba08e22acb040e55e33a86ad"
-  integrity sha512-R4Z/BhotQjshw378PqABYstxZpyEpVyQDBFgqzBYxoLoJ18HVDCePXQbBn9tFmPzqf9AqHfIz3sIMaUf2z1qVg==
+expo-build-properties@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.0.1-canary-20231205-250b31f.tgz#daec17375dd23ca6cb3a2e9256da09845ac8555f"
+  integrity sha512-GmLlZwPfJ752JmoRvqoGx82y9xOgbmtJd+81cszSlY+2mGJ31O5rGeVM1SylP6tJxD2sKOWChHvrXF9yi0D0+Q==
   dependencies:
     ajv "^8.11.0"
     semver "^7.5.3"
 
-expo-constants@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-0.0.1-canary-20231130-ede75a7-1.tgz#253e98310eca81ddd6f83db4bbe1267d50e383cb"
-  integrity sha512-6TacsosXak8qmtozHmrm0oNcf1rPH/IPKyeFHioL6TsW+B67rti1FVHlKKgF3s4Rz611PClwZ2vlIpMnHbd3rA==
+expo-constants@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-0.0.1-canary-20231205-250b31f.tgz#fbc56aea9b9b31516372ea8df43190719bef1b1c"
+  integrity sha512-qJg5uS4dgzmr0xX9t3dSgVROMsPaevF1NyM3y/LEyVNNpBoPr5xJNfHV33D9Zi4mNAShKsCXuK7mwiR/rBPHkg==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
     uuid "^3.3.2"
 
-expo-device@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-0.0.1-canary-20231130-ede75a7-1.tgz#0ae1b5ee68439b358192d3b310fa30ca7d8b462e"
-  integrity sha512-qRgRb+fEBMWf9BJ/2JiS5g+I4LFUw+QxIqIbmfWtGEAhz0gGMujUtbSeaSmHz8Ob1AqI75soeJmSqAsZ0+rR5Q==
+expo-dev-client@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-0.0.1-canary-20231205-250b31f.tgz#0e2c9a62d5115de6d8338496a59198d9065ba0eb"
+  integrity sha512-qCMR3QtHSlBoeLVKEkllah3S73JFPIe+UpNPjXV60XBClciIOUom3mDDaH8oowHw8hdODNC8uSB4IQfWyjADUQ==
+  dependencies:
+    expo-dev-launcher "0.0.1-canary-20231205-250b31f"
+    expo-dev-menu "0.0.1-canary-20231205-250b31f"
+    expo-dev-menu-interface "0.0.1-canary-20231205-250b31f"
+    expo-manifests "0.0.1-canary-20231205-250b31f"
+    expo-updates-interface "0.0.1-canary-20231205-250b31f"
+
+expo-dev-launcher@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-0.0.1-canary-20231205-250b31f.tgz#340ff519254df4d79d65c74a6624e24a919b5d6a"
+  integrity sha512-YY+Hjq+p3VnENZCNyL8xFyv5PmMh7/ITGaRbvmGhYLytQeycnpd0jH77MTOhMQb46u2GHsCYY0zqwd5Tb4C1mg==
+  dependencies:
+    ajv "8.11.0"
+    expo-dev-menu "0.0.1-canary-20231205-250b31f"
+    expo-manifests "0.0.1-canary-20231205-250b31f"
+    resolve-from "^5.0.0"
+    semver "^7.5.3"
+
+expo-dev-menu-interface@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu-interface/-/expo-dev-menu-interface-0.0.1-canary-20231205-250b31f.tgz#2c745808f79a1ba3b58811e5864a6c79213dd49f"
+  integrity sha512-peUO9DFRQQwDqXS+Lketv2RqOdWt4YUvG6KKReDCf8F2GrwWwNTplBVlDTqxOha59KFUEj+BiNo3eIlYUwoglA==
+
+expo-dev-menu@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu/-/expo-dev-menu-0.0.1-canary-20231205-250b31f.tgz#bfed8d3a3d226884a821276b4ab1c0360328ff5f"
+  integrity sha512-qPvhy6U2mQhzjiBR6Qw+PNUZQN67Dtb+UvwTSadmwo/I4JWInkjngFAYZkqzBLdP0/HsO0OR29NFMWVrkDoPkg==
+  dependencies:
+    expo-dev-menu-interface "0.0.1-canary-20231205-250b31f"
+    semver "^7.5.3"
+
+expo-device@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-0.0.1-canary-20231205-250b31f.tgz#0a869d2ae38dc76ef560b0a349f7ad8271e0cad8"
+  integrity sha512-AaHbVcZHCvphogH+zYtYI+q/dqNko1/Kp0ELztPcFAZxjHjsj0hWq9JMaYVwtIfJXtJ82mTJhsECfz9Tbe02Rg==
   dependencies:
     ua-parser-js "^0.7.33"
 
-expo-document-picker@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-0.0.1-canary-20231130-ede75a7-1.tgz#892dc40a4fa8ab3325b989140e833c61a65e9ea4"
-  integrity sha512-JgByQgGzQR4ehfjjFNc9eRK2GS+tOhiHymKmUS93d7Tk+F+XFINjeIg/7kTUI5hgDHM/jTqhiRozLmUK60wA3w==
+expo-document-picker@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-0.0.1-canary-20231205-250b31f.tgz#10ec5bbfb1c12d210cd2e21bc0c0d540ea3f9d35"
+  integrity sha512-9Zk/dHTVmu3dxykwcv2VBNEr7MWguPQMf/lgOXyzMUgWtqs0qmH43F7BMY6SPZBisgdt1soka+pmuMEBuKfvcw==
 
-expo-eas-client@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-eas-client/-/expo-eas-client-0.0.1-canary-20231130-ede75a7-1.tgz#747ff284c96f8533261ac373656391bd7d7d8aca"
-  integrity sha512-L7d7+hmc1Ob9iQee20R11qVCyjnnrpNUG9KxtGNssLy/PfoQ5anucUNQ26vMPZG/USYJjRUOWmNlQbJBbEYvpA==
+expo-eas-client@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-eas-client/-/expo-eas-client-0.0.1-canary-20231205-250b31f.tgz#5ff76709c2c4f544792bfad3b7498b5ae102208b"
+  integrity sha512-9CugN2v9fJtXPznt4OZW3hbNUkLkX8WIxyOwAE1l5zok4gC0jOY1XU7cCd4DEgV4/8HaDIxsJLHVuwabm76G4g==
 
-expo-file-system@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-0.0.1-canary-20231130-ede75a7-1.tgz#a3892ce8ae6f03b7f53c6281de795f197d8bdd76"
-  integrity sha512-bowa7dZUx8wkolNSdjoRQxxbbNh+db/5oW8MA8KjLHHiiY6E3EmL+6/kkoyOpwlmDo6U2QaTKDIrFRuIFDfb3w==
+expo-file-system@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-0.0.1-canary-20231205-250b31f.tgz#9e12b71d5dc675bc3cf26f73f2b83127755f2cb8"
+  integrity sha512-SUcUImkOdR85EusJ8zP4xFNaz/5Zi+l2PRX0YkLEAAy1FRyvEIXYiqtH3ysHL4qtqGdaFnfsOFdxhFLxXsXtEg==
   dependencies:
     uuid "^3.4.0"
 
-expo-font@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-0.0.1-canary-20231130-ede75a7-1.tgz#99621ed00967a44d2684c3914676930cf7daad0b"
-  integrity sha512-dN8Mqpaks7xKZsF+/RvbS8hM42Cxne2t032fwGt42DYltGVMzn5Vw7phmgdYpsYx9JoOmF3ghqy+EplZoSDaOQ==
+expo-font@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-0.0.1-canary-20231205-250b31f.tgz#622078ed2e11fcc9f908e54d6860f698b29f37e2"
+  integrity sha512-3KwUu0BTzbw0BHx+SP7AbbrwzlNI1Vactl6QkacCdbwuLY198A+5L8qMYO/J/P8Z2JAT3jbYiQ1HIIFAdHED1g==
   dependencies:
     fontfaceobserver "^2.1.0"
 
-expo-haptics@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-0.0.1-canary-20231130-ede75a7-1.tgz#2d5fa27c56bc2b465bbe031798e1d42a3c6d1dc3"
-  integrity sha512-H3W4hRI9MG/XM4T1zn9vIcg/7VOHdUczmdJPK3aFLTn/zWSaoDr1r37eWbF+xlmPvtfSVxf6BWBCNIMA/QkrHw==
+expo-haptics@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-0.0.1-canary-20231205-250b31f.tgz#f23e169ef3346a2eb9ae7a45e0807ac9517173e3"
+  integrity sha512-8hQhG+y8YwPt+j3A8mxv5rDd5bsuXT7F2lrSNQKVDbY017k0FqK5Hr1OGDrpxvNmefP1+pLuijJyCGtH8c2rKg==
 
-expo-image-loader@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-0.0.1-canary-20231130-ede75a7-1.tgz#30aafc0a71444816f1c0bd2b94cec9f4478eb9b5"
-  integrity sha512-Srk4pAY0Ym0b0ZiETipOhrmEIJ2SBEj+iZhT2tYnE/AIPVQspgB5Vg/Mn5dekxR8XF8s/XHcy0bh9ARa18Eoaw==
+expo-image-loader@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-0.0.1-canary-20231205-250b31f.tgz#ad924024cd081293c7f53d7976adf35a7d58a90b"
+  integrity sha512-vpZhcpRWIBC1e1XkERG06rN9xtLZTUq55N4HAjn0Wh6uSxe/FWNpPzqf3BBnqxj/BRQM6rbM+4zbsauKIT8SxA==
 
-expo-image-manipulator@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-0.0.1-canary-20231130-ede75a7-1.tgz#650b6fdf14e4abe5f5c31a5a1b3dbc068d1de049"
-  integrity sha512-7ckI96jnNhCQXhdxM4JpEXCgHED/nyN0Ld4xbugcfXWbvfr3yEfaQVebRvHxHfuVo+NM/7ytWKGtgH5O8mtygw==
+expo-image-manipulator@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-0.0.1-canary-20231205-250b31f.tgz#3a62476a95dc9e3e1f22dd1470bea9a0aae72570"
+  integrity sha512-5rIt28eVsTMWN/RsccZK52or5Yg3uQLrVLTeSVVh1xV03OdYCdGvmpBDTlcIRp2ZI4OkETbRDpnOzhUobWmYJQ==
   dependencies:
-    expo-image-loader "0.0.1-canary-20231130-ede75a7-1"
+    expo-image-loader "0.0.1-canary-20231205-250b31f"
 
-expo-image-picker@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-0.0.1-canary-20231130-ede75a7-1.tgz#734327257365d5b6c05901e05c4c6d3a3c494c09"
-  integrity sha512-qqNHtRtFsDo38axu/Ss7gpCuoa7ccpybqIxYphc/mA4pCAe9Jc1/MBAO1/fR4j3IfYxwUY7w70m3nTQzVG0J/g==
+expo-image-picker@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-0.0.1-canary-20231205-250b31f.tgz#2e439e52448dba03c6a28309bc408dbca001df40"
+  integrity sha512-zamqqZamS5lDHwHxADxiBY2PrlswI9wkQuo+DuQj/HCte5ElGkm2I+aJwTotoHwvYNTIke/8e9s3uL+5mx+5Dg==
   dependencies:
-    expo-image-loader "0.0.1-canary-20231130-ede75a7-1"
+    expo-image-loader "0.0.1-canary-20231205-250b31f"
 
-expo-image@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-0.0.1-canary-20231130-ede75a7-1.tgz#c3838e2c53a06f34ad920b66254438039dc9d46d"
-  integrity sha512-ZMMLgvYFCB3gMaesVULyMey1OLfQazyj68xuzm0bFRTWytcf9/4m6ZBK8ka43HOu5cx7k9M9+pVbP2AJYtnFjg==
+expo-image@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-0.0.1-canary-20231205-250b31f.tgz#0790a49edc0fd9a58f7d0e310720b0b74250b8d5"
+  integrity sha512-mXcGEQcuKCd335NSROIwwB5mUWY+6ItiOn1YDXlG8A8tUBAEJP4Hg5PZS2lImqhuutGbL4pRPHTUSucpfuZsNA==
   dependencies:
     "@react-native/assets-registry" "~0.73.1"
 
-expo-insights@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-insights/-/expo-insights-0.0.1-canary-20231130-ede75a7-1.tgz#9d31dc34a41ace7b0013ee39a45864a01a01ed19"
-  integrity sha512-qC6h3l59Bt97vMM8oR6Qm6TcschP4lzzy3aRmGMjZWv1WqZ2NqsZAuncw2YIbNt5fHqgmJGhQgkYx16NNwMoBw==
+expo-insights@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-insights/-/expo-insights-0.0.1-canary-20231205-250b31f.tgz#8643d36e3d1bdeb9809f8bd0782745cd1ab974d7"
+  integrity sha512-NGI7gonQ7g4IviSpG/cN2KCiOI+OGgwbRyOcsExSH1OJvLRmSI5xy4g+fUIoQOx256aV6xGTaqmPVU98h+Lc8A==
   dependencies:
-    expo-eas-client "0.0.1-canary-20231130-ede75a7-1"
+    expo-eas-client "0.0.1-canary-20231205-250b31f"
 
-expo-json-utils@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-json-utils/-/expo-json-utils-0.0.1-canary-20231130-ede75a7-1.tgz#09ff1bdc42fd9c0b858c62c2207ca4d6f20b4b4c"
-  integrity sha512-/Uf0yyk4yO29kwjWSwrDeqNaRkxDnedhdnmx4WQ2cW7clLpEuJyXW2ddR2iDCBKd1L6SG/oYymyuytKWaqhEqQ==
+expo-json-utils@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-json-utils/-/expo-json-utils-0.0.1-canary-20231205-250b31f.tgz#e5b11903bd8a012c8af92f8e9c9a8eb60b816781"
+  integrity sha512-2jfCZcfX9o5Lg76D6jIXwbuDxjpZxCHBE9BYhOHVbg5UeI7Ajz/KyW1X4F6FT6752Zcv6EwQrsrHrc+uAvUteQ==
 
-expo-keep-awake@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-0.0.1-canary-20231130-ede75a7-1.tgz#748e65cd813d458a1c26a5755a939a5a67fcb9a7"
-  integrity sha512-K4MOrN/ljKrsgR9f87TgHO208JyK6yvpGWD0m0I1IZPbRmGvVef+uZOxJ87aNQdnZtANLFCOGGwLQBfjc6PoEg==
+expo-keep-awake@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-0.0.1-canary-20231205-250b31f.tgz#08b2be5b2a7f0147092f34d49b7908864b3b3161"
+  integrity sha512-s5EzTK/PJYdXnYMQaWtBLjEASErUjimUqdVzGFDpy3F8oJ/k34R/AzGn+GyiXtF60pgQUuQAC6kIY1HDTYk2AA==
 
-expo-linking@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-0.0.1-canary-20231130-ede75a7-1.tgz#e253275ac1975a3384c6366a9323627762a813e9"
-  integrity sha512-lCriPACFdN/vI7K59XhA4UHtGoax8/IEk6xe+ehgt868P60mShzFsxE5988TcrqNb5ry811BrRpREo6NwXr4WA==
+expo-linking@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-0.0.1-canary-20231205-250b31f.tgz#bac55c6e091e07fea7bd3dd0b8780cc6d81a7218"
+  integrity sha512-npY9g6hzg6qEol+lqhTS+p/EPHqIZEP5CS8Q844jd3j44/gIe4WJ9LVSZ9omlPR11bgOWBwrldUh+hvWmGN18A==
   dependencies:
-    expo-constants "0.0.1-canary-20231130-ede75a7-1"
+    expo-constants "0.0.1-canary-20231205-250b31f"
     invariant "^2.2.4"
 
-expo-manifests@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-manifests/-/expo-manifests-0.0.1-canary-20231130-ede75a7-1.tgz#a3689369c999f2b6c40c9015b5e36013dffcc832"
-  integrity sha512-Y3b0XyYKb09mkWVu326Hufhw8CbcTUvWa5b4+Q1gjMfTV1D0pvYf3VJNOp5ABMr8H8LPdu6RsWB6Py4zYakYJw==
+expo-manifests@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-manifests/-/expo-manifests-0.0.1-canary-20231205-250b31f.tgz#981586c7fe7848063a930869daca0552825ca48d"
+  integrity sha512-kC1YaiwCiHiOxd5f16MZZCrHMKvQhCFOUmhS8vcM1cLudq3UGIWVjNlHARxuYbhzSVdlKDcfCR2ErXlq2QEayQ==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    expo-json-utils "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    expo-json-utils "0.0.1-canary-20231205-250b31f"
 
-expo-media-library@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-0.0.1-canary-20231130-ede75a7-1.tgz#8d4839f95abc9b773c4e35d7856a3e2998803625"
-  integrity sha512-GpGueo0S6+Qn6DBklVF9i+FI0JPp+Tqhru38yfRDHkfZDEc89ugXwdbWtI0z5cTrjIWRiWGqwOplAFybs+5eqw==
+expo-media-library@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-0.0.1-canary-20231205-250b31f.tgz#45565f1cb7829ca04a92350e376e086aea7440a1"
+  integrity sha512-CCeL1ci2rwnnQZl+zTnNK9o17bfvCOIY6FUX1KUmaDVxRJGS7AGnkAX7rJ54djIZlz5+gWF8wNlPFY81gO4lpQ==
 
-expo-modules-autolinking@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.0.1-canary-20231130-ede75a7-1.tgz#0576824e86ccff64ed6713890f3a856187cf1565"
-  integrity sha512-ZM8HaPculaPSQZUwgOWM6RgE8ukacjnCAAqxjyAEdmYEb3p/zyC6FckFRC3PGSjR5PvgoMufT+TfqNnck3jWlg==
+expo-modules-autolinking@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.0.1-canary-20231205-250b31f.tgz#7bb0f24ce8bbda4dff780db7f9b29ba3c9bf3305"
+  integrity sha512-HClMFNDWhpmq4AKZWbie39eTm7jV0natAh2Gyp2lRW/brYGwoGnavPntv1hIGThSuDhMHrXJJOvTTj/u7ss0Nw==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
     chalk "^4.1.0"
     commander "^7.2.0"
     fast-glob "^3.2.5"
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.0.1-canary-20231130-ede75a7-1.tgz#069c6b28346b401679a8bed717256e148855ea02"
-  integrity sha512-oSMpl3KR/y5hyF/1TiB/ZgsuhE2kvxvzClkgcih1yBgXaJgh+IFL/q1ki2FKs6HlMzgpIp+9z/leyuz2SAakKQ==
+expo-modules-core@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.0.1-canary-20231205-250b31f.tgz#977fc90f2fa443b7f9d84ed8ccbb7a672e54889d"
+  integrity sha512-aXoBUf/LLvWsAUPgY6F3wZCZPdN35iLyIRexckM5ZjRAgfNHMyrMwAAtlg/FNqN5thuEBq9I9tF7UzYSRvzLDg==
   dependencies:
     invariant "^2.2.4"
 
@@ -4742,103 +4782,103 @@ expo-quick-actions@^0.2.3:
     "@expo/image-utils" "^0.3.23"
     schema-utils "^4.2.0"
 
-expo-router@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.1-canary-20231130-ede75a7-1.tgz#1ed927288f90186ef225f12c34c98537fe3cbe3b"
-  integrity sha512-cYxCm0/43fr0wWAOiD9QVITUkNOpxawsQvb2tNjCDQC8k9/ourgchnVfbwlA0O3YlNKLkGd0foSEng63wqSulw==
+expo-router@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-0.0.1-canary-20231205-250b31f.tgz#1e0e49ab683703421c3aa9a70c997ef52e83522e"
+  integrity sha512-ZctDdxvPW+LssY4NMWhtym+oMdxvMB688HDvKJrFVmQegN1AtG3ZqRQ7FbjQG+Y+dRzqXPKoL/m8S4X22MTziA==
   dependencies:
-    "@expo/metro-runtime" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/server" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/metro-runtime" "0.0.1-canary-20231205-250b31f"
+    "@expo/server" "0.0.1-canary-20231205-250b31f"
     "@radix-ui/react-slot" "1.0.1"
     "@react-navigation/bottom-tabs" "~6.5.7"
     "@react-navigation/native" "~6.1.6"
     "@react-navigation/native-stack" "~6.9.12"
-    expo-splash-screen "0.0.1-canary-20231130-ede75a7-1"
+    expo-splash-screen "0.0.1-canary-20231205-250b31f"
     react-helmet-async "^1.3.0"
     schema-utils "^4.0.1"
 
-expo-screen-orientation@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-0.0.1-canary-20231130-ede75a7-1.tgz#5c738caadd0c08f9c7f748ce4fc2e5655e029d9b"
-  integrity sha512-5SKyZhQ4smyG2nr7yVV/x/eedENCd3tqHWp8E1QUO44ZM26ASjrl6Hs3bOFzxS7qoeZARYY6vikE7atOeAjdHw==
+expo-screen-orientation@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-0.0.1-canary-20231205-250b31f.tgz#10f8ee40ba029bf7d5ca29043dbbefa116f19976"
+  integrity sha512-9gVWdLwOJr6aZCpyYqxsNgMQZARQZ4SQE+euvyAbBzzYhEa/Dx14EGwgDfvUlKD7EmHSBkS4vsqacRCwgJG+vg==
 
-expo-sharing@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-0.0.1-canary-20231130-ede75a7-1.tgz#6e72e006bc362adf7dc61cbb7dceeeda0240be48"
-  integrity sha512-TgIqTMz+ZrkZINQIic2T9w/LyWcBPPvR1CIZKQoFV5TBifi3YYfmnTrLZBMw/lVq5BKLnm4qm5iUBaU7XcqjoA==
+expo-sharing@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-0.0.1-canary-20231205-250b31f.tgz#e69b70b430a77108786d0bbf16d2d495f3bd4d43"
+  integrity sha512-pqeHJ4hjMqh7LULrPVViSfa/ouZcAJU2pSaxHqsL4nE1SoFx6ldgvna0LwhiHuSo/9njdbmsCgqtjkzz14QCvw==
 
-expo-splash-screen@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.0.1-canary-20231130-ede75a7-1.tgz#203dce5d173d91d23338877461e5b0a5b017cf2b"
-  integrity sha512-p+U9uypftx8V+iOu+nSXcjbvpZRq9z9HwMT3M7ELOeMgUic71bNZoRj02SIZdpYHSSAZK3pVRPCxJjHa6ptpVA==
+expo-splash-screen@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.0.1-canary-20231205-250b31f.tgz#460c1a1687de588465018c493cd4782a565d81da"
+  integrity sha512-vzkqNQVt9MNqxna72SP/yizwSNDUT2YtijApdslfDzUf+hofeMus7dKgO8EsN3ZN4+4bGVFJpwlB5WPdsz7k3w==
   dependencies:
-    "@expo/prebuild-config" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/prebuild-config" "0.0.1-canary-20231205-250b31f"
 
-expo-status-bar@0.0.1-canary-20231130-ede75a7-1:
-  version "0.0.1-canary-20231130-ede75a7-1"
-  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-0.0.1-canary-20231130-ede75a7-1.tgz#85e95235dee9991454eb649a9416d6c500afc635"
-  integrity sha512-5moPdhnJsiemoy9sWQLwTFSItMGFVtwF5uD6tEGIA/UxNghQSHoJGtoXIfNC+cByaRYD40eQ3oWtQx6ggd18gA==
+expo-status-bar@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-0.0.1-canary-20231205-250b31f.tgz#381375eb8f8852792ffc39f91268a776cf187d92"
+  integrity sha512-zjzP0QxTrnO39/AFw0xfBFsKw8ckg+DABQhnw9rBCQ/3vc6jpBr5uuRKJD0m92bnXSrbZn15/yqhdIkm5RWKPQ==
 
-expo-structured-headers@0.0.1-canary-20231130-ede75a7:
-  version "0.0.1-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-0.0.1-canary-20231130-ede75a7.tgz#e65e323626a18fe8e8dc811143e549b196fa7839"
-  integrity sha512-X12T/eE0J0i1LetIa+FGNwk6YdwZTJXbQClYns+HsptWzAlj5lRfgroxs9G0Z6w0pnq8tb9V5iKBvGxsCO3RBA==
+expo-structured-headers@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-0.0.1-canary-20231205-250b31f.tgz#7383eff582aca7c30e04ed6224cb56e82a72803f"
+  integrity sha512-VRw79HEZdwnDw2RMOdlJ+wB6hyZ6FaZ+BSUapb/5IuUhzw70tDy4OzDUi6J4uZURaZM1lC9SRrqFTV9dN6DRjw==
 
-expo-system-ui@0.0.1-canary-20231130-ede75a7:
-  version "0.0.1-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-0.0.1-canary-20231130-ede75a7.tgz#c53d8dab6798de71b16100b616bf56da58dfd8d5"
-  integrity sha512-8byPd3O4AtWfPykv4qwBxamDD44XA25npcROY9FsDaiZn5+8yyhZqNAydFp6Zi+xGSU5RuVJFfagsrT5xgNYLg==
+expo-system-ui@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-0.0.1-canary-20231205-250b31f.tgz#14819628bd915f26844d321aa83546670f058eed"
+  integrity sha512-fNDLfMH8u/zKcOgIF5sqoAUh2Q25NNNGoiHeSRZi5l9TQsuiCA1FYkDOVMGIknE98obhLnFPI0eBjSCZGa/EDg==
   dependencies:
     "@react-native/normalize-color" "^2.0.0"
     debug "^4.3.2"
 
-expo-updates-interface@0.0.1-canary-20231130-ede75a7:
-  version "0.0.1-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.0.1-canary-20231130-ede75a7.tgz#a0b9effb0565e28cf57732e19cd9cbf359a8cee6"
-  integrity sha512-602+6ejMq1y2dGVKHD08s3Se/NdAlOd3qJwENvettpN3fGoCOIyWhNsye/BOYjhml0J7/ja0am+MLz515ZR6Vw==
+expo-updates-interface@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.0.1-canary-20231205-250b31f.tgz#c636c1eedc2266518372e188d87cf50d4fcb5a32"
+  integrity sha512-LwV2Tg+/KP4/5XT0FP4TN5QiXUrc+bi7cntl+u2wgqK13qXaKvHKhkvWymK1Kd3iuOdVTfp7LYhuGZmRpwz5Dw==
 
-expo-updates@0.0.1-canary-20231130-ede75a7:
-  version "0.0.1-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.0.1-canary-20231130-ede75a7.tgz#636e11fd65272a36beb32ef221bafdd2883e7129"
-  integrity sha512-jj7htyiaxS6j1k0f5F+ANXTwQw2Dft2kEXhE+TbSk37pgkqOFZ6+EuxP4XuWNY1zpoJE3GwZAZOySXmDaPJRtA==
+expo-updates@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.0.1-canary-20231205-250b31f.tgz#bbf60783075a9d47b2a24c1c2c304ac3bc14909c"
+  integrity sha512-u1eCeKlFG1941Gsg+r2z+5LhlYgGXO/ztgwE/rKf2bZxvl8yfzK1uHt6MirdEQWe/aOoQ2O61Y1LoMohMAdhWw==
   dependencies:
     "@expo/code-signing-certificates" "0.0.5"
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/config-plugins" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/config-plugins" "0.0.1-canary-20231205-250b31f"
     arg "4.1.0"
     chalk "^4.1.2"
-    expo-eas-client "0.0.1-canary-20231130-ede75a7-1"
-    expo-manifests "0.0.1-canary-20231130-ede75a7-1"
-    expo-structured-headers "0.0.1-canary-20231130-ede75a7"
-    expo-updates-interface "0.0.1-canary-20231130-ede75a7"
+    expo-eas-client "0.0.1-canary-20231205-250b31f"
+    expo-manifests "0.0.1-canary-20231205-250b31f"
+    expo-structured-headers "0.0.1-canary-20231205-250b31f"
+    expo-updates-interface "0.0.1-canary-20231205-250b31f"
     fbemitter "^3.0.0"
     resolve-from "^5.0.0"
 
-expo-web-browser@0.0.1-canary-20231130-ede75a7:
-  version "0.0.1-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-0.0.1-canary-20231130-ede75a7.tgz#7fc867219e652c9f20589fb386497c9887d9cbce"
-  integrity sha512-j3LgaVaTQn6sas0SM4JWwtHgGm6CQQ7cx4OXdre21BobVg/ecKhDilaKq/hsJ8yipXgap7ZxHfopyfWcWYXGBw==
+expo-web-browser@0.0.1-canary-20231205-250b31f:
+  version "0.0.1-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-0.0.1-canary-20231205-250b31f.tgz#680ff70ded9b54678eeb977858d0458b37eb2dcb"
+  integrity sha512-sv/IVPS/BpMoJbAqj/N/BsD6xXrM21Wd9qb4k/Tli/iFHmEg4qWPoNMVta1k8mR1j3+2IRkqpuVOxbcq6aFMWw==
   dependencies:
     compare-urls "^2.0.0"
     url "^0.11.0"
 
-expo@^50.0.0-canary-20231130-ede75a7:
-  version "50.0.0-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-50.0.0-canary-20231130-ede75a7.tgz#c3c4fcf8f2866311fb3ab22755fdd31767f56aec"
-  integrity sha512-H1eYbj3lNam/3vNPzn5fzGKdHyK7xZLv6WjaBDr1qyfhn0tibB+F/jxDBKm61g1UyRmdsMABXX91jKeUUKOVCA==
+expo@^50.0.0-canary-20231205-250b31f:
+  version "50.0.0-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-50.0.0-canary-20231205-250b31f.tgz#58ebd4720be0122000af6cff1ff6837a550780d2"
+  integrity sha512-S1yaigdrDUJYZizIbuWd8Xt/uHrW94kX913qeJOW/0Sixwkm093htpb09Mnb4BletmRoSE+cH0bccJmy5KKxNA==
   dependencies:
     "@babel/runtime" "^7.20.0"
-    "@expo/cli" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/config-plugins" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/cli" "0.0.1-canary-20231205-250b31f"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/config-plugins" "0.0.1-canary-20231205-250b31f"
     "@expo/vector-icons" "^13.0.0"
-    babel-preset-expo "0.0.1-canary-20231130-ede75a7-1"
-    expo-asset "0.0.1-canary-20231130-ede75a7-1"
-    expo-file-system "0.0.1-canary-20231130-ede75a7-1"
-    expo-font "0.0.1-canary-20231130-ede75a7-1"
-    expo-keep-awake "0.0.1-canary-20231130-ede75a7-1"
-    expo-modules-autolinking "0.0.1-canary-20231130-ede75a7-1"
-    expo-modules-core "0.0.1-canary-20231130-ede75a7-1"
+    babel-preset-expo "0.0.1-canary-20231205-250b31f"
+    expo-asset "0.0.1-canary-20231205-250b31f"
+    expo-file-system "0.0.1-canary-20231205-250b31f"
+    expo-font "0.0.1-canary-20231205-250b31f"
+    expo-keep-awake "0.0.1-canary-20231205-250b31f"
+    expo-modules-autolinking "0.0.1-canary-20231205-250b31f"
+    expo-modules-core "0.0.1-canary-20231205-250b31f"
     whatwg-url-without-unicode "8.0.0-3"
 
 ext@^1.1.2:
@@ -5960,13 +6000,13 @@ jest-environment-node@^29.6.3:
     jest-mock "^29.7.0"
     jest-util "^29.7.0"
 
-jest-expo@50.0.0-canary-20231130-ede75a7:
-  version "50.0.0-canary-20231130-ede75a7"
-  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-50.0.0-canary-20231130-ede75a7.tgz#d1b01f18932934ffefdb1d0d1631ce73544f913a"
-  integrity sha512-qzv4w+TMHl2Xb8OHjKKV4ilXK7AlfGczcVf5NL6uNArPezkFHAQ7E5SLPidOQI9ZEkXt9BNVByEIfgqh7oVUMQ==
+jest-expo@50.0.0-canary-20231205-250b31f:
+  version "50.0.0-canary-20231205-250b31f"
+  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-50.0.0-canary-20231205-250b31f.tgz#41ed62bcf433758a9712a836e45d79100344f5e7"
+  integrity sha512-BRgLeuV6jaRGfiXmoj51Q24TuM/JE2ZoD1xr9zXdKoZpVXzUwQf4RlimtYK1iIrOrV8R/sx0besnkOuna8UJhw==
   dependencies:
-    "@expo/config" "0.0.1-canary-20231130-ede75a7-1"
-    "@expo/json-file" "0.0.1-canary-20231130-ede75a7-1"
+    "@expo/config" "0.0.1-canary-20231205-250b31f"
+    "@expo/json-file" "0.0.1-canary-20231205-250b31f"
     "@jest/create-cache-key-function" "^29.2.1"
     babel-jest "^29.2.1"
     find-up "^5.0.0"
@@ -7922,10 +7962,10 @@ react-native-web@~0.19.6:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.3"
 
-react-native@0.73.0-rc.6:
-  version "0.73.0-rc.6"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.73.0-rc.6.tgz#5467d2995d9199d6308c7ddc42cf9d810534e6cb"
-  integrity sha512-dSJ/Eg5B2PsQl0np1LsCNyaL1dnFA24LWdTzzEm7gls/2lFe5sz2vZJxKDegV2wti5GWKnVQSr2HOsLO0m1rBw==
+react-native@0.73.0-rc.8:
+  version "0.73.0-rc.8"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.73.0-rc.8.tgz#714b9e3bcdd375b424a72077d42c079d2c531151"
+  integrity sha512-HyIYLK0Eg1/6V2UymxCOuMg2Rexfo/rWjZZlkwGR6avpSpU3q+6pJvhmQZy6xveoIsWc7C7O7swRsektugzwxA==
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
     "@react-native-community/cli" "12.1.1"
@@ -7965,7 +8005,7 @@ react-native@0.73.0-rc.6:
     ws "^6.2.2"
     yargs "^17.6.2"
 
-react-refresh@0.14.0, react-refresh@^0.14.0, react-refresh@~0.14.0:
+react-refresh@0.14.0, react-refresh@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
@@ -8999,11 +9039,6 @@ tslib@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
-
-tslib@^1.9.3:
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
-  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
 tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0:
   version "2.6.1"

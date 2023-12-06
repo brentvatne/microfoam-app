@@ -6,6 +6,7 @@ import {
   DefaultTheme,
   ThemeProvider as ReactNavigationThemeProvider,
 } from "@react-navigation/native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ThemeColors } from "~/constants/colors";
 import {
   useTheme,
@@ -14,7 +15,7 @@ import {
 import { useDataIsReady } from "~/storage/PourStore";
 import * as QuickActions from "expo-quick-actions";
 
-// import * as Sentry from "@sentry/react-native";
+import * as Sentry from "@sentry/react-native";
 
 function Root() {
   useAutoSetAppearanceFromSettingsEffect();
@@ -34,7 +35,7 @@ function Root() {
   });
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
       <ReactNavigationThemeProvider
         value={
@@ -45,7 +46,7 @@ function Root() {
       >
         <Stack screenOptions={{ presentation: "modal" }} />
       </ReactNavigationThemeProvider>
-    </>
+    </GestureHandlerRootView>
   );
 }
 
@@ -67,8 +68,8 @@ const CustomNavigationDarkTheme = {
   },
 };
 
-export default Root;
-// export default Sentry.wrap(Root);
+// export default Root;
+export default Sentry.wrap(Root);
 
 function useQuickActionCallback(
   callback?: (data: QuickActions.Action) => void | Promise<void>
