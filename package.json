@@ -2,5 +2,15 @@
   "private": true,
   "name": "monofoam",
   "version": "1.0.0",
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0"
+  }
 }
