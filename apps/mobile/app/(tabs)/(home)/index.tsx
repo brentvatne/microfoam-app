@@ -107,7 +107,7 @@ function PourRow({ item }) {
         // TODO: bottom sheet with view / share / edit / delete options
         Alert.alert(
           "Delete pour?",
-          "Are you sure you want to delete this pour?",
+          "Are you sure you want to delete this?",
           [
             {
               text: "Cancel",
