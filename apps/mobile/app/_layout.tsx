@@ -13,7 +13,7 @@ import {
   useAutoSetAppearanceFromSettingsEffect,
 } from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
-import * as QuickActions from "expo-quick-actions";
+import { useQuickActionCallback } from "~/utils/useQuickActionCallback";
 
 import * as Sentry from "@sentry/react-native";
 
@@ -70,25 +70,3 @@ const CustomNavigationDarkTheme = {
 
 // export default Root;
 export default Sentry.wrap(Root);
-
-function useQuickActionCallback(
-  callback?: (data: QuickActions.Action) => void | Promise<void>
-) {
-  React.useEffect(() => {
-    let isMounted = true;
-
-    if (QuickActions.initial) {
-      callback?.(QuickActions.initial);
-    }
-
-    const sub = QuickActions.addListener((event) => {
-      if (isMounted) {
-        callback?.(event);
-      }
-    });
-    return () => {
-      isMounted = false;
-      sub.remove();
-    };
-  }, [QuickActions.initial, callback]);
-}
