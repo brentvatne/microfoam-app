@@ -16,6 +16,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   updates: {
     fallbackToCacheTimeout: 0,
     url: getUpdatesUrl(),
+    requestHeaders: {
+      "expo-channel-name": "main"
+    }
   },
   extra: {
     eas: {
