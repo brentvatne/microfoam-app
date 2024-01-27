@@ -1,0 +1,17 @@
+diff --git a/node_modules/@sentry/react-native/plugin/build/withSentry.js b/node_modules/@sentry/react-native/plugin/build/withSentry.js
+index cccba67..2c9dc4f 100644
+--- a/node_modules/@sentry/react-native/plugin/build/withSentry.js
++++ b/node_modules/@sentry/react-native/plugin/build/withSentry.js
+@@ -32,9 +32,9 @@ function getSentryProperties(props) {
+     // eslint-disable-next-line no-prototype-builtins
+     const missingProperties = ['organization', 'project'].filter(each => !props?.hasOwnProperty(each));
+     if (missingProperties.length) {
+-        const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(', ')} in config plugin. Builds will fall back to environment variables. See: https://docs.sentry.io/platforms/react-native/manual-setup/.`;
+-        config_plugins_1.WarningAggregator.addWarningAndroid(utils_1.SDK_PACKAGE_NAME, warningMessage);
+-        config_plugins_1.WarningAggregator.addWarningIOS(utils_1.SDK_PACKAGE_NAME, warningMessage);
++        // const warningMessage = `Missing Sentry configuration properties: ${missingProperties.join(', ')} in config plugin. Builds will fall back to environment variables. See: https://docs.sentry.io/platforms/react-native/manual-setup/.`;
++        // config_plugins_1.WarningAggregator.addWarningAndroid(utils_1.SDK_PACKAGE_NAME, warningMessage);
++        // config_plugins_1.WarningAggregator.addWarningIOS(utils_1.SDK_PACKAGE_NAME, warningMessage);
+     }
+     return `defaults.url=${url}
+ ${organization ? `defaults.org=${organization}` : missingOrgMessage}
