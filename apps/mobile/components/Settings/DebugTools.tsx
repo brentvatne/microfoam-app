@@ -163,8 +163,8 @@ async function exportDatabaseAsync() {
 
 async function importDatabaseAsync() {
   const result = await DocumentPicker.getDocumentAsync();
-  if (result.type === "success") {
-    const data = await FileSystem.readAsStringAsync(result.uri);
+  if (result.assets) {
+    const data = await FileSystem.readAsStringAsync(result.assets[0].uri);
     try {
       PourStore.loadExternalJSONAsync(data);
       alert("Imported data successfully");

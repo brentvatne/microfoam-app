@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useRouter, Stack, useSearchParams } from "expo-router";
+import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import * as PourStore from "~/storage/PourStore";
@@ -9,7 +9,7 @@ import LogForm, { LogFormHandle } from "~/components/LogForm";
 import { AntDesign } from "~/components/Themed";
 
 export default function EditPourScreen() {
-  const params = useSearchParams();
+  const params = useLocalSearchParams();
   const id = params.id as string;
   const router = useRouter();
   const pour = PourStore.usePour(id);

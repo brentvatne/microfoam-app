@@ -53,6 +53,7 @@ export default function ApplicationInfo({
             marginTop: Margin[1],
           }}
         >
+          {/* @ts-ignore */}
           Released: {Updates.manifest.createdAt ?? "(no release date)"}
         </Text>
       </View>
