@@ -47,7 +47,14 @@
         "PREVIEW": "1"
       }
     },
-    "simulator": {
+    "development-simulator": {
+      "extends": "base",
+      "developmentClient": true,
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview-simulator": {
       "extends": "base",
       "channel": "preview",
       "distribution": "internal",
