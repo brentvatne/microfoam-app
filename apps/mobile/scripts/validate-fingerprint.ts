@@ -9,7 +9,7 @@ async function main() {
   const currentFingerprint = await Fingerprint.createFingerprintAsync(process.cwd());
 
   if (config.exp.runtimeVersion === currentFingerprint.hash) {
-    console.log('Fingerprint is the same');
+    console.log(`✅ ${chalk.bold('runtimeVersion')} in app.json matches the current project fingerprint`);
     process.exit(0);
   }
   
