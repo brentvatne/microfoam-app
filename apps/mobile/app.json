@@ -22,7 +22,9 @@
         "usesNonExemptEncryption": false
       }
     },
-    "assetBundlePatterns": ["node_modules/expo-router/**/*"],
+    "assetBundlePatterns": [
+      "node_modules/expo-router/**/*"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -30,8 +32,6 @@
       },
       "package": "com.brents.microfoam"
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    "runtimeVersion": "793af33381ec273ca294afa7a0e70fad893c429f"
   }
 }
