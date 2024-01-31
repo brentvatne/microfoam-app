@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import * as Application from "expo-application";
-import * as Updates from "expo-updates";
+import { useUpdates } from "expo-updates";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { Text } from "~/components/Themed";
@@ -11,6 +11,8 @@ export default function ApplicationInfo({
 }: {
   onTripleTap: () => void;
 }) {
+  const { currentlyRunning: currentlyRunningUpdate } = useUpdates();
+
   const gesture = Gesture.Tap()
     .numberOfTaps(3)
     .runOnJS(true)
@@ -21,42 +23,39 @@ export default function ApplicationInfo({
   return (
     <GestureDetector gesture={gesture}>
       <View>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            marginTop: Margin[1],
-            fontSize: FontSize.base,
-            textAlign: "center",
-          }}
-        >
+        <DebugText>
           Version: {Application.nativeApplicationVersion} (
           {Application.nativeBuildVersion})
-        </Text>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            marginTop: Margin[1],
-            fontSize: FontSize.base,
-            textAlign: "center",
-          }}
-        >
-          ID: {Updates.updateId ?? "(no update id)"}
-        </Text>
-        <Text
-          darkColor={TailwindColor["gray-100"]}
-          lightColor={TailwindColor["gray-700"]}
-          style={{
-            fontSize: FontSize.base,
-            textAlign: "center",
-            marginTop: Margin[1],
-          }}
-        >
-          {/* @ts-ignore */}
-          Released: {Updates.manifest.createdAt ?? "(no release date)"}
-        </Text>
+        </DebugText>
+
+        <DebugText>Runtime: {currentlyRunningUpdate.runtimeVersion}</DebugText>
+
+        <DebugText>Channel: {currentlyRunningUpdate.channel}</DebugText>
+
+        <DebugText>
+          ID: {currentlyRunningUpdate.updateId ?? "(embedded)"}
+        </DebugText>
+
+        {currentlyRunningUpdate.createdAt ? (
+          <DebugText>Released: {currentlyRunningUpdate.createdAt}</DebugText>
+        ) : null}
       </View>
     </GestureDetector>
   );
 }
+
+const DebugText = ({ children }) => {
+  return (
+    <Text
+      darkColor={TailwindColor["gray-100"]}
+      lightColor={TailwindColor["gray-700"]}
+      style={{
+        fontSize: FontSize.base,
+        textAlign: "center",
+        marginTop: Margin[1],
+      }}
+    >
+      {children}
+    </Text>
+  );
+};
