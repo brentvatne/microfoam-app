@@ -22,7 +22,7 @@ export default function ApplicationInfo({
 
   return (
     <GestureDetector gesture={gesture}>
-      <View>
+      <View style={{ paddingHorizontal: 10 }}>
         <DebugText>
           Version: {Application.nativeApplicationVersion} (
           {Application.nativeBuildVersion})
@@ -37,7 +37,9 @@ export default function ApplicationInfo({
         </DebugText>
 
         {currentlyRunningUpdate.createdAt ? (
-          <DebugText>Released: {currentlyRunningUpdate.createdAt.toString()}</DebugText>
+          <DebugText>
+            Released: {currentlyRunningUpdate.createdAt.toString()}
+          </DebugText>
         ) : null}
       </View>
     </GestureDetector>
