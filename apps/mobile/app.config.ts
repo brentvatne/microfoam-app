@@ -42,7 +42,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    ["@sentry/react-native", { /* values provided via env */ }],
+    ["@sentry/react-native", {
+      organization: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+    }],
     ["expo-router"],
     // ["expo-dev-client"],
     [
