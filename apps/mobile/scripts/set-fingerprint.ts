@@ -2,6 +2,7 @@ import path from 'path';
 import { ensureDir, ensureFile, writeJson } from 'fs-extra';
 import * as Fingerprint from '@expo/fingerprint';
 import JsonFile from '@expo/json-file';
+import chalk from 'chalk';
 
 async function main() {
   const fingerprintCacheDir = path.join(process.cwd(), '.fingerprint');
@@ -25,9 +26,10 @@ async function main() {
     }
   });
 
-  console.log(result.hash);
-  console.log(`Wrote to ${fingerprintJsonFile}`);
-  console.log(`Updated app.json`);
+  console.log('');
+  console.log(`🏃 Updated ${chalk.bold('runtimeVersion')} to ${chalk.bold(result.hash)} in app.json`);
+  console.log(`🗂️  Saved full fingerprint to ${fingerprintJsonFile}`);
+  console.log('');
 }
 
 main();

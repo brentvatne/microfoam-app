@@ -9,10 +9,9 @@
     "android": "expo run:android",
     "prebuild:ios": "expo prebuild -p ios --clean",
     "prebuild:android": "expo prebuild -p android --clean",
-    "fingerprint:validate": "bun scripts/validate-fingerprint.ts",
-    "fingerprint:set": "bun scripts/set-fingerprint.ts",
-    "prettier:fix": "prettier app components constants storage index.js -w",
-    "postinstall": "patch-package"
+    "fingerprint:validate": "ts-node scripts/validate-fingerprint.ts",
+    "fingerprint:set": "ts-node scripts/set-fingerprint.ts",
+    "prettier:fix": "prettier app components constants storage index.js -w"
   },
   "dependencies": {
     "@expo/fingerprint": "^0.6.0",
@@ -54,8 +53,6 @@
     "jest-expo": "~50.0.1",
     "lodash": "^4.17.21",
     "moti": "^0.20.0",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "pretty-bytes": "^6.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -81,8 +78,10 @@
     "@types/jest": "^29.5.3",
     "@types/react": "~18.2.45",
     "babel-plugin-module-resolver": "^5.0.0",
+    "chalk": "^4.1.2",
     "fs-extra": "^11.2.0",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
   },
   "expo": {
