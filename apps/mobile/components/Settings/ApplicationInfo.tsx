@@ -37,7 +37,7 @@ export default function ApplicationInfo({
         </DebugText>
 
         {currentlyRunningUpdate.createdAt ? (
-          <DebugText>Released: {currentlyRunningUpdate.createdAt}</DebugText>
+          <DebugText>Released: {currentlyRunningUpdate.createdAt.toString()}</DebugText>
         ) : null}
       </View>
     </GestureDetector>

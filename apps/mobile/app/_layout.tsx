@@ -1,12 +1,15 @@
-import * as React from 'react';
+import { useEffect } from "react";
+import { Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack, router } from "expo-router";
+import { useUpdates, fetchUpdateAsync, checkForUpdateAsync, reloadAsync } from "expo-updates";
+import { useAppState } from "@react-native-community/hooks";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider as ReactNavigationThemeProvider,
 } from "@react-navigation/native";
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeColors } from "~/constants/colors";
 import {
   useTheme,
@@ -21,6 +24,16 @@ function Root() {
   useAutoSetAppearanceFromSettingsEffect();
   const theme = useTheme();
   const dataIsReady = useDataIsReady();
+  const {
+    isChecking,
+    isDownloading,
+    isUpdateAvailable,
+    isUpdatePending,
+    availableUpdate,
+    downloadedUpdate,
+  } = useUpdates();
+
+  const appState = useAppState();
 
   if (!dataIsReady) {
     return null;
@@ -33,6 +46,54 @@ function Root() {
       });
     }
   });
+
+  // Check for updates when app state changes to foreground
+  useEffect(() => {
+    if (appState === "active" && !isUpdatePending && !isChecking) {
+      checkForUpdateAsync();
+    }
+  }, [appState])
+
+  // Prompt to install when an update is available
+  useEffect(() => {
+    if (isUpdateAvailable) {
+      Alert.alert(`An update is available`, `Download and install it now?`, [
+        {
+          text: "Yes",
+          onPress: () => {
+            fetchUpdateAsync();
+          },
+        },
+        {
+          text: "I'll do it later",
+          onPress: () => {},
+        },
+      ]);
+    }
+  }, [isUpdateAvailable]);
+
+  // Prompt to install when an update is downloaded
+  useEffect(() => {
+    if (downloadedUpdate) {
+      Alert.alert(
+        `An update is ready to install`,
+        `Would you like to restart and install it now?`,
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+              // @ts-ignore
+              reloadAsync();
+            },
+          },
+          {
+            text: "I'll do it later",
+            onPress: () => {},
+          },
+        ]
+      );
+    }
+  }, [downloadedUpdate]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
