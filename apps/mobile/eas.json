@@ -6,7 +6,12 @@
   "build": {
     "base": {
       "resourceClass": "large",
-      "image": "latest",
+      "ios": {
+        "image": "latest"
+      },
+      "android": {
+        "image": "latest"
+      },
       "env": {
         "SENTRY_ORG": "brents",
         "SENTRY_PROJECT": "microfoam",
