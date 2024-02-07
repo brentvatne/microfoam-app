@@ -33,7 +33,7 @@ export default function LogListScreen() {
     <BorderlessButton
       hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
       onPress={() => {
-        router.push("/new");
+        router.navigate("/new");
       }}
     >
       <AntDesign
@@ -101,7 +101,7 @@ function PourRow({ item }) {
           let text = await result.text();
           console.log(text);
         };
-        router.push(`/details/${item.id}`);
+        router.navigate(`/details/${item.id}`);
       }}
       onLongPress={() => {
         // TODO: bottom sheet with view / share / edit / delete options
@@ -229,7 +229,7 @@ function EmptyState() {
       <BorderlessButton
         borderless={false}
         onPress={() => {
-          router.push("/new");
+          router.navigate("/new");
         }}
       >
         <View

@@ -63,7 +63,7 @@ export default function ShowPour() {
             <BorderlessButton
               hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
               onPress={() => {
-                router.push(`/edit/${params.id}`);
+                router.navigate(`/edit/${params.id}`);
               }}
             >
               <AntDesign name="edit" size={24} color="white" />

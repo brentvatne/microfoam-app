@@ -27,9 +27,9 @@ export default function NewPourScreen() {
     });
 
     // Go back to tabs from the modal (not sure if desirable?)
-    // router.push(`/details/${row.id}`);
+    // router.navigate(`/details/${row.id}`);
 
-    router.push(`/`);
+    router.navigate(`/`);
   };
 
   return (

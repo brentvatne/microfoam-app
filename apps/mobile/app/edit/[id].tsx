@@ -74,7 +74,7 @@ export default function EditPourScreen() {
         onSave={handleSaveAsync}
         onDelete={() => {
           PourStore.destroy({ id });
-          router.push("/");
+          router.navigate("/");
         }}
       />
 

@@ -42,14 +42,14 @@ function Root() {
   useQuickActionCallback((action) => {
     if (action.id === "1") {
       requestAnimationFrame(() => {
-        router.push("/new");
+        router.navigate("/new");
       });
     }
   });
 
   // Check for updates when app state changes to foreground
   useEffect(() => {
-    if (appState === "active" && !isUpdatePending && !isChecking) {
+    if (appState === "active" && !isUpdatePending && !isChecking && !__DEV__) {
       checkForUpdateAsync();
     }
   }, [appState])

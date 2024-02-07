@@ -19,7 +19,7 @@ export default function AuthButton() {
         <ListItem
           renderIcon={() => <Avatar email={session.user.email} />}
           title={session.user.email}
-          onPress={() => router.push("/settings/auth")}
+          onPress={() => router.navigate("/settings/auth")}
         />
       </List>
     );
@@ -46,7 +46,7 @@ export default function AuthButton() {
           <ListItem
             title="Sign in"
             subtitle="This will enable you to back-up your data and restore it on other devices."
-            onPress={() => router.push("/settings/auth")}
+            onPress={() => router.navigate("/settings/auth")}
           />
         </List>
       </>

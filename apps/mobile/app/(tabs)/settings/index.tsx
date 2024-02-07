@@ -106,7 +106,7 @@ function UploadPhotosButton({ disabled }: { disabled: boolean }) {
 
   return (
     <ListItem
-      onPress={() => router.push("/settings/upload")}
+      onPress={() => router.navigate("/settings/upload")}
       title="Upload photos"
       disabled={disabled}
       renderIcon={() => <AntDesign name="picture" size={24} />}
