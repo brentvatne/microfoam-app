@@ -4,14 +4,17 @@ import React, {
   useState,
   useImperativeHandle,
 } from "react";
-import { Keyboard, StyleSheet, useColorScheme } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
+import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
 import {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
@@ -286,60 +289,119 @@ function PhotoPickerForm({ onChange, photoUri }) {
     });
   };
 
+  const handleDropImageAsync = async (asset: OnDropEvent) => {
+    if (!asset.type?.startsWith("image")) {
+      alert("Oops, that's not an image");
+    }
+
+    const image = await ImageManipulator.manipulateAsync(
+      asset.uri,
+      [{ crop: cropCover(asset.width, asset.height) }],
+      { compress: 0.6, format: ImageManipulator.SaveFormat.PNG }
+    );
+
+    onChange({
+      ...image,
+      // We don't have the following data in a drop event
+      exif: {},
+    });
+  };
+
   return (
-    <View
-      darkColor={TailwindColor["zinc-800"]}
-      lightColor={TailwindColor["gray-100"]}
-      style={{
-        flex: 1,
-        borderRadius: 10,
-        padding: Padding[5],
-        margin: Margin[2],
-        alignItems: "center",
+    <DragDropContentView
+      onDropEvent={(event: { assets: OnDropEvent[] }) => {
+        if (event.assets[0]) {
+          handleDropImageAsync(event.assets[0]);
+        }
+
+        if (event.assets.length > 1) {
+          console.warn(
+            "Multiple assets were dropped, but only the first will be used."
+          );
+        }
       }}
+      highlightColor="#2f95dc"
+      highlightBorderRadius={20}
+      style={{ flex: 1 }}
     >
-      {photoUri ? (
-        <BorderlessButton
-          onPress={() => launchPickerAsync()}
-          borderless={false}
-        >
-          <Photo
-            uri={photoUri}
-            resizeMode="cover"
-            containerStyle={{
+      <View
+        darkColor={TailwindColor["zinc-800"]}
+        lightColor={TailwindColor["gray-100"]}
+        style={{
+          flex: 1,
+          borderRadius: 10,
+          padding: Padding[5],
+          margin: Margin[2],
+          alignItems: "center",
+        }}
+      >
+        {photoUri ? (
+          <BorderlessButton
+            onPress={() => launchPickerAsync()}
+            borderless={false}
+          >
+            <Photo
+              uri={photoUri}
+              resizeMode="cover"
+              containerStyle={{
+                width: 200,
+                height: 200,
+                borderRadius: 5,
+                overflow: "hidden",
+              }}
+            />
+          </BorderlessButton>
+        ) : (
+          <RectButton
+            style={{
               width: 200,
               height: 200,
+              backgroundColor:
+                colorScheme === "light"
+                  ? TailwindColor["gray-200"]
+                  : TailwindColor["zinc-700"],
               borderRadius: 5,
-              overflow: "hidden",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-          />
-        </BorderlessButton>
-      ) : (
-        <RectButton
-          style={{
-            width: 200,
-            height: 200,
-            backgroundColor:
-              colorScheme === "light"
-                ? TailwindColor["gray-200"]
-                : TailwindColor["zinc-700"],
-            borderRadius: 5,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={() => launchPickerAsync()}
-        >
-          <Text
-            darkColor={TailwindColor["gray-200"]}
-            lightColor={TailwindColor["gray-700"]}
-            style={{ fontSize: FontSize.lg }}
+            onPress={() => launchPickerAsync()}
           >
-            {photoUri ? "Select a different photo " : "Select a photo"}
-          </Text>
-        </RectButton>
-      )}
-    </View>
+            <Text
+              darkColor={TailwindColor["gray-200"]}
+              lightColor={TailwindColor["gray-700"]}
+              style={{ fontSize: FontSize.lg }}
+            >
+              {photoUri ? "Select a different photo " : "Select a photo"}
+            </Text>
+          </RectButton>
+        )}
+      </View>
+    </DragDropContentView>
   );
+}
+
+// Thanks ChatGPT
+function cropCover(originalWidth: number, originalHeight: number) {
+  let newDimension: number, startX: number, startY: number;
+
+  if (originalWidth < originalHeight) {
+    // Width is smaller than height
+    newDimension = originalWidth;
+    startX = 0;
+    startY = (originalHeight - originalWidth) / 2;
+  } else {
+    // Height is smaller than width or they are equal
+    newDimension = originalHeight;
+    startX = (originalWidth - originalHeight) / 2;
+    startY = 0;
+  }
+
+  return {
+    width: newDimension,
+    height: newDimension,
+    originX: startX,
+    originY: startY,
+  };
 }
 
 function PatternPicker({

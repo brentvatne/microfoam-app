@@ -26,10 +26,8 @@ function Root() {
   const dataIsReady = useDataIsReady();
   const {
     isChecking,
-    isDownloading,
     isUpdateAvailable,
     isUpdatePending,
-    availableUpdate,
     downloadedUpdate,
   } = useUpdates();
 

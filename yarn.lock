@@ -4682,6 +4682,11 @@ expo-document-picker@~11.10.1:
   resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.10.1.tgz#03394d77842a2fd7cb0a784a60098ee1ddd1012e"
   integrity sha512-A1MiLfyXQ+KxanRO5lYxYQy3ryV+25JHe5Ai/BLV+FJU0QXByUF+Y/dn35WVPx5gpdZXC8UJ4ejg5SKSoeconw==
 
+expo-drag-drop-content-view@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/expo-drag-drop-content-view/-/expo-drag-drop-content-view-0.2.0.tgz#9dde26a0e22a87888972982004cfd1f405390432"
+  integrity sha512-MeRwb6nHNsFDydBJipiT9HxmlObHPEVGxbu/MyflCHExmWMmcVdP/0SCSJ93y2geCmNtAKTlgdQWb+Hw5ZmLfg==
+
 expo-eas-client@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/expo-eas-client/-/expo-eas-client-0.11.0.tgz#0f25aa497849cade7ebef55c0631093a87e58b07"
@@ -7977,7 +7982,7 @@ react-native@0.73.4:
     ws "^6.2.2"
     yargs "^17.6.2"
 
-react-refresh@0.14.0, react-refresh@^0.14.0, react-refresh@~0.14.0:
+react-refresh@0.14.0, react-refresh@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==

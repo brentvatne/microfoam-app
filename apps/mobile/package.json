@@ -36,6 +36,7 @@
     "expo-dev-client": "~3.3.8",
     "expo-device": "~5.9.3",
     "expo-document-picker": "~11.10.1",
+    "expo-drag-drop-content-view": "^0.2.0",
     "expo-file-system": "~16.0.6",
     "expo-haptics": "~12.8.1",
     "expo-image": "~1.10.6",
