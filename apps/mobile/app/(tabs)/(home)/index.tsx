@@ -8,7 +8,6 @@ import {
 import { Stack, useRouter } from "expo-router";
 import { RectButton, BorderlessButton } from "react-native-gesture-handler";
 import { useScrollToTop } from "@react-navigation/native";
-import { MotiView } from "moti";
 import { FlashList } from "@shopify/flash-list";
 
 import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
@@ -54,12 +53,6 @@ export default function LogListScreen() {
         }}
       />
       <View style={{ flex: 1 }}>
-        <MotiView
-          from={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ type: "timing", duration: 500 }}
-          style={{ flex: 1 }}
-        >
           <FlashList
             data={data}
             renderItem={renderItem}
@@ -70,7 +63,6 @@ export default function LogListScreen() {
             ItemSeparatorComponent={ItemSeparatorComponent}
             ListEmptyComponent={EmptyState}
           />
-        </MotiView>
       </View>
     </>
   );

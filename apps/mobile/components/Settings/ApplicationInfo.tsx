@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import * as Application from "expo-application";
-import { useUpdates } from "expo-updates";
+// import { useUpdates } from "expo-updates";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 import { Text } from "~/components/Themed";
@@ -11,7 +11,7 @@ export default function ApplicationInfo({
 }: {
   onTripleTap: () => void;
 }) {
-  const { currentlyRunning: currentlyRunningUpdate } = useUpdates();
+  // const { currentlyRunning: currentlyRunningUpdate } = useUpdates();
 
   const gesture = Gesture.Tap()
     .numberOfTaps(3)
@@ -28,7 +28,7 @@ export default function ApplicationInfo({
           {Application.nativeBuildVersion})
         </DebugText>
 
-        <DebugText>Runtime: {currentlyRunningUpdate.runtimeVersion}</DebugText>
+        {/* <DebugText>Runtime: {currentlyRunningUpdate.runtimeVersion}</DebugText>
 
         <DebugText>Channel: {currentlyRunningUpdate.channel}</DebugText>
 
@@ -40,7 +40,7 @@ export default function ApplicationInfo({
           <DebugText>
             Released: {currentlyRunningUpdate.createdAt.toString()}
           </DebugText>
-        ) : null}
+        ) : null} */}
       </View>
     </GestureDetector>
   );

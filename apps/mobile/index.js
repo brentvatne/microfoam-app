@@ -1,3 +1,4 @@
+import 'reflect.ownkeys/auto';
 // Side effects
 import { LogBox } from "react-native";
 import PourStore from "./storage/PourStore";
@@ -14,7 +15,7 @@ Sentry.init({
   // dsn: process.env.EXPO_PUBLIC_SENTRY_DSN
 });
 
-import { vexo } from "vexo-analytics";
+// import { vexo } from "vexo-analytics";
 
 LogBox.ignoreLogs([
   '@supabase/gotrue-js: Stack guards'

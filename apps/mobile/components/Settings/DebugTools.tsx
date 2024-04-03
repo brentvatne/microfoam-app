@@ -2,7 +2,7 @@ import { Alert, StyleSheet } from "react-native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import Insights from "expo-insights";
 
 import { isLocalFile } from "~/storage/fs";
@@ -86,7 +86,7 @@ export default function DebugTools() {
         }}
       />
 
-      <Button
+      {/* <Button
         title="Check for update"
         onPress={async () => {
           const result = await Updates.fetchUpdateAsync();
@@ -107,7 +107,7 @@ export default function DebugTools() {
             alert("No update available");
           }
         }}
-      />
+      /> */}
     </>
   );
 }

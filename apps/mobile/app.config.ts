@@ -17,8 +17,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
     url: getUpdatesUrl(),
     requestHeaders: {
-      "expo-channel-name": "main"
-    }
+      "expo-channel-name": "main",
+    },
   },
   extra: {
     eas: {
@@ -42,24 +42,38 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    ["@sentry/react-native", {
-      organization: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-    }],
+    [
+      "@sentry/react-native",
+      {
+        organization: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
+    ],
     ["expo-router"],
     // ["expo-dev-client"],
     [
       "expo-quick-actions",
       {
-        "iosActions": [
+        iosActions: [
           {
-            "id": "1",
-            "title": "Log a new pour",
-            "icon": "compose"
-          }
-        ]
-      }
-    ]
+            id: "1",
+            title: "Log a new pour",
+            icon: "compose",
+          },
+        ],
+      },
+    ],
+    [
+      "expo-build-properties",
+      {
+        ios: {
+          newArchEnabled: true,
+        },
+        android: {
+          newArchEnabled: true,
+        },
+      },
+    ],
   ],
 });
 

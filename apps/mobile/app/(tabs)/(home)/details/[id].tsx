@@ -2,11 +2,11 @@ import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-  useAnimatedStyle,
-} from "react-native-reanimated";
+// import Animated, {
+//   useAnimatedScrollHandler,
+//   useSharedValue,
+//   useAnimatedStyle,
+// } from "react-native-reanimated";
 
 import * as PourStore from "~/storage/PourStore";
 import { FontSize, Margin, Padding, TailwindColor } from "~/constants/styles";
@@ -14,8 +14,8 @@ import Photo from "~/components/Photo";
 import { AntDesign, ScrollView, Text, View } from "~/components/Themed";
 import { humanDate } from "~/utils/formatDate";
 
-const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
-const AnimatedPhoto = Animated.createAnimatedComponent(Photo);
+// const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+// const AnimatedPhoto = Animated.createAnimatedComponent(Photo);
 
 export default function ShowPour() {
   const params = useLocalSearchParams();
@@ -23,22 +23,22 @@ export default function ShowPour() {
   const pour = PourStore.usePour(id);
   const frame = useSafeAreaFrame();
   const router = useRouter();
-  const scrollOffsetY = useSharedValue(0);
+  // const scrollOffsetY = useSharedValue(0);
 
   console.log({ id });
 
   // Probably could just use useScrollViewOffset instead
-  const handler = useAnimatedScrollHandler({
-    onScroll: (e) => {
-      scrollOffsetY.value = e.contentOffset.y;
-    },
-  });
+  // const handler = useAnimatedScrollHandler({
+  //   onScroll: (e) => {
+  //     scrollOffsetY.value = e.contentOffset.y;
+  //   },
+  // });
 
-  const scrollViewAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: Math.max(1, 1 - scrollOffsetY.value / 100) }],
-    };
-  });
+  // const scrollViewAnimatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     transform: [{ scale: Math.max(1, 1 - scrollOffsetY.value / 100) }],
+  //   };
+  // });
 
   if (!pour) {
     return null;
@@ -48,9 +48,9 @@ export default function ShowPour() {
   const targetImageHeight = Math.min(400, targetImageWidth);
 
   return (
-    <AnimatedScrollView
+    <ScrollView
       scrollEventThrottle={16}
-      onScroll={handler}
+      // onScroll={handler}
       contentContainerStyle={{ minHeight: "100%" }}
       style={[{ flex: 1 }]}
     >
@@ -73,17 +73,16 @@ export default function ShowPour() {
       />
       <StatusBar style="light" />
 
-      <Animated.View
+      <View
         style={[
           {
             width: "100%",
             height: targetImageHeight,
             backgroundColor: TailwindColor["black"],
           },
-          scrollViewAnimatedStyle,
         ]}
       >
-        <AnimatedPhoto
+        <Photo
           uri={pour.photoUrl}
           blurhash={pour.blurhash}
           transition={500}
@@ -93,10 +92,10 @@ export default function ShowPour() {
           }}
           resizeMode="contain"
         />
-      </Animated.View>
+      </View>
 
       <Description pour={pour} />
-    </AnimatedScrollView>
+    </ScrollView>
   );
 }
 
