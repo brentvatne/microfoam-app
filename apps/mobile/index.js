@@ -1,4 +1,3 @@
-import 'reflect.ownkeys/auto';
 // Side effects
 import { LogBox } from "react-native";
 import PourStore from "./storage/PourStore";
