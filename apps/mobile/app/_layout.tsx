@@ -18,7 +18,7 @@ import {
 import { useDataIsReady } from "~/storage/PourStore";
 import { useQuickActionCallback } from "~/utils/useQuickActionCallback";
 
-import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 
 function Root() {
   useAutoSetAppearanceFromSettingsEffect();
@@ -127,5 +127,5 @@ const CustomNavigationDarkTheme = {
   },
 };
 
-// export default Root;
-export default Sentry.wrap(Root);
+export default Root;
+// export default Sentry.wrap(Root);

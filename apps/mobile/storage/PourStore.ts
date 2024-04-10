@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { SectionListData } from "react-native";
-import { Blurhash } from "react-native-blurhash";
+// import { Blurhash } from "react-native-blurhash";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import { createStore, createCustomPersister } from "tinybase";
@@ -70,32 +70,34 @@ export async function updateAsync(id: string, pour: PourRecord) {
   return nextPour;
 }
 
+// Doesn't work with bridgeless yet
 async function generateBlurhashAsync(
   imageUri: string,
   componentsX = 4,
   componentsY = 3
 ) {
-  try {
-    let localUri = imageUri;
+  return null;
+  // try {
+  //   let localUri = imageUri;
 
-    if (!imageUri.startsWith(FileSystem.cacheDirectory)) {
-      const { uri } = await FileSystem.downloadAsync(
-        imageUri,
-        `${FileSystem.cacheDirectory}/${uuid()})`
-      );
-      localUri = uri;
-    }
+  //   if (!imageUri.startsWith(FileSystem.cacheDirectory)) {
+  //     const { uri } = await FileSystem.downloadAsync(
+  //       imageUri,
+  //       `${FileSystem.cacheDirectory}/${uuid()})`
+  //     );
+  //     localUri = uri;
+  //   }
 
-    const thumbnail = await shrinkImageAsync(localUri, {
-      width: 50,
-      height: 50,
-    });
-    const blurhash = await Blurhash.encode(thumbnail, componentsX, componentsY);
-    return blurhash;
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
+  //   const thumbnail = await shrinkImageAsync(localUri, {
+  //     width: 50,
+  //     height: 50,
+  //   });
+  //   const blurhash = await Blurhash.encode(thumbnail, componentsX, componentsY);
+  //   return blurhash;
+  // } catch (e) {
+  //   console.log(e);
+  //   throw e;
+  // }
 }
 
 async function processImageAsync(pour: { uri: string; blurhash?: string }) {
