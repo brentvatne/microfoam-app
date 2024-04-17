@@ -1,0 +1,39 @@
+diff --git a/node_modules/expo-av/ios/EXAV/EXAudioRecordingPermissionRequester.m b/node_modules/expo-av/ios/EXAV/EXAudioRecordingPermissionRequester.m
+index 117074c..7d8375a 100644
+--- a/node_modules/expo-av/ios/EXAV/EXAudioRecordingPermissionRequester.m
++++ b/node_modules/expo-av/ios/EXAV/EXAudioRecordingPermissionRequester.m
+@@ -4,6 +4,9 @@
+ #import <ExpoModulesCore/EXDefines.h>
+ 
+ #import <AVFoundation/AVFoundation.h>
++#import <objc/message.h>
++
++static SEL recordRecordPermissionSelector;
+ 
+ @implementation EXAudioRecordingPermissionRequester
+ 
+@@ -12,6 +15,11 @@ + (NSString *)permissionType
+   return @"audioRecording";
+ }
+ 
+++ (void)load
++{
++  recordRecordPermissionSelector = NSSelectorFromString([@"request" stringByAppendingString:@"RecordPermission:"]);
++}
++
+ - (NSDictionary *)getPermissions
+ {
+   AVAudioSessionRecordPermission systemStatus;
+@@ -44,10 +52,10 @@ - (NSDictionary *)getPermissions
+ - (void)requestPermissionsWithResolver:(EXPromiseResolveBlock)resolve rejecter:(EXPromiseRejectBlock)reject
+ {
+   EX_WEAKIFY(self)
+-  [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
++  ((void (*)(id, SEL, void(^)(BOOL)))objc_msgSend)(AVAudioSession.sharedInstance, recordRecordPermissionSelector, ^(BOOL granted) {
+     EX_STRONGIFY(self)
+     resolve([self getPermissions]);
+-  }];
++  });
+ }
+ 
+ @end
