@@ -13,8 +13,8 @@ import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
+// import { AvoidSoftInput } from "react-native-avoid-softinput";
+// import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
 // import {
 //   BottomSheetModalProvider,
 //   BottomSheetBackdrop,
@@ -81,13 +81,13 @@ function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
 
   // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
   // 🤷‍♂️
-  useEffect(() => {
-    AvoidSoftInput.setEnabled(true);
+  // useEffect(() => {
+  //   AvoidSoftInput.setEnabled(true);
 
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-    };
-  }, []);
+  //   return () => {
+  //     AvoidSoftInput.setEnabled(false);
+  //   };
+  // }, []);
 
   return (
     <ScrollView
@@ -284,41 +284,25 @@ function PhotoPickerForm({ onChange, photoUri }) {
     });
   };
 
-  const handleDropImageAsync = async (asset: OnDropEvent) => {
-    if (!asset.type?.startsWith("image")) {
-      alert("Oops, that's not an image");
-    }
+  // const handleDropImageAsync = async (asset) => {
+  //   if (!asset.type?.startsWith("image")) {
+  //     alert("Oops, that's not an image");
+  //   }
 
-    const image = await ImageManipulator.manipulateAsync(
-      asset.uri,
-      [{ crop: cropCover(asset.width, asset.height) }],
-      { compress: 0.6, format: ImageManipulator.SaveFormat.PNG }
-    );
+  //   const image = await ImageManipulator.manipulateAsync(
+  //     asset.uri,
+  //     [{ crop: cropCover(asset.width, asset.height) }],
+  //     { compress: 0.6, format: ImageManipulator.SaveFormat.PNG }
+  //   );
 
-    onChange({
-      ...image,
-      // We don't have the following data in a drop event
-      exif: {},
-    });
-  };
+  //   onChange({
+  //     ...image,
+  //     // We don't have the following data in a drop event
+  //     exif: {},
+  //   });
+  // };
 
   return (
-    <DragDropContentView
-      onDropEvent={(event: { assets: OnDropEvent[] }) => {
-        if (event.assets[0]) {
-          handleDropImageAsync(event.assets[0]);
-        }
-
-        if (event.assets.length > 1) {
-          console.warn(
-            "Multiple assets were dropped, but only the first will be used."
-          );
-        }
-      }}
-      highlightColor="#2f95dc"
-      highlightBorderRadius={20}
-      style={{ flex: 1 }}
-    >
       <View
         darkColor={TailwindColor["zinc-800"]}
         lightColor={TailwindColor["gray-100"]}
@@ -371,7 +355,6 @@ function PhotoPickerForm({ onChange, photoUri }) {
           </RectButton>
         )}
       </View>
-    </DragDropContentView>
   );
 }
 

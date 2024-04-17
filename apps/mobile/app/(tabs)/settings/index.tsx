@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { Button, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
+import * as StoreReview from 'expo-store-review';
+
 import { setTheme, Theme } from "~/modules/expo-settings";
 
 import { isLocalFile } from "~/storage/fs";
@@ -35,6 +37,7 @@ export default function Settings() {
 
         <List>
           <View style={{ marginTop: Margin[1] }} />
+          <ListItem title="Rate the app" onPress={() => StoreReview.requestReview()} />
           <UploadPhotosButton disabled={!session} />
           <ListSeparator />
           <ListItem
