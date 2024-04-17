@@ -2,14 +2,17 @@
   "expo": {
     "name": "Microfoam",
     "slug": "microfoam",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "microfoam",
     "backgroundColor": "#1e1e1e",
     "owner": "brents",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -23,9 +26,6 @@
         "usesNonExemptEncryption": false
       }
     },
-    "assetBundlePatterns": [
-      "node_modules/expo-router/**/*"
-    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -33,6 +33,6 @@
       },
       "package": "com.brents.microfoam"
     },
-    "runtimeVersion": "be975abaed5ef1ab51b8eff6c95f384a8700debe"
+    "runtimeVersion": "ea1ba076b259cc14e6d2b56e07011ea316c0c416"
   }
 }
