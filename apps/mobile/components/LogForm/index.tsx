@@ -13,7 +13,6 @@ import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
 import {
   BottomSheetModalProvider,
@@ -79,15 +78,15 @@ function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
     [formData]
   );
 
-  // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
-  // 🤷‍♂️
-  useEffect(() => {
-    AvoidSoftInput.setEnabled(true);
+  // // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
+  // // 🤷‍♂️
+  // useEffect(() => {
+  //   AvoidSoftInput.setEnabled(true);
 
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-    };
-  }, []);
+  //   return () => {
+  //     AvoidSoftInput.setEnabled(false);
+  //   };
+  // }, []);
 
   return (
     <BottomSheetModalProvider>
