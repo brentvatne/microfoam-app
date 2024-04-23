@@ -1,6 +1,6 @@
 const { getDefaultConfig } = require('expo/metro-config');
 const { getSentryExpoConfig } = require('@sentry/react-native/metro');
-const { withMetroBundleConfig } = require('expo-atlas/metro');
+const { withExpoAtlas } = require('expo-atlas/metro');
 const path = require('path');
 
 // Find the project and workspace directories
@@ -20,4 +20,4 @@ config.resolver.nodeModulesPaths = [
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
 
-module.exports = withMetroBundleConfig(config);
+module.exports = withExpoAtlas(config);
