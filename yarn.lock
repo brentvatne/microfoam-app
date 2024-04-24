@@ -4415,6 +4415,13 @@ expo-font@~12.0.2:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-font@~12.0.3:
+  version "12.0.3"
+  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-12.0.3.tgz#1b9916938620b8f380f916964fcd454ccb1efcb3"
+  integrity sha512-CMZiZdkJRRFSaSddFV4xa8fGvIbHNzziRLw5RDBOUBO02MSdLSHe5ogJb59o0ovWX+FbK3dCiVJmMwVCaxVbYg==
+  dependencies:
+    fontfaceobserver "^2.1.0"
+
 expo-haptics@~13.0.1:
   version "13.0.1"
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-13.0.1.tgz#35679c7fde4ae1c21ae3bc2d2cb34c266049dc2c"
@@ -7908,7 +7915,7 @@ react-native@0.74.0:
     ws "^6.2.2"
     yargs "^17.6.2"
 
-react-refresh@0.14.0, react-refresh@^0.14.0:
+react-refresh@0.14.0, react-refresh@^0.14.0, react-refresh@~0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
