@@ -12,6 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     ...config.android,
     package: getPackage(config),
+    googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
   },
   updates: {
     fallbackToCacheTimeout: 0,
