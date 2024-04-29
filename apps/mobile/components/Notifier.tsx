@@ -9,6 +9,7 @@ import {
   getExpoPushTokenAsync,
   getPermissionsAsync,
   getNotificationChannelsAsync,
+  setNotificationChannelGroupAsync,
   removeNotificationSubscription,
   requestPermissionsAsync,
   setNotificationChannelAsync,
@@ -48,8 +49,21 @@ const Notifier = () => {
     );
 
     if (Platform.OS === 'android') {
-      getNotificationChannelsAsync().then((value) => setChannels(value ?? []));
+      setNotificationChannelAsync('Miscellaneous', {
+        name: 'Miscellaneous',
+        importance: AndroidImportance.HIGH,
+      })
+        .then((value) => {
+          console.log(`Set channel ${value.name}`);
+          getNotificationChannelsAsync().then((value) =>
+            setChannels(value ?? []),
+          );
+        })
+        .catch((error) => {
+          console.log(`Error in setting channel: ${error}`);
+        });
     }
+
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
