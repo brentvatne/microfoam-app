@@ -13,7 +13,6 @@ import { FlashList } from '@shopify/flash-list';
 
 import { TailwindColor, FontSize, Margin, Padding } from '~/constants/styles';
 import * as PourStore from '~/storage/PourStore';
-import Notifier from '~/components/Notifier';
 import Photo from '~/components/Photo';
 import { AntDesign, Text, View } from '~/components/Themed';
 
@@ -61,7 +60,6 @@ export default function LogListScreen() {
           transition={{ type: 'timing', duration: 500 }}
           style={{ flex: 1 }}
         >
-          <Notifier />
           <FlashList
             data={data}
             renderItem={renderItem}
