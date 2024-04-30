@@ -20,3 +20,5 @@ web-build/
 
 .env
 .env.local
+
+google-services.json

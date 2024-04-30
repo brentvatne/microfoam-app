@@ -12,14 +12,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     ...config.android,
     package: getPackage(config),
-    googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
+    googleServicesFile: getGoogleServices(),
   },
   updates: {
     fallbackToCacheTimeout: 0,
     url: getUpdatesUrl(),
     requestHeaders: {
-      "expo-channel-name": "main"
-    }
+      "expo-channel-name": "main",
+    },
   },
   extra: {
     eas: {
@@ -43,24 +43,27 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           : "Development",
       },
     ],
-    ["@sentry/react-native", {
-      organization: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-    }],
+    [
+      "@sentry/react-native",
+      {
+        organization: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
+    ],
     ["expo-router"],
     // ["expo-dev-client"],
     [
       "expo-quick-actions",
       {
-        "iosActions": [
+        iosActions: [
           {
-            "id": "1",
-            "title": "Log a new pour",
-            "icon": "compose"
-          }
-        ]
-      }
-    ]
+            id: "1",
+            title: "Log a new pour",
+            icon: "compose",
+          },
+        ],
+      },
+    ],
   ],
 });
 
@@ -69,6 +72,16 @@ function getUpdatesUrl() {
     return "https://staging-u.expo.dev/6122a374-f53d-4d9e-ac78-1fef59eeb937";
   } else {
     return "https://u.expo.dev/f19296df-44bd-482a-90bb-2af254c6ac42";
+  }
+}
+
+function getGoogleServices() {
+  if (process.env.RELEASE) {
+    return process.env.GOOGLE_SERVICES_JSON;
+  } else if (process.env.PREVIEW) {
+    return process.env.GOOGLE_SERVICES_JSON_PREVIEW;
+  } else {
+    return process.env.GOOGLE_SERVICES_JSON_DEV;
   }
 }
 
