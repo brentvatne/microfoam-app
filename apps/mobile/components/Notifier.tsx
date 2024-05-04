@@ -9,11 +9,11 @@ import {
   getExpoPushTokenAsync,
   getPermissionsAsync,
   getNotificationChannelsAsync,
-  setNotificationChannelGroupAsync,
   removeNotificationSubscription,
   requestPermissionsAsync,
   setNotificationChannelAsync,
   setNotificationHandler,
+  useLastNotificationResponse,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -42,6 +42,8 @@ const Notifier = () => {
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
+
+  const lastResponse = useLastNotificationResponse();
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(
@@ -113,6 +115,10 @@ const Notifier = () => {
         <Text>
           Response received for:{' '}
           {response && response.notification.request.content.title}
+        </Text>
+        <Text>
+          Last response:{' '}
+          {lastResponse && lastResponse.notification.request.content.title}
         </Text>
       </View>
     </View>
