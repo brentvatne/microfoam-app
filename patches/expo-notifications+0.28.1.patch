@@ -240,10 +240,10 @@ index 7b1add7..e22ec26 100644
     * See {@link FirebaseMessagingService#onDeletedMessages()}
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
 new file mode 100644
-index 0000000..55e3ab9
+index 0000000..3ae6481
 --- /dev/null
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
-@@ -0,0 +1,79 @@
+@@ -0,0 +1,76 @@
 +package expo.modules.notifications.service.delegates;
 +
 +import android.app.Activity;
@@ -264,11 +264,9 @@ index 0000000..55e3ab9
 +
 +public class ExpoNotificationLifecycleListener implements ReactActivityLifecycleListener {
 +
-+    private Context mContext;
 +    private NotificationManager mNotificationManager;
 +
 +    public ExpoNotificationLifecycleListener(Context context, NotificationManager notificationManager) {
-+      mContext = context;
 +      mNotificationManager = notificationManager;
 +    }
 +
@@ -292,7 +290,6 @@ index 0000000..55e3ab9
 +                mNotificationManager.onNotificationResponseFromExtras(extras);
 +            }
 +        }
-+        ReactActivityLifecycleListener.super.onCreate(activity, savedInstanceState);
 +    }
 +
 +    /**
