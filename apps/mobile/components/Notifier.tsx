@@ -13,6 +13,7 @@ import {
   requestPermissionsAsync,
   setNotificationChannelAsync,
   setNotificationHandler,
+  useLastNotificationResponse,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -42,14 +43,29 @@ const Notifier = () => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
+  const lastResponse = useLastNotificationResponse();
+
   useEffect(() => {
     registerForPushNotificationsAsync().then(
       (token) => token && setExpoPushToken(token),
     );
 
     if (Platform.OS === 'android') {
-      getNotificationChannelsAsync().then((value) => setChannels(value ?? []));
+      setNotificationChannelAsync('Miscellaneous', {
+        name: 'Miscellaneous',
+        importance: AndroidImportance.HIGH,
+      })
+        .then((value) => {
+          console.log(`Set channel ${value.name}`);
+          getNotificationChannelsAsync().then((value) =>
+            setChannels(value ?? []),
+          );
+        })
+        .catch((error) => {
+          console.log(`Error in setting channel: ${error}`);
+        });
     }
+
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
@@ -99,6 +115,10 @@ const Notifier = () => {
         <Text>
           Response received for:{' '}
           {response && response.notification.request.content.title}
+        </Text>
+        <Text>
+          Last response:{' '}
+          {lastResponse && lastResponse.notification.request.content.title}
         </Text>
       </View>
     </View>
