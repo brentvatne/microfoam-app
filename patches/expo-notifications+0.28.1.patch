@@ -99,7 +99,7 @@ index 88da825..384a78b 100644
 +  }
  }
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-index fd04a2e..c65fabe 100644
+index fd04a2e..53316ca 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 @@ -3,9 +3,9 @@ package expo.modules.notifications.notifications;
@@ -130,7 +130,7 @@ index fd04a2e..c65fabe 100644
  import expo.modules.notifications.notifications.triggers.DailyTrigger;
  import expo.modules.notifications.notifications.triggers.DateTrigger;
  import expo.modules.notifications.notifications.triggers.TimeIntervalTrigger;
-@@ -199,4 +195,30 @@ public class NotificationSerializer {
+@@ -199,4 +195,31 @@ public class NotificationSerializer {
      }
      return null;
    }
@@ -139,7 +139,8 @@ index fd04a2e..c65fabe 100644
 +    public static Bundle toResponseBundleFromExtras(Bundle extras) {
 +      Bundle serializedContent = new Bundle();
 +      serializedContent.putString("title", extras.getString("title"));
-+      serializedContent.putString("body", extras.getString("body"));
++      serializedContent.putString("body", extras.getString("message"));
++      serializedContent.putString("dataString", extras.getString("body"));
 +
 +      Bundle serializedTrigger = new Bundle();
 +      serializedTrigger.putString("type", "push");
@@ -320,3 +321,56 @@ index 0000000..3ae6481
 +        }
 +    }
 +}
+diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.js b/node_modules/expo-notifications/build/NotificationsEmitter.js
+index 1c07cca..64577e8 100644
+--- a/node_modules/expo-notifications/build/NotificationsEmitter.js
++++ b/node_modules/expo-notifications/build/NotificationsEmitter.js
+@@ -72,7 +72,21 @@ export function addNotificationsDroppedListener(listener) {
+  * @header listen
+  */
+ export function addNotificationResponseReceivedListener(listener) {
+-    return emitter.addListener(didReceiveNotificationResponseEventName, listener);
++    const translatingListener = (response) => {
++      let mappedResponse = { ...response };
++      try {
++        const dataString = mappedResponse?.notification?.request?.content['dataString'];
++        if (typeof dataString === 'string') {
++          mappedResponse.notification.request.content.data = JSON.parse(dataString);
++          delete mappedResponse.notification.request.content.dataString;
++        }
++      } catch (e) {
++        console.log(`Error in response: ${e}`);
++      }
++      console.log(`response received: ${JSON.stringify(mappedResponse, null, 2)}`);
++      listener(mappedResponse);
++    }
++    return emitter.addListener(didReceiveNotificationResponseEventName, translatingListener);
+ }
+ /**
+  * Removes a notification subscription returned by an `addNotificationListener` call.
+diff --git a/node_modules/expo-notifications/src/NotificationsEmitter.ts b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+index 6942363..7ba5e54 100644
+--- a/node_modules/expo-notifications/src/NotificationsEmitter.ts
++++ b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+@@ -86,7 +86,20 @@ export function addNotificationResponseReceivedListener(
+ ): Subscription {
+   return emitter.addListener<NotificationResponse>(
+     didReceiveNotificationResponseEventName,
+-    listener
++    (response: NotificationResponse) => {
++      let mappedResponse = { ...response };
++      try {
++        const dataString = mappedResponse?.notification?.request?.content['dataString'];
++        if (typeof dataString === 'string') {
++          mappedResponse.notification.request.content.data = JSON.parse(dataString);
++          delete mappedResponse.notification.request.content.dataString;
++        }
++      } catch (e: any) {
++        console.log(`Error in response: ${e}`);
++      }
++      console.log(`response received: ${JSON.stringify(mappedResponse, null, 2)}`);
++      listener(mappedResponse);
++    }
+   );
+ }
+ 
