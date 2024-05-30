@@ -120,6 +120,15 @@ const Notifier = () => {
           Last response:{' '}
           {lastResponse && lastResponse.notification.request.content.title}
         </Text>
+        <Text>
+          Last response data:{' '}
+          {lastResponse &&
+            JSON.stringify(
+              lastResponse.notification.request.content.data,
+              null,
+              2,
+            )}
+        </Text>
       </View>
     </View>
   );
