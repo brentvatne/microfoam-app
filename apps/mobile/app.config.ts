@@ -53,6 +53,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ["expo-router"],
     // ["expo-dev-client"],
     [
+      "expo-notifications",
+      {
+        icon: "./assets/icon.png",
+        color: "#232323",
+      },
+    ],
+    [
       "expo-quick-actions",
       {
         iosActions: [

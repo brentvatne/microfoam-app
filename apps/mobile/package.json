@@ -46,7 +46,7 @@
     "expo-insights": "~0.7.0",
     "expo-linking": "~6.3.1",
     "expo-media-library": "~16.0.3",
-    "expo-notifications": "~0.28.2",
+    "expo-notifications": "0.28.4",
     "expo-quick-actions": "^0.2.3",
     "expo-router": "~3.5.14",
     "expo-screen-orientation": "~7.0.5",

@@ -4711,10 +4711,10 @@ expo-modules-core@1.12.9:
   dependencies:
     invariant "^2.2.4"
 
-expo-notifications@~0.28.2:
-  version "0.28.2"
-  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.2.tgz#23ff1447056c4247b16e46d87438b846077af9d3"
-  integrity sha512-4ajJ68OP10v4IM1u4ecOxFM9K5ZutwcUvB/yKcebJjVjMqXTOqjdzDLACXaTx50ucGJp4v86EVuHtk8+0r26ng==
+expo-notifications@0.28.4:
+  version "0.28.4"
+  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.4.tgz#10104592d074d1349336a2c9accb2d8281c59ee1"
+  integrity sha512-UVlxury96VsGVVZua4BOEA+ZYWSOqrY6FuAZmAM/eFzJOKm3kreRQwXZtd7+OnWqqcvu26shskWeAcHus2q5tA==
   dependencies:
     "@expo/image-utils" "^0.5.0"
     "@ide/backoff" "^1.0.0"
