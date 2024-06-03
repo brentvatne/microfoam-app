@@ -37,9 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       // the app config to determine what project we are building... This worked
       // fine with .envrc before because it was always loaded in shell. Maybe
       // that is a good solution here too?
-      projectId:
-        process.env.EAS_BUILD_PROJECT_ID ??
-        "f19296df-44bd-482a-90bb-2af254c6ac42",
+      projectId: getProjectId(),
     },
   },
   plugins: [
@@ -49,13 +47,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         iCloudContainerEnvironment: process.env.RELEASE
           ? "Production"
           : "Development",
-      },
-    ],
-    [
-      "@sentry/react-native",
-      {
-        organization: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
       },
     ],
     ["expo-router"],
@@ -84,11 +75,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 });
 
 function getUpdatesUrl() {
-  if (process.env.EXPO_STAGING) {
-    return "https://staging-u.expo.dev/6122a374-f53d-4d9e-ac78-1fef59eeb937";
-  } else {
-    return "https://u.expo.dev/f19296df-44bd-482a-90bb-2af254c6ac42";
-  }
+  return `https://u.expo.dev/${getProjectId()}`;
+}
+
+function getProjectId() {
+  return process.env.EAS_BUILD_PROJECT_ID ?? "8b4d2a38-f0a5-49d0-8215-d637bf204681";
 }
 
 function getGoogleServices() {

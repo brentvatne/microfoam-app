@@ -25,12 +25,6 @@ async function validateEnv(
   //   env: BuildStepEnv;
   // }
 ): Promise<void> {
-  ['SENTRY_ORG', 'SENTRY_PROJECT', 'EXPO_PUBLIC_SENTRY_DSN'].forEach((key) => {
-    if (!process.env[key]) {
-      throw new Error(`Missing required environment variable: ${key}`);
-    }
-  });
-
   ctx.logger.info('Validated all environment variables.');
 }
 

@@ -1,5 +1,4 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 const { withExpoAtlas } = require('expo-atlas/metro');
 const path = require('path');
 
@@ -8,7 +7,7 @@ const projectRoot = __dirname;
 // This can be replaced with `find-yarn-workspace-root`
 const workspaceRoot = path.resolve(projectRoot, '../..');
 
-const config = getSentryExpoConfig(__dirname);
+const config = getDefaultConfig(__dirname);
 
 // 1. Watch all files within the monorepo
 config.watchFolders = [workspaceRoot];

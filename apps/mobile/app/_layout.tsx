@@ -24,8 +24,6 @@ import {
 import { useDataIsReady } from '~/storage/PourStore';
 import { useQuickActionCallback } from '~/utils/useQuickActionCallback';
 
-import * as Sentry from '@sentry/react-native';
-
 import { useNotificationObserverInRootLayout } from '~/components/Notifier';
 
 function Root() {
@@ -132,5 +130,4 @@ const CustomNavigationDarkTheme = {
   },
 };
 
-// export default Root;
-export default Sentry.wrap(Root);
+export default Root;
