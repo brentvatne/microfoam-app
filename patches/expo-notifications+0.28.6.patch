@@ -1,0 +1,39 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
+index 40d08f8..a03e70d 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
+@@ -38,9 +38,11 @@ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycle
+     @Override
+     public void onCreate(Activity activity, Bundle savedInstanceState) {
+         Intent intent = activity.getIntent();
++        String actionIdentifier = intent.getAction();
+         if (intent != null) {
+             Bundle extras = intent.getExtras();
+             if (extras != null) {
++                logExtra("onCreate", extras);
+                 mNotificationManager.onNotificationResponseFromExtras(extras);
+             }
+         }
+@@ -58,9 +60,22 @@ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycle
+     @Override
+     public boolean onNewIntent(Intent intent) {
+         Bundle extras = intent.getExtras();
++        String actionIdentifier = intent.getAction();
+         if (extras != null) {
++            logExtra("onNewIntent", extras);
+             mNotificationManager.onNotificationResponseFromExtras(extras);
+         }
+         return ReactActivityLifecycleListener.super.onNewIntent(intent);
+     }
++
++    private void logExtra(String method, Bundle extra) {
++        Log.d("ReactNativeJS", method + " : keys count = " + extra.keySet().size());
++
++        for (String key : extra.keySet()) {
++            Log.d(
++                    "ReactNativeJS",
++                    method + " : key = " + key + ", value = " + Objects.requireNonNull(extra.get(key)).toString()
++            );
++        }
++    }
+ }
