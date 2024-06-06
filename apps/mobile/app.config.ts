@@ -57,6 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         icon: "./assets/icon.png",
         color: "#232323",
+        defaultChannel: "default",
       },
     ],
     [
