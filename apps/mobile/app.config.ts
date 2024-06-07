@@ -1,5 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
+const googleServicesFile = getGoogleServices();
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   slug: config.slug, // TypeScript is upset if we don't explicitly provide a slug here
@@ -12,7 +14,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     ...config.android,
     package: getPackage(config),
-    googleServicesFile: getGoogleServices(),
+    // Support building without a Google Services file present. This will only
+    // break notifications
+    ...(googleServicesFile
+      ? {
+          googleServicesFile,
+        }
+      : {}),
   },
   updates: {
     fallbackToCacheTimeout: 0,
