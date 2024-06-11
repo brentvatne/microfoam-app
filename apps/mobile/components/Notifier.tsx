@@ -17,8 +17,9 @@ import {
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
+import { defineTask } from 'expo-task-manager';
 import { useEffect, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 
 import { View, Text } from './Themed';
 
@@ -28,6 +29,47 @@ setNotificationHandler({
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
+});
+
+// Background task
+// https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
+  console.log(
+    `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`,
+  );
+
+  if (error) {
+    console.log(
+      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: Error! ${JSON.stringify(
+        error,
+      )}`,
+    );
+
+    return;
+  }
+
+  if (AppState.currentState.match(/inactive|background/) === null) {
+    console.log(
+      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App not in background state, skipping task.`,
+    );
+
+    return;
+  }
+
+  console.log(
+    `${
+      Platform.OS
+    } BACKGROUND-NOTIFICATION-TASK: Received a notification in the background! ${JSON.stringify(
+      data,
+      null,
+      2,
+    )}`,
+  );
+
+  // data.notification.data.data = JSON.parse(data.notification.data.body);
+  // data.notification.data.body = data.notification.data.message;
+  // setNotification(data.notification);
 });
 
 const Notifier = () => {
