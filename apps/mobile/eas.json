@@ -49,6 +49,9 @@
       "extends": "base",
       "channel": "preview",
       "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleRelease -d"
+      },
       "env": {
         "PREVIEW": "1"
       }

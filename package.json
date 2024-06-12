@@ -12,5 +12,11 @@
   "dependencies": {
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0"
+  },
+  "resolutions": {
+    "@expo/cli": "0.18.16",
+    "@expo/metro-config": "0.18.4",
+    "@expo/server": "0.4.2",
+    "babel-preset-expo": "11.0.8"
   }
 }
