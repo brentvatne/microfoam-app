@@ -4444,21 +4444,21 @@ expo-constants@~16.0.0, expo-constants@~16.0.2:
     "@expo/config" "~9.0.0"
     "@expo/env" "~0.3.0"
 
-expo-dev-client@~4.0.16:
-  version "4.0.16"
-  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-4.0.16.tgz#a4d8b03b1e4fdd7f56e90ae4fc90d4733133cb03"
-  integrity sha512-MVI26D4WziJcV3eDQ7+gwNC+0jYFfBYRHLCt07DmvUyK0d0e2HOqleHCLkr/4kS/CIFBrUVgXCFIFEMPfX2ObQ==
+expo-dev-client@~4.0.17:
+  version "4.0.17"
+  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-4.0.17.tgz#63f8f8af94c83fd98df740045718e288e9cffb42"
+  integrity sha512-dv0Yju1awQo19QA06JWhR3/8Myuk17PViiFbykuvz0oLGKka9vRM3YhYFsTISDnljGZyA57VcpWgiZEi1U5WUg==
   dependencies:
-    expo-dev-launcher "4.0.18"
+    expo-dev-launcher "4.0.19"
     expo-dev-menu "5.0.15"
     expo-dev-menu-interface "1.8.3"
     expo-manifests "~0.14.0"
     expo-updates-interface "~0.16.2"
 
-expo-dev-launcher@4.0.18:
-  version "4.0.18"
-  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-4.0.18.tgz#e529806d974656228ce74a913bf58d2b3f3432b8"
-  integrity sha512-ghfelmnQX08qv5kC94dqE3EPl4wZMhG3kZY8v+I2tWd0LYq7NQP/ZYeYpVhH5BZ50sDGsHfmiDj5GljZ8fuR2g==
+expo-dev-launcher@4.0.19:
+  version "4.0.19"
+  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-4.0.19.tgz#a9944ea5e0a409c4fd6e7cba71b2d853e26c1b40"
+  integrity sha512-5M0f/vD8sx659m1PsXimK9DuABuLQI/R5WBm07yTasICiOZuMEPB2RAjwd4vMwssTS5l1cJW/GAUcKRXNWzLGQ==
   dependencies:
     ajv "8.11.0"
     expo-dev-menu "5.0.15"
@@ -4600,10 +4600,10 @@ expo-modules-core@1.12.14:
   dependencies:
     invariant "^2.2.4"
 
-expo-notifications@~0.28.8:
-  version "0.28.8"
-  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.8.tgz#787568092992cabba969fda6f6bc7954e56189a8"
-  integrity sha512-WuNMaOwbyevlGFxZnOM9GiGuS/dKBL8IysYl2e7tBvO+eQj9HOtw61vS7otT33WXsubK7cunRCb0/iGkeScaLQ==
+expo-notifications@~0.28.9:
+  version "0.28.9"
+  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.9.tgz#3ef49ed8931c0f871c3ffed5af9d09552d169df3"
+  integrity sha512-lilBS+0n+MC71jU6R9kYr91nev2God/OyxGRtab37XBmr7OWKL+jrahwdIRc2fJXq3hkQoiVWr4i9COGVFF8sA==
   dependencies:
     "@expo/image-utils" "^0.5.0"
     "@ide/backoff" "^1.0.0"
