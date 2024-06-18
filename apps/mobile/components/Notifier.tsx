@@ -14,12 +14,15 @@ import {
   setNotificationChannelAsync,
   setNotificationHandler,
   useLastNotificationResponse,
+  addPushTokenListener,
+  DevicePushToken,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
 import { defineTask } from 'expo-task-manager';
 import { useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { View, Text } from './Themed';
 
@@ -30,6 +33,8 @@ setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
+const STORAGE_KEY = '@notification_bg_store';
 
 // Background task
 // https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
@@ -49,22 +54,11 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
     return;
   }
 
-  if (AppState.currentState.match(/inactive|background/) === null) {
-    console.log(
-      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App not in background state, skipping task.`,
-    );
-
-    return;
-  }
-
-  console.log(
-    `${
-      Platform.OS
-    } BACKGROUND-NOTIFICATION-TASK: Received a notification in the background! ${JSON.stringify(
-      data,
-      null,
-      2,
-    )}`,
+  AsyncStorage.setItem(
+    STORAGE_KEY,
+    `Background trigger: ${AppState.isAvailable} ${
+      AppState.currentState
+    } ${JSON.stringify(data)}`,
   );
 
   // data.notification.data.data = JSON.parse(data.notification.data.body);
@@ -73,7 +67,6 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
 });
 
 const Notifier = () => {
-  const [expoPushToken, setExpoPushToken] = useState('');
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notification | undefined>(
     undefined,
@@ -81,17 +74,16 @@ const Notifier = () => {
   const [response, setResponse] = useState<NotificationResponse | undefined>(
     undefined,
   );
+  const [backgroundTaskString, setBackgroundTaskString] = useState<string>('');
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
   const lastResponse = useLastNotificationResponse();
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(
-      (token) => token && setExpoPushToken(token),
-    );
+  const expoPushToken = usePushToken();
 
+  useEffect(() => {
     if (Platform.OS === 'android') {
       setNotificationChannelAsync('Miscellaneous', {
         name: 'Miscellaneous',
@@ -127,6 +119,16 @@ const Notifier = () => {
     );
 
     console.log(`${Platform.OS} added listeners`);
+
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((value) => {
+        console.log(`Retrieved value for STORAGE_KEY: ${value}`);
+        setBackgroundTaskString(value);
+      })
+      .catch((reason) => {
+        console.log(`Error retrieving value for STORAGE_KEY: ${reason}`);
+        setBackgroundTaskString(reason);
+      });
 
     return () => {
       console.log(`${Platform.OS} removed listeners`);
@@ -171,10 +173,39 @@ const Notifier = () => {
               2,
             )}
         </Text>
+        <Text>Background task data: {backgroundTaskString}</Text>
       </View>
     </View>
   );
 };
+
+function usePushToken() {
+  const [pushToken, setPushToken] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (!pushToken) {
+      registerForPushNotificationsAsync()
+        .then((token) => {
+          setPushToken(token);
+        })
+        .catch((error) => {
+          console.error(error);
+          setPushToken('error');
+        });
+    }
+    if (pushToken) {
+      if (Platform.OS === 'android') {
+        const subscription = addPushTokenListener((token) => {
+          setPushToken(token as unknown as string);
+        });
+        return () => {
+          subscription.remove();
+        };
+      }
+    }
+  }, [pushToken]);
+
+  return pushToken;
+}
 
 async function registerForPushNotificationsAsync() {
   let token: string;
