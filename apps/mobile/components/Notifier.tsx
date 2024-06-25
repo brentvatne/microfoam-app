@@ -201,9 +201,11 @@ function usePushToken() {
     }
     if (expoPushToken) {
       if (!devicePushToken) {
-        getDevicePushTokenAsync().then((token) =>
-          setDevicePushToken(JSON.stringify(token)),
-        );
+        getDevicePushTokenAsync().then((token) => {
+          const tokenString = JSON.stringify(token);
+          console.log(tokenString);
+          setDevicePushToken(tokenString);
+        });
       }
       if (Platform.OS === 'android') {
         const subscription = addPushTokenListener((token) => {
