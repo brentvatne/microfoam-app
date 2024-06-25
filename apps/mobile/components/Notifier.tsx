@@ -7,6 +7,7 @@ import {
   addNotificationReceivedListener,
   addNotificationResponseReceivedListener,
   getExpoPushTokenAsync,
+  getDevicePushTokenAsync,
   getPermissionsAsync,
   getNotificationChannelsAsync,
   removeNotificationSubscription,
@@ -15,7 +16,6 @@ import {
   setNotificationHandler,
   useLastNotificationResponse,
   addPushTokenListener,
-  DevicePushToken,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -81,7 +81,7 @@ const Notifier = () => {
 
   const lastResponse = useLastNotificationResponse();
 
-  const expoPushToken = usePushToken();
+  const { expoPushToken, devicePushToken } = usePushToken();
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -142,6 +142,7 @@ const Notifier = () => {
   return (
     <View>
       <Text>Your expo push token: {expoPushToken}</Text>
+      <Text>Your device push token: {devicePushToken}</Text>
       <Text>{`Channels: ${JSON.stringify(
         channels.map((c: { id: string }) => c.id),
         null,
@@ -180,31 +181,45 @@ const Notifier = () => {
 };
 
 function usePushToken() {
-  const [pushToken, setPushToken] = useState<string | undefined>(undefined);
+  const [expoPushToken, setExpoPushToken] = useState<string | undefined>(
+    undefined,
+  );
+  const [devicePushToken, setDevicePushToken] = useState<string | undefined>(
+    undefined,
+  );
+
   useEffect(() => {
-    if (!pushToken) {
+    if (!expoPushToken) {
       registerForPushNotificationsAsync()
         .then((token) => {
-          setPushToken(token);
+          setExpoPushToken(token);
         })
         .catch((error) => {
           console.error(error);
-          setPushToken('error');
+          setExpoPushToken('error');
         });
     }
-    if (pushToken) {
+    if (expoPushToken) {
+      if (!devicePushToken) {
+        getDevicePushTokenAsync().then((token) =>
+          setDevicePushToken(JSON.stringify(token)),
+        );
+      }
       if (Platform.OS === 'android') {
         const subscription = addPushTokenListener((token) => {
-          setPushToken(token as unknown as string);
+          setExpoPushToken(token as unknown as string);
         });
         return () => {
           subscription.remove();
         };
       }
     }
-  }, [pushToken]);
+  }, [expoPushToken, devicePushToken]);
 
-  return pushToken;
+  return {
+    expoPushToken,
+    devicePushToken,
+  };
 }
 
 async function registerForPushNotificationsAsync() {
