@@ -104,7 +104,11 @@ const Notifier = () => {
       (notification) => {
         setNotification(notification);
         console.log(
-          `${Platform.OS} saw notification ${notification.request.content.title}`,
+          `${Platform.OS} saw notification ${JSON.stringify(
+            notification,
+            null,
+            2,
+          )}`,
         );
       },
     );
@@ -113,7 +117,11 @@ const Notifier = () => {
       (response) => {
         setResponse(response);
         console.log(
-          `${Platform.OS} saw response for ${response.notification.request.content.title}`,
+          `${Platform.OS} saw response for ${JSON.stringify(
+            response,
+            null,
+            2,
+          )}`,
         );
       },
     );
