@@ -896,10 +896,10 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@expo/cli@0.18.20":
-  version "0.18.20"
-  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.18.20.tgz#4a605b95cdff08a38aee9a4b82c0b72e8f78f13e"
-  integrity sha512-UkEiS8l8UV34WywmjLgxMKoGBsdKXNJwVF8BJaNsXc0XcmAvvawkXiUvToO3MvJpf0www2tEjqlia8EJaTL38w==
+"@expo/cli@0.18.21":
+  version "0.18.21"
+  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.18.21.tgz#a44fb04bbac42141bc101b6acb91eb7b237e5722"
+  integrity sha512-t8sFUGXRM/vafILp98H/MvIgJ5c7OG+d780Zastpzn0zfakaVDvXyw9tXskwAYi9YHJpG8/cfvght1c5fBDBoA==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/code-signing-certificates" "0.0.5"
@@ -4635,10 +4635,10 @@ expo-modules-autolinking@1.11.1:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@1.12.17:
-  version "1.12.17"
-  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.12.17.tgz#4a1e2c84bd1e3686384e10a52801967e8952f030"
-  integrity sha512-f4wD3GwWD1QnxsVjvqPys6migmGtEaofAQCG3zdMz2ovuXf99mwLEY9+mhtnlwwxcJ1bqjOLpjB6/3wMwJaxqw==
+expo-modules-core@1.12.18:
+  version "1.12.18"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.12.18.tgz#fd086c3177b42df979db912f8a2389494ef98483"
+  integrity sha512-YhIOJsMNjPvP0tmTbC1MRlxl5q7l21uQQDr1rlXEWHNmI2AEMW0gfr2wXrlB2Tz/oOIx8YqREsj3i0VsYXEaCA==
   dependencies:
     invariant "^2.2.4"
 
@@ -4752,13 +4752,13 @@ expo-web-browser@~13.0.3:
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-13.0.3.tgz#dceb05dbc187b498ca937b02adf385b0232a4e92"
   integrity sha512-HXb7y82ApVJtqk8tManyudtTrCtx8xcUnVzmJECeHCB0SsWSQ+penVLZxJkcyATWoJOsFMnfVSVdrTcpKKGszQ==
 
-expo@~51.0.16:
-  version "51.0.16"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-51.0.16.tgz#cc3882757f0e1fe1d7890697bfa46e0efa2d8811"
-  integrity sha512-BDxw+8zEcgPlXcw+jWTkQsyb7mFtNK8eu2XUC4A34aNBeryCV2cDFurV9kkAFzRXa8BNNi3Ije39RI9OS7uIRA==
+expo@~51.0.17:
+  version "51.0.17"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-51.0.17.tgz#aa5217a38edd9fd0b28b598daf3661acd66537f2"
+  integrity sha512-VqLrdVMLdjCUhNuWWGdexqkiscnudY7OACafBrfqIFOejAeKceEaBU5YQIlNlOsKuB7PBMqDkhdZ+dG93Ul4ig==
   dependencies:
     "@babel/runtime" "^7.20.0"
-    "@expo/cli" "0.18.20"
+    "@expo/cli" "0.18.21"
     "@expo/config" "9.0.1"
     "@expo/config-plugins" "8.0.6"
     "@expo/metro-config" "0.18.8"
@@ -4769,7 +4769,7 @@ expo@~51.0.16:
     expo-font "~12.0.7"
     expo-keep-awake "~13.0.2"
     expo-modules-autolinking "1.11.1"
-    expo-modules-core "1.12.17"
+    expo-modules-core "1.12.18"
     fbemitter "^3.0.0"
     whatwg-url-without-unicode "8.0.0-3"
 
@@ -8847,7 +8847,16 @@ string-to-color@^2.2.2:
     lodash.words "^4.2.0"
     rgb-hex "^3.0.0"
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -8907,7 +8916,7 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -8920,6 +8929,13 @@ strip-ansi@^5.0.0, strip-ansi@^5.2.0:
   integrity sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==
   dependencies:
     ansi-regex "^4.1.0"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
 
 strip-ansi@^7.0.1:
   version "7.1.0"
@@ -9738,7 +9754,7 @@ wonka@^6.3.2:
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.3.4.tgz#76eb9316e3d67d7febf4945202b5bdb2db534594"
   integrity sha512-CjpbqNtBGNAeyNS/9W6q3kSkKE52+FjIj7AkFlLr11s/VWGUu6a2CdYSdGxocIhIVjaW/zchesBQUKPVU69Cqg==
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
@@ -9751,6 +9767,15 @@ wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
   dependencies:
     ansi-styles "^4.0.0"
     string-width "^4.1.0"
