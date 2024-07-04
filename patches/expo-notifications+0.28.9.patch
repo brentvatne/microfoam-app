@@ -1,0 +1,64 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
+index 07f3a3d..c73d619 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
+@@ -1,6 +1,7 @@
+ package expo.modules.notifications.notifications.emitting
+ 
+ import android.os.Bundle
++import android.util.Log
+ import expo.modules.kotlin.modules.Module
+ import expo.modules.kotlin.modules.ModuleDefinition
+ import expo.modules.notifications.notifications.NotificationSerializer
+@@ -49,7 +50,10 @@ open class NotificationsEmitter : Module(), NotificationListener {
+    * @param notification Notification received
+    */
+   override fun onNotificationReceived(notification: Notification) {
+-    sendEvent(NEW_MESSAGE_EVENT_NAME, NotificationSerializer.toBundle(notification))
++    Log.i("ReactNativeJS", "onNotificationReceived:")
++    val bundle = NotificationSerializer.toBundle(notification)
++    logBundle(bundle)
++    sendEvent(NEW_MESSAGE_EVENT_NAME, bundle)
+   }
+ 
+   /**
+@@ -60,13 +64,19 @@ open class NotificationsEmitter : Module(), NotificationListener {
+    * @return Whether notification has been handled
+    */
+   override fun onNotificationResponseReceived(response: NotificationResponse): Boolean {
+-    lastNotificationResponseBundle = NotificationSerializer.toBundle(response)
++    Log.i("ReactNativeJS", "onNotificationResponseReceived:")
++    val bundle = NotificationSerializer.toBundle(response)
++    logBundle(bundle);
++    lastNotificationResponseBundle = bundle
+     sendEvent(NEW_RESPONSE_EVENT_NAME, lastNotificationResponseBundle)
+     return true
+   }
+ 
+   override fun onNotificationResponseIntentReceived(extras: Bundle?) {
+-    lastNotificationResponseBundle = NotificationSerializer.toResponseBundleFromExtras(extras)
++    Log.i("ReactNativeJS", "onNotificationResponseIntentReceived:")
++    val bundle = NotificationSerializer.toResponseBundleFromExtras(extras)
++    logBundle(bundle);
++    lastNotificationResponseBundle = bundle
+     sendEvent(NEW_RESPONSE_EVENT_NAME, lastNotificationResponseBundle)
+   }
+ 
+@@ -77,4 +87,17 @@ open class NotificationsEmitter : Module(), NotificationListener {
+   override fun onNotificationsDropped() {
+     sendEvent(MESSAGES_DELETED_EVENT_NAME, Bundle.EMPTY)
+   }
++
++  private fun logBundle(bundleToLog: Bundle) {
++    bundleToLog.keySet().forEach {
++      val value = bundleToLog.get(it)
++      val stringValue = if (value != null) {
++        "${value}"
++      } else {
++        "(null)"
++      }
++      Log.i("ReactNativeJS", "  ${it}: ${stringValue}")
++    }
++  }
+ }
++
