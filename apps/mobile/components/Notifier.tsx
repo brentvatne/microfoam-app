@@ -8,6 +8,7 @@ import {
   addNotificationResponseReceivedListener,
   getExpoPushTokenAsync,
   getDevicePushTokenAsync,
+  getLastNotificationResponseAsync,
   getPermissionsAsync,
   getNotificationChannelsAsync,
   removeNotificationSubscription,
@@ -25,6 +26,7 @@ import { AppState, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { View, Text } from './Themed';
+import Button from './Button';
 
 setNotificationHandler({
   handleNotification: async () => ({
@@ -74,6 +76,11 @@ const Notifier = () => {
   const [response, setResponse] = useState<NotificationResponse | undefined>(
     undefined,
   );
+
+  const [responseFromAsync, setResponseFromAsync] = useState<
+    NotificationResponse | undefined
+  >(undefined);
+
   const [backgroundTaskString, setBackgroundTaskString] = useState<string>('');
 
   const notificationListener = useRef<Subscription>();
@@ -182,7 +189,24 @@ const Notifier = () => {
               2,
             )}
         </Text>
+        <Text>
+          Last response data from getLastNotificationResponseAsync:{' '}
+          {responseFromAsync &&
+            JSON.stringify(
+              responseFromAsync.notification.request.content.data,
+              null,
+              2,
+            )}
+        </Text>
         <Text>Background task data: {backgroundTaskString}</Text>
+        <Button
+          title="getLastNotificationResponseAsync()"
+          onPress={() => {
+            getLastNotificationResponseAsync()
+              .then((lastResponse) => setResponseFromAsync(lastResponse))
+              .catch((error) => setResponseFromAsync(error));
+          }}
+        />
       </View>
     </View>
   );

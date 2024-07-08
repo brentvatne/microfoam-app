@@ -62,3 +62,65 @@ index 07f3a3d..c73d619 100644
 +  }
  }
 +
+diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.js b/node_modules/expo-notifications/build/NotificationsEmitter.js
+index aa6ee6c571..1778f00c52 100644
+--- a/node_modules/expo-notifications/build/NotificationsEmitter.js
++++ b/node_modules/expo-notifications/build/NotificationsEmitter.js
+@@ -94,6 +94,8 @@ export async function getLastNotificationResponseAsync() {
+     if (!NotificationsEmitterModule.getLastNotificationResponseAsync) {
+         throw new UnavailabilityError('ExpoNotifications', 'getLastNotificationResponseAsync');
+     }
+-    return await NotificationsEmitterModule.getLastNotificationResponseAsync();
++    const response = await NotificationsEmitterModule.getLastNotificationResponseAsync();
++    const mappedResponse = response ? mapNotificationResponse(response) : response;
++    return mappedResponse;
+ }
+ //# sourceMappingURL=NotificationsEmitter.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/useLastNotificationResponse.js b/node_modules/expo-notifications/build/useLastNotificationResponse.js
+index 34d22ab113..6f38d08f83 100644
+--- a/node_modules/expo-notifications/build/useLastNotificationResponse.js
++++ b/node_modules/expo-notifications/build/useLastNotificationResponse.js
+@@ -55,11 +55,7 @@ export default function useLastNotificationResponse() {
+     // and always returns the most recent response.
+     useEffect(() => {
+         NotificationsEmitterModule.getLastNotificationResponseAsync?.().then((response) => {
+-            // We only update the state with the resolved value if it's empty,
+-            // because if it's not empty it must have been populated by the `useLayoutEffect`
+-            // listener which returns "live" values.
+-            const mappedResponse = response ? mapNotificationResponse(response) : response;
+-            setLastNotificationResponse((currentResponse) => currentResponse ?? mappedResponse);
++            setLastNotificationResponse(response);
+         });
+     }, []);
+     return lastNotificationResponse;
+diff --git a/node_modules/expo-notifications/src/NotificationsEmitter.ts b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+index 7caea9fa27..a95ea3538f 100644
+--- a/node_modules/expo-notifications/src/NotificationsEmitter.ts
++++ b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+@@ -111,5 +111,7 @@ export async function getLastNotificationResponseAsync(): Promise<NotificationRe
+   if (!NotificationsEmitterModule.getLastNotificationResponseAsync) {
+     throw new UnavailabilityError('ExpoNotifications', 'getLastNotificationResponseAsync');
+   }
+-  return await NotificationsEmitterModule.getLastNotificationResponseAsync();
++  const response = await NotificationsEmitterModule.getLastNotificationResponseAsync();
++  const mappedResponse = response ? mapNotificationResponse(response) : response;
++  return mappedResponse;
+ }
+diff --git a/node_modules/expo-notifications/src/useLastNotificationResponse.ts b/node_modules/expo-notifications/src/useLastNotificationResponse.ts
+index 0df3389ad5..de57781cc4 100644
+--- a/node_modules/expo-notifications/src/useLastNotificationResponse.ts
++++ b/node_modules/expo-notifications/src/useLastNotificationResponse.ts
+@@ -62,11 +62,7 @@ export default function useLastNotificationResponse() {
+   // and always returns the most recent response.
+   useEffect(() => {
+     NotificationsEmitterModule.getLastNotificationResponseAsync?.().then((response) => {
+-      // We only update the state with the resolved value if it's empty,
+-      // because if it's not empty it must have been populated by the `useLayoutEffect`
+-      // listener which returns "live" values.
+-      const mappedResponse = response ? mapNotificationResponse(response) : response;
+-      setLastNotificationResponse((currentResponse) => currentResponse ?? mappedResponse);
++      setLastNotificationResponse(response);
+     });
+   }, []);
+ 
