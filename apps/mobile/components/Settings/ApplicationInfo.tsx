@@ -33,7 +33,7 @@ export default function ApplicationInfo({
         <DebugText>Channel: {currentlyRunningUpdate.channel}</DebugText>
 
         <DebugText>
-          ID: {currentlyRunningUpdate.updateId ?? "(embedded)"}
+          ID: {currentlyRunningUpdate.updateId ?? "n/a"}
         </DebugText>
 
         {currentlyRunningUpdate.createdAt ? (
