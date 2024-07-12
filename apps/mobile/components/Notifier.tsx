@@ -17,6 +17,7 @@ import {
   setNotificationHandler,
   useLastNotificationResponse,
   addPushTokenListener,
+  NotificationContentAndroid,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -92,9 +93,11 @@ const Notifier = () => {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      setNotificationChannelAsync('Miscellaneous', {
-        name: 'Miscellaneous',
+      setNotificationChannelAsync('testApp', {
+        name: 'testApp',
         importance: AndroidImportance.HIGH,
+        enableVibrate: true,
+        vibrationPattern: [0, 250, 250, 250],
       })
         .then((value) => {
           console.log(`Set channel ${value.name}`);
@@ -168,6 +171,14 @@ const Notifier = () => {
           Title: {notification && notification.request.content.title}{' '}
         </Text>
         <Text>Body: {notification && notification.request.content.body}</Text>
+        <Text>
+          Vibration:{' '}
+          {notification &&
+            JSON.stringify(
+              (notification.request.content as NotificationContentAndroid)
+                .vibrationPattern ?? 'null',
+            )}
+        </Text>
         <Text>
           Data:{' '}
           {notification && JSON.stringify(notification.request.content.data)}
