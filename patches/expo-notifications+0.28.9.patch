@@ -1,5 +1,5 @@
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
-index 07f3a3d..c73d619 100644
+index 07f3a3d..3dcc0a4 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
 @@ -1,6 +1,7 @@
@@ -44,26 +44,77 @@ index 07f3a3d..c73d619 100644
      sendEvent(NEW_RESPONSE_EVENT_NAME, lastNotificationResponseBundle)
    }
  
-@@ -77,4 +87,17 @@ open class NotificationsEmitter : Module(), NotificationListener {
+@@ -77,4 +87,29 @@ open class NotificationsEmitter : Module(), NotificationListener {
    override fun onNotificationsDropped() {
      sendEvent(MESSAGES_DELETED_EVENT_NAME, Bundle.EMPTY)
    }
 +
 +  private fun logBundle(bundleToLog: Bundle) {
++    return logBundle("", bundleToLog)
++  }
++
++  private fun logBundle(indent: String, bundleToLog: Bundle) {
++    if (indent.equals("        ")) {
++      return;
++    }
 +    bundleToLog.keySet().forEach {
 +      val value = bundleToLog.get(it)
-+      val stringValue = if (value != null) {
-+        "${value}"
++      if (value is Bundle) {
++        val childIndent = "${indent}  "
++        Log.i("ReactNativeJS", "${indent}${it}:")
++        logBundle(childIndent, value)
 +      } else {
-+        "(null)"
++        val stringValue = when (value) {
++          null -> "(null)"
++          else -> "${value}"
++        }
++        Log.i("ReactNativeJS", "${indent}${it}: ${stringValue}")
 +      }
-+      Log.i("ReactNativeJS", "  ${it}: ${stringValue}")
 +    }
 +  }
  }
 +
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
+index 55b3a8d..f9207fc 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
+@@ -1,6 +1,8 @@
+ package expo.modules.notifications.service.delegates
+ 
+ import android.content.Context
++import android.os.Bundle
++import android.util.Log
+ import com.google.firebase.messaging.RemoteMessage
+ import expo.modules.notifications.notifications.JSONNotificationContentBuilder
+ import expo.modules.notifications.notifications.RemoteMessageSerializer
+@@ -89,12 +91,25 @@ open class FirebaseMessagingDelegate(protected val context: Context) : FirebaseM
+   fun getBackgroundTasks() = sBackgroundTaskConsumerReferences.values.mapNotNull { it.get() }
+ 
+   override fun onMessageReceived(remoteMessage: RemoteMessage) {
++    Log.i("ReactNativeJS", "FirebaseMessagingDelegate.onMessageReceived")
++    logMessage(remoteMessage)
++
+     NotificationsService.receive(context, createNotification(remoteMessage))
+     getBackgroundTasks().forEach {
+       it.scheduleJob(RemoteMessageSerializer.toBundle(remoteMessage))
+     }
+   }
+ 
++  private fun logMessage(message: RemoteMessage) {
++    Log.i("ReactNativeJS", "  notification.channelId: ${message.notification?.channelId}")
++    Log.i("ReactNativeJS", "  notification.vibrateTimings: ${message.notification?.vibrateTimings?.contentToString()}")
++    Log.i("ReactNativeJS", "  notification.body: ${message.notification?.body}")
++    Log.i("ReactNativeJS", "  data: ${message.data}")
++    Log.i("ReactNativeJS", "  notification.color: ${message.notification?.color}")
++    Log.i("ReactNativeJS", "  notification.sound: ${message.notification?.sound}")
++  }
++
++
+   protected fun createNotification(remoteMessage: RemoteMessage): Notification {
+     val identifier = getNotificationIdentifier(remoteMessage)
+     val payload = JSONObject(remoteMessage.data as Map<*, *>)
 diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.js b/node_modules/expo-notifications/build/NotificationsEmitter.js
-index aa6ee6c571..1778f00c52 100644
+index 18cd3a4..40f59a9 100644
 --- a/node_modules/expo-notifications/build/NotificationsEmitter.js
 +++ b/node_modules/expo-notifications/build/NotificationsEmitter.js
 @@ -94,6 +94,8 @@ export async function getLastNotificationResponseAsync() {
@@ -78,7 +129,7 @@ index aa6ee6c571..1778f00c52 100644
  //# sourceMappingURL=NotificationsEmitter.js.map
 \ No newline at end of file
 diff --git a/node_modules/expo-notifications/build/useLastNotificationResponse.js b/node_modules/expo-notifications/build/useLastNotificationResponse.js
-index 34d22ab113..6f38d08f83 100644
+index 34d22ab..6f38d08 100644
 --- a/node_modules/expo-notifications/build/useLastNotificationResponse.js
 +++ b/node_modules/expo-notifications/build/useLastNotificationResponse.js
 @@ -55,11 +55,7 @@ export default function useLastNotificationResponse() {
@@ -95,7 +146,7 @@ index 34d22ab113..6f38d08f83 100644
      }, []);
      return lastNotificationResponse;
 diff --git a/node_modules/expo-notifications/src/NotificationsEmitter.ts b/node_modules/expo-notifications/src/NotificationsEmitter.ts
-index 7caea9fa27..a95ea3538f 100644
+index 50f9678..83f9857 100644
 --- a/node_modules/expo-notifications/src/NotificationsEmitter.ts
 +++ b/node_modules/expo-notifications/src/NotificationsEmitter.ts
 @@ -111,5 +111,7 @@ export async function getLastNotificationResponseAsync(): Promise<NotificationRe
@@ -108,7 +159,7 @@ index 7caea9fa27..a95ea3538f 100644
 +  return mappedResponse;
  }
 diff --git a/node_modules/expo-notifications/src/useLastNotificationResponse.ts b/node_modules/expo-notifications/src/useLastNotificationResponse.ts
-index 0df3389ad5..de57781cc4 100644
+index 0df3389..de57781 100644
 --- a/node_modules/expo-notifications/src/useLastNotificationResponse.ts
 +++ b/node_modules/expo-notifications/src/useLastNotificationResponse.ts
 @@ -62,11 +62,7 @@ export default function useLastNotificationResponse() {
