@@ -1,3 +1,48 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+index 53316ca..7f8133c 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+@@ -82,11 +82,7 @@ public class NotificationSerializer {
+       serializedContent.putString("priority", content.getPriority().getEnumValue());
+     }
+     if (content.getVibrationPattern() != null) {
+-      double[] serializedVibrationPattern = new double[content.getVibrationPattern().length];
+-      for (int i = 0; i < serializedVibrationPattern.length; i++) {
+-        serializedVibrationPattern[i] = content.getVibrationPattern()[i];
+-      }
+-      serializedContent.putDoubleArray("vibrationPattern", serializedVibrationPattern);
++      serializedContent.putIntArray("vibrationPattern", RemoteMessageSerializer.intArrayFromLongArray(content.getVibrationPattern()));
+     }
+     serializedContent.putBoolean("autoDismiss", content.isAutoDismiss());
+     if (content.getCategoryId() != null) {
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java
+index 267a5b9..06cb240 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java
+@@ -93,7 +93,9 @@ public class RemoteMessageSerializer {
+     serializedNotification.putString("title", notification.getTitle());
+     serializedNotification.putStringArray("titleLocalizationArgs", notification.getTitleLocalizationArgs());
+     serializedNotification.putString("titleLocalizationKey", notification.getTitleLocalizationKey());
+-    serializedNotification.putLongArray("vibrateTimings", notification.getVibrateTimings());
++    if (notification.getVibrateTimings() != null) {
++      serializedNotification.putIntArray("vibrateTimings", intArrayFromLongArray(notification.getVibrateTimings()));
++    }
+     if (notification.getVisibility() != null) {
+       serializedNotification.putInt("visibility", notification.getVisibility());
+     } else {
+@@ -101,4 +103,12 @@ public class RemoteMessageSerializer {
+     }
+     return serializedNotification;
+   }
++
++  public static int[] intArrayFromLongArray(long[] longArray) {
++    int[] intArray = new int[longArray.length];
++    for (int i = 0; i < longArray.length; i++) {
++      intArray[i] = (int)(longArray[i]);
++    }
++    return intArray;
++  }
+ }
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
 index 07f3a3d..3dcc0a4 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
@@ -87,7 +132,7 @@ index c957a9e..2a4ff82 100644
  
          receiver?.send(ERROR_CODE, Bundle().also { it.putSerializable(EXCEPTION_KEY, e) })
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
-index 55b3a8d..3ed1e16 100644
+index 55b3a8d..122a93a 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
 @@ -1,6 +1,10 @@
@@ -164,7 +209,7 @@ index 55b3a8d..3ed1e16 100644
 +    if (vibrationPattern != null) {
 +      val jsonVibrationTimings = JSONArray()
 +      vibrationPattern.forEach {
-+        jsonVibrationTimings.put(it)
++        jsonVibrationTimings.put(it.toInt() )
 +      }
 +      payload.put("vibrate", jsonVibrationTimings)
 +    }
