@@ -1,8 +1,16 @@
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-index 53316ca..7f8133c 100644
+index 53316ca..5f13534 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-@@ -82,11 +82,7 @@ public class NotificationSerializer {
+@@ -2,6 +2,7 @@ package expo.modules.notifications.notifications;
+ 
+ import android.os.Build;
+ import android.os.Bundle;
++import android.util.Log;
+ 
+ import androidx.annotation.Nullable;
+ 
+@@ -82,11 +83,7 @@ public class NotificationSerializer {
        serializedContent.putString("priority", content.getPriority().getEnumValue());
      }
      if (content.getVibrationPattern() != null) {
@@ -15,6 +23,34 @@ index 53316ca..7f8133c 100644
      }
      serializedContent.putBoolean("autoDismiss", content.isAutoDismiss());
      if (content.getCategoryId() != null) {
+@@ -222,4 +219,27 @@ public class NotificationSerializer {
+ 
+       return serializedResponse;
+     }
++
++  public static void logBundle(Bundle bundleToLog) {
++    logBundle("", bundleToLog);
++  }
++
++  public static void logBundle(String indent, Bundle bundleToLog) {
++    if (indent.equals("        ")) {
++      return;
++    }
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
++      bundleToLog.keySet().forEach(it -> {
++        Object value = bundleToLog.get(it);
++        if (value instanceof Bundle) {
++          String childIndent = indent + "  ";
++          Log.i("ReactNativeJS", indent + it);
++          logBundle(childIndent, (Bundle)value);
++        } else {
++          String stringValue = value != null ? value.toString() : "(null)";
++          Log.i("ReactNativeJS", indent + it + ": " + stringValue);
++        }
++      });
++    }
++  }
+ }
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java
 index 267a5b9..06cb240 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/RemoteMessageSerializer.java
@@ -44,7 +80,7 @@ index 267a5b9..06cb240 100644
 +  }
  }
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
-index 07f3a3d..3dcc0a4 100644
+index 07f3a3d..19b597f 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
 @@ -1,6 +1,7 @@
@@ -62,7 +98,7 @@ index 07f3a3d..3dcc0a4 100644
 -    sendEvent(NEW_MESSAGE_EVENT_NAME, NotificationSerializer.toBundle(notification))
 +    Log.i("ReactNativeJS", "onNotificationReceived:")
 +    val bundle = NotificationSerializer.toBundle(notification)
-+    logBundle(bundle)
++    NotificationSerializer.logBundle(bundle)
 +    sendEvent(NEW_MESSAGE_EVENT_NAME, bundle)
    }
  
@@ -74,7 +110,7 @@ index 07f3a3d..3dcc0a4 100644
 -    lastNotificationResponseBundle = NotificationSerializer.toBundle(response)
 +    Log.i("ReactNativeJS", "onNotificationResponseReceived:")
 +    val bundle = NotificationSerializer.toBundle(response)
-+    logBundle(bundle);
++    NotificationSerializer.logBundle(bundle);
 +    lastNotificationResponseBundle = bundle
      sendEvent(NEW_RESPONSE_EVENT_NAME, lastNotificationResponseBundle)
      return true
@@ -84,39 +120,16 @@ index 07f3a3d..3dcc0a4 100644
 -    lastNotificationResponseBundle = NotificationSerializer.toResponseBundleFromExtras(extras)
 +    Log.i("ReactNativeJS", "onNotificationResponseIntentReceived:")
 +    val bundle = NotificationSerializer.toResponseBundleFromExtras(extras)
-+    logBundle(bundle);
++    NotificationSerializer.logBundle(bundle);
 +    lastNotificationResponseBundle = bundle
      sendEvent(NEW_RESPONSE_EVENT_NAME, lastNotificationResponseBundle)
    }
  
-@@ -77,4 +87,29 @@ open class NotificationsEmitter : Module(), NotificationListener {
+@@ -77,4 +87,6 @@ open class NotificationsEmitter : Module(), NotificationListener {
    override fun onNotificationsDropped() {
      sendEvent(MESSAGES_DELETED_EVENT_NAME, Bundle.EMPTY)
    }
 +
-+  private fun logBundle(bundleToLog: Bundle) {
-+    return logBundle("", bundleToLog)
-+  }
-+
-+  private fun logBundle(indent: String, bundleToLog: Bundle) {
-+    if (indent.equals("        ")) {
-+      return;
-+    }
-+    bundleToLog.keySet().forEach {
-+      val value = bundleToLog.get(it)
-+      if (value is Bundle) {
-+        val childIndent = "${indent}  "
-+        Log.i("ReactNativeJS", "${indent}${it}:")
-+        logBundle(childIndent, value)
-+      } else {
-+        val stringValue = when (value) {
-+          null -> "(null)"
-+          else -> "${value}"
-+        }
-+        Log.i("ReactNativeJS", "${indent}${it}: ${stringValue}")
-+      }
-+    }
-+  }
  }
 +
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt
@@ -131,6 +144,65 @@ index c957a9e..2a4ff82 100644
          e.printStackTrace()
  
          receiver?.send(ERROR_CODE, Bundle().also { it.putSerializable(EXCEPTION_KEY, e) })
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
+index 77591a5..cde3f33 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoNotificationLifecycleListener.java
+@@ -1,22 +1,14 @@
+ package expo.modules.notifications.service.delegates;
+ 
+ import android.app.Activity;
+-import android.app.NotificationChannel;
+-import android.app.PendingIntent;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.os.Bundle;
+-import android.os.Parcel;
+ import android.util.Log;
+ 
+-import androidx.core.app.NotificationCompat;
+-
+-import java.util.Objects;
+-
+ import expo.modules.core.interfaces.ReactActivityLifecycleListener;
+ import expo.modules.notifications.notifications.NotificationManager;
+-import expo.modules.notifications.notifications.model.Notification;
+-import expo.modules.notifications.notifications.model.NotificationResponse;
++import expo.modules.notifications.notifications.NotificationSerializer;
+ 
+ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycleListener {
+ 
+@@ -37,6 +29,7 @@ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycle
+      */
+     @Override
+     public void onCreate(Activity activity, Bundle savedInstanceState) {
++        Log.i("ReactNativeJS", "ExpoNotificationLifeCycleListener.onCreate:");
+         Intent intent = activity.getIntent();
+         if (intent != null) {
+             Bundle extras = intent.getExtras();
+@@ -45,6 +38,7 @@ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycle
+                     Log.d("ReactNativeJS", "[native] ExpoNotificationLifecycleListener contains an unmarshaled notification response. Skipping.");
+                     return;
+                 }
++                NotificationSerializer.logBundle(extras);
+                 mNotificationManager.onNotificationResponseFromExtras(extras);
+             }
+         }
+@@ -62,12 +56,14 @@ public class ExpoNotificationLifecycleListener implements ReactActivityLifecycle
+     @Override
+     public boolean onNewIntent(Intent intent) {
+         Bundle extras = intent.getExtras();
++        Log.i("ReactNativeJS", "ExpoNotificationLifeCycleListener.onNewIntent:");
+         if (extras != null) {
+             if (extras.containsKey("notificationResponse")) {
+                 Log.d("ReactNativeJS", "[native] ExpoNotificationLifecycleListener contains an unmarshaled notification response. Skipping.");
+                 intent.removeExtra("notificationResponse");
+                 return ReactActivityLifecycleListener.super.onNewIntent(intent);
+             }
++            NotificationSerializer.logBundle(extras);
+             mNotificationManager.onNotificationResponseFromExtras(extras);
+         }
+         return ReactActivityLifecycleListener.super.onNewIntent(intent);
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
 index 55b3a8d..122a93a 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt
