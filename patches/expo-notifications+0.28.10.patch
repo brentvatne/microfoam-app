@@ -1,8 +1,8 @@
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-index 53316ca..5f13534 100644
+index 53316ca..6d99b8a 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-@@ -2,6 +2,7 @@ package expo.modules.notifications.notifications;
+@@ -2,11 +2,15 @@ package expo.modules.notifications.notifications;
  
  import android.os.Build;
  import android.os.Bundle;
@@ -10,7 +10,69 @@ index 53316ca..5f13534 100644
  
  import androidx.annotation.Nullable;
  
-@@ -82,11 +83,7 @@ public class NotificationSerializer {
++import com.google.firebase.messaging.RemoteMessage;
++
+ import org.jetbrains.annotations.NotNull;
+ import org.json.JSONArray;
++import org.json.JSONException;
+ import org.json.JSONObject;
+ import expo.modules.core.arguments.MapArguments;
+ 
+@@ -16,6 +20,8 @@ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
+ 
+ import expo.modules.notifications.notifications.interfaces.NotificationTrigger;
+ import expo.modules.notifications.notifications.model.Notification;
+@@ -52,11 +58,34 @@ public class NotificationSerializer {
+   public static Bundle toBundle(NotificationRequest request) {
+     Bundle serializedRequest = new Bundle();
+     serializedRequest.putString("identifier", request.getIdentifier());
+-    serializedRequest.putBundle("content", toBundle(request.getContent()));
+     serializedRequest.putBundle("trigger", toBundle(request.getTrigger()));
++    Bundle content = toBundle(request.getContent());
++    Bundle existingContentData = content.getBundle("data");
++    if (existingContentData == null) {
++      FirebaseNotificationTrigger trigger = (FirebaseNotificationTrigger) request.getTrigger();
++      RemoteMessage message = trigger.getRemoteMessage();
++      Map<String, String> data = message.getData();
++      if (data != null) {
++        String dataBody = data.get("body");
++        if (isValidJSONString(dataBody)) {
++          content.putString("dataString", dataBody);
++        } else {
++          content.putBundle("data", toBundle(data));
++        }
++      }
++    }
++    serializedRequest.putBundle("content", content);
+     return serializedRequest;
+   }
+ 
++  public static Bundle toBundle(Map<String, String> map) {
++    Bundle result = new Bundle();
++    for (String key: map.keySet()) {
++      result.putString(key, map.get(key));
++    }
++    return result;
++  }
++
+   public static Bundle toBundle(NotificationContent content) {
+     Bundle serializedContent = new Bundle();
+     serializedContent.putString("title", content.getTitle());
+@@ -65,7 +94,7 @@ public class NotificationSerializer {
+     if (content.getColor() != null) {
+       serializedContent.putString("color", String.format("#%08X", content.getColor().intValue()));
+     }
+-    serializedContent.putBundle("data", toBundle(content.getBody()));
++
+     if (content.getBadgeCount() != null) {
+       serializedContent.putInt("badge", content.getBadgeCount().intValue());
+     } else {
+@@ -82,11 +111,7 @@ public class NotificationSerializer {
        serializedContent.putString("priority", content.getPriority().getEnumValue());
      }
      if (content.getVibrationPattern() != null) {
@@ -23,19 +85,86 @@ index 53316ca..5f13534 100644
      }
      serializedContent.putBoolean("autoDismiss", content.isAutoDismiss());
      if (content.getCategoryId() != null) {
-@@ -222,4 +219,27 @@ public class NotificationSerializer {
+@@ -196,30 +221,75 @@ public class NotificationSerializer {
+     return null;
+   }
  
-       return serializedResponse;
-     }
+-    @NotNull
+-    public static Bundle toResponseBundleFromExtras(Bundle extras) {
+-      Bundle serializedContent = new Bundle();
+-      serializedContent.putString("title", extras.getString("title"));
++  @NotNull
++  public static Bundle toResponseBundleFromExtras(Bundle extras) {
++    Bundle serializedContent = new Bundle();
++    serializedContent.putString("title", extras.getString("title"));
++    String body = extras.getString("body");
++    if (isValidJSONString(body)) {
++      // If body is a JSON string, the notification was probably sent by the Expo
++      // notification service, so we do the expected remapping of fields
++      serializedContent.putString("dataString", body);
+       serializedContent.putString("body", extras.getString("message"));
+-      serializedContent.putString("dataString", extras.getString("body"));
++    } else {
++      // TODO: make sure the mapping is correct
++      // For now we just set the content.data to the entire bundle
++      serializedContent.putBundle("data", extras);
++    }
+ 
+-      Bundle serializedTrigger = new Bundle();
+-      serializedTrigger.putString("type", "push");
+-      serializedTrigger.putString("channelId", extras.getString("channelId"));
++    Bundle serializedTrigger = new Bundle();
++    serializedTrigger.putString("type", "push");
++    serializedTrigger.putString("channelId", extras.getString("channelId"));
+ 
+-      Bundle serializedRequest = new Bundle();
+-      serializedRequest.putString("identifier", extras.getString("google.message_id"));
+-      serializedRequest.putBundle("trigger", serializedTrigger);
+-      serializedRequest.putBundle("content", serializedContent);
++    Bundle serializedRequest = new Bundle();
++    serializedRequest.putString("identifier", extras.getString("google.message_id"));
++    serializedRequest.putBundle("trigger", serializedTrigger);
++    serializedRequest.putBundle("content", serializedContent);
+ 
+-      Bundle serializedNotification = new Bundle();
+-      serializedNotification.putLong("date", extras.getLong("google.sent_time"));
+-      serializedNotification.putBundle("request", serializedRequest);
++    Bundle serializedNotification = new Bundle();
++    serializedNotification.putLong("date", extras.getLong("google.sent_time"));
++    serializedNotification.putBundle("request", serializedRequest);
+ 
+-      Bundle serializedResponse = new Bundle();
+-      serializedResponse.putString("actionIdentifier", "expo.modules.notifications.actions.DEFAULT");
+-      serializedResponse.putBundle("notification", serializedNotification);
++    Bundle serializedResponse = new Bundle();
++    serializedResponse.putString("actionIdentifier", "expo.modules.notifications.actions.DEFAULT");
++    serializedResponse.putBundle("notification", serializedNotification);
++
++    return serializedResponse;
++  }
++
++  public static boolean isValidJSONString(String test) {
++    try {
++      new JSONObject(test);
++    } catch (JSONException objectEx) {
++      try {
++        new JSONArray(test);
++      } catch (JSONException arrayEx) {
++        return false;
++      }
++    }
++    return true;
++  }
 +
 +  public static void logBundle(Bundle bundleToLog) {
 +    logBundle("", bundleToLog);
 +  }
-+
+ 
+-      return serializedResponse;
 +  public static void logBundle(String indent, Bundle bundleToLog) {
 +    if (indent.equals("        ")) {
 +      return;
-+    }
+     }
 +    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 +      bundleToLog.keySet().forEach(it -> {
 +        Object value = bundleToLog.get(it);
@@ -288,3 +417,797 @@ index 55b3a8d..122a93a 100644
      val content = JSONNotificationContentBuilder(context).setPayload(payload).build()
      val request = createNotificationRequest(identifier, content, FirebaseNotificationTrigger(remoteMessage))
      return Notification(request, Date(remoteMessage.sentTime))
+diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.d.ts.map b/node_modules/expo-notifications/build/NotificationsEmitter.d.ts.map
+index 493dc6a..1121fe4 100644
+--- a/node_modules/expo-notifications/build/NotificationsEmitter.d.ts.map
++++ b/node_modules/expo-notifications/build/NotificationsEmitter.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"NotificationsEmitter.d.ts","sourceRoot":"","sources":["../src/NotificationsEmitter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAgB,YAAY,EAAuB,MAAM,mBAAmB,CAAC;AAEpF,OAAO,EAAE,YAAY,EAAE,oBAAoB,EAAE,MAAM,uBAAuB,CAAC;AAY3E,eAAO,MAAM,yBAAyB,+CAA+C,CAAC;AAEtF;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,wBAAgB,+BAA+B,CAC7C,QAAQ,EAAE,CAAC,KAAK,EAAE,YAAY,KAAK,IAAI,GACtC,YAAY,CAEd;AAED;;;;;;;GAOG;AACH,wBAAgB,+BAA+B,CAAC,QAAQ,EAAE,MAAM,IAAI,GAAG,YAAY,CAElF;AAED;;;;;;;;;;;;;;;;;;;;;;;;;GAyBG;AACH,wBAAgB,uCAAuC,CACrD,QAAQ,EAAE,CAAC,KAAK,EAAE,oBAAoB,KAAK,IAAI,GAC9C,YAAY,CAQd;AAED;;;;GAIG;AACH,wBAAgB,8BAA8B,CAAC,YAAY,EAAE,YAAY,QAExE;AAGD;;GAEG;AACH,wBAAsB,gCAAgC,IAAI,OAAO,CAAC,oBAAoB,GAAG,IAAI,CAAC,CAO7F"}
+\ No newline at end of file
++{"version":3,"file":"NotificationsEmitter.d.ts","sourceRoot":"","sources":["../src/NotificationsEmitter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAgB,YAAY,EAAuB,MAAM,mBAAmB,CAAC;AAEpF,OAAO,EAAE,YAAY,EAAE,oBAAoB,EAAE,MAAM,uBAAuB,CAAC;AAY3E,eAAO,MAAM,yBAAyB,+CAA+C,CAAC;AAEtF;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,wBAAgB,+BAA+B,CAC7C,QAAQ,EAAE,CAAC,KAAK,EAAE,YAAY,KAAK,IAAI,GACtC,YAAY,CAQd;AAED;;;;;;;GAOG;AACH,wBAAgB,+BAA+B,CAAC,QAAQ,EAAE,MAAM,IAAI,GAAG,YAAY,CAElF;AAED;;;;;;;;;;;;;;;;;;;;;;;;;GAyBG;AACH,wBAAgB,uCAAuC,CACrD,QAAQ,EAAE,CAAC,KAAK,EAAE,oBAAoB,KAAK,IAAI,GAC9C,YAAY,CAQd;AAED;;;;GAIG;AACH,wBAAgB,8BAA8B,CAAC,YAAY,EAAE,YAAY,QAExE;AAGD;;GAEG;AACH,wBAAsB,gCAAgC,IAAI,OAAO,CAAC,oBAAoB,GAAG,IAAI,CAAC,CAO7F"}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.js b/node_modules/expo-notifications/build/NotificationsEmitter.js
+index 40f59a9..e027c06 100644
+--- a/node_modules/expo-notifications/build/NotificationsEmitter.js
++++ b/node_modules/expo-notifications/build/NotificationsEmitter.js
+@@ -1,6 +1,6 @@
+ import { EventEmitter, UnavailabilityError } from 'expo-modules-core';
+ import NotificationsEmitterModule from './NotificationsEmitterModule';
+-import { mapNotificationResponse } from './utils/mapNotificationResponse';
++import { mapNotification, mapNotificationResponse } from './utils/mapNotificationResponse';
+ // Web uses SyntheticEventEmitter
+ const emitter = new EventEmitter(NotificationsEmitterModule);
+ const didReceiveNotificationEventName = 'onDidReceiveNotification';
+@@ -33,7 +33,10 @@ export const DEFAULT_ACTION_IDENTIFIER = 'expo.modules.notifications.actions.DEF
+  * @header listen
+  */
+ export function addNotificationReceivedListener(listener) {
+-    return emitter.addListener(didReceiveNotificationEventName, listener);
++    return emitter.addListener(didReceiveNotificationEventName, (notification) => {
++        const mappedNotification = mapNotification(notification);
++        listener(mappedNotification);
++    });
+ }
+ /**
+  * Listeners registered by this method will be called whenever some notifications have been dropped by the server.
+diff --git a/node_modules/expo-notifications/build/NotificationsEmitter.js.map b/node_modules/expo-notifications/build/NotificationsEmitter.js.map
+index 6424444..db81215 100644
+--- a/node_modules/expo-notifications/build/NotificationsEmitter.js.map
++++ b/node_modules/expo-notifications/build/NotificationsEmitter.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"NotificationsEmitter.js","sourceRoot":"","sources":["../src/NotificationsEmitter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAgB,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAGpF,OAAO,0BAA0B,MAAM,8BAA8B,CAAC;AACtE,OAAO,EAAE,uBAAuB,EAAE,MAAM,iCAAiC,CAAC;AAE1E,iCAAiC;AACjC,MAAM,OAAO,GAAG,IAAI,YAAY,CAAC,0BAA0B,CAAC,CAAC;AAE7D,MAAM,+BAA+B,GAAG,0BAA0B,CAAC;AACnE,MAAM,6BAA6B,GAAG,wBAAwB,CAAC;AAC/D,MAAM,uCAAuC,GAAG,kCAAkC,CAAC;AAEnF,eAAe;AACf,MAAM,CAAC,MAAM,yBAAyB,GAAG,4CAA4C,CAAC;AAEtF;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,MAAM,UAAU,+BAA+B,CAC7C,QAAuC;IAEvC,OAAO,OAAO,CAAC,WAAW,CAAe,+BAA+B,EAAE,QAAQ,CAAC,CAAC;AACtF,CAAC;AAED;;;;;;;GAOG;AACH,MAAM,UAAU,+BAA+B,CAAC,QAAoB;IAClE,OAAO,OAAO,CAAC,WAAW,CAAO,6BAA6B,EAAE,QAAQ,CAAC,CAAC;AAC5E,CAAC;AAED;;;;;;;;;;;;;;;;;;;;;;;;;GAyBG;AACH,MAAM,UAAU,uCAAuC,CACrD,QAA+C;IAE/C,OAAO,OAAO,CAAC,WAAW,CACxB,uCAAuC,EACvC,CAAC,QAA8B,EAAE,EAAE;QACjC,MAAM,cAAc,GAAG,uBAAuB,CAAC,QAAQ,CAAC,CAAC;QACzD,QAAQ,CAAC,cAAc,CAAC,CAAC;IAC3B,CAAC,CACF,CAAC;AACJ,CAAC;AAED;;;;GAIG;AACH,MAAM,UAAU,8BAA8B,CAAC,YAA0B;IACvE,OAAO,CAAC,kBAAkB,CAAC,YAAY,CAAC,CAAC;AAC3C,CAAC;AAED,eAAe;AACf;;GAEG;AACH,MAAM,CAAC,KAAK,UAAU,gCAAgC;IACpD,IAAI,CAAC,0BAA0B,CAAC,gCAAgC,EAAE;QAChE,MAAM,IAAI,mBAAmB,CAAC,mBAAmB,EAAE,kCAAkC,CAAC,CAAC;KACxF;IACD,MAAM,QAAQ,GAAG,MAAM,0BAA0B,CAAC,gCAAgC,EAAE,CAAC;IACrF,MAAM,cAAc,GAAG,QAAQ,CAAC,CAAC,CAAC,uBAAuB,CAAC,QAAQ,CAAC,CAAC,CAAC,CAAC,QAAQ,CAAC;IAC/E,OAAO,cAAc,CAAC;AACxB,CAAC","sourcesContent":["import { EventEmitter, Subscription, UnavailabilityError } from 'expo-modules-core';\n\nimport { Notification, NotificationResponse } from './Notifications.types';\nimport NotificationsEmitterModule from './NotificationsEmitterModule';\nimport { mapNotificationResponse } from './utils/mapNotificationResponse';\n\n// Web uses SyntheticEventEmitter\nconst emitter = new EventEmitter(NotificationsEmitterModule);\n\nconst didReceiveNotificationEventName = 'onDidReceiveNotification';\nconst didDropNotificationsEventName = 'onNotificationsDeleted';\nconst didReceiveNotificationResponseEventName = 'onDidReceiveNotificationResponse';\n\n// @docsMissing\nexport const DEFAULT_ACTION_IDENTIFIER = 'expo.modules.notifications.actions.DEFAULT';\n\n/**\n * Listeners registered by this method will be called whenever a notification is received while the app is running.\n * @param listener A function accepting a notification ([`Notification`](#notification)) as an argument.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @example Registering a notification listener using a React hook:\n * ```jsx\n * import React from 'react';\n * import * as Notifications from 'expo-notifications';\n *\n * export default function App() {\n *   React.useEffect(() => {\n *     const subscription = Notifications.addNotificationReceivedListener(notification => {\n *       console.log(notification);\n *     });\n *     return () => subscription.remove();\n *   }, []);\n *\n *   return (\n *     // Your app content\n *   );\n * }\n * ```\n * @header listen\n */\nexport function addNotificationReceivedListener(\n  listener: (event: Notification) => void\n): Subscription {\n  return emitter.addListener<Notification>(didReceiveNotificationEventName, listener);\n}\n\n/**\n * Listeners registered by this method will be called whenever some notifications have been dropped by the server.\n * Applicable only to Firebase Cloud Messaging which we use as a notifications service on Android. It corresponds to `onDeletedMessages()` callback.\n * More information can be found in [Firebase docs](https://firebase.google.com/docs/cloud-messaging/android/receive#override-ondeletedmessages).\n * @param listener A callback function.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @header listen\n */\nexport function addNotificationsDroppedListener(listener: () => void): Subscription {\n  return emitter.addListener<void>(didDropNotificationsEventName, listener);\n}\n\n/**\n * Listeners registered by this method will be called whenever a user interacts with a notification (for example, taps on it).\n * @param listener A function accepting notification response ([`NotificationResponse`](#notificationresponse)) as an argument.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @example Register a notification responder listener:\n * ```jsx\n * import React from 'react';\n * import { Linking } from 'react-native';\n * import * as Notifications from 'expo-notifications';\n *\n * export default function Container() {\n *   React.useEffect(() => {\n *     const subscription = Notifications.addNotificationResponseReceivedListener(response => {\n *       const url = response.notification.request.content.data.url;\n *       Linking.openURL(url);\n *     });\n *     return () => subscription.remove();\n *   }, []);\n *\n *   return (\n *     // Your app content\n *   );\n * }\n * ```\n * @header listen\n */\nexport function addNotificationResponseReceivedListener(\n  listener: (event: NotificationResponse) => void\n): Subscription {\n  return emitter.addListener<NotificationResponse>(\n    didReceiveNotificationResponseEventName,\n    (response: NotificationResponse) => {\n      const mappedResponse = mapNotificationResponse(response);\n      listener(mappedResponse);\n    }\n  );\n}\n\n/**\n * Removes a notification subscription returned by an `addNotificationListener` call.\n * @param subscription A subscription returned by `addNotificationListener` method.\n * @header listen\n */\nexport function removeNotificationSubscription(subscription: Subscription) {\n  emitter.removeSubscription(subscription);\n}\n\n// @docsMissing\n/**\n * @header listen\n */\nexport async function getLastNotificationResponseAsync(): Promise<NotificationResponse | null> {\n  if (!NotificationsEmitterModule.getLastNotificationResponseAsync) {\n    throw new UnavailabilityError('ExpoNotifications', 'getLastNotificationResponseAsync');\n  }\n  const response = await NotificationsEmitterModule.getLastNotificationResponseAsync();\n  const mappedResponse = response ? mapNotificationResponse(response) : response;\n  return mappedResponse;\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"NotificationsEmitter.js","sourceRoot":"","sources":["../src/NotificationsEmitter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAgB,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAGpF,OAAO,0BAA0B,MAAM,8BAA8B,CAAC;AACtE,OAAO,EAAE,eAAe,EAAE,uBAAuB,EAAE,MAAM,iCAAiC,CAAC;AAE3F,iCAAiC;AACjC,MAAM,OAAO,GAAG,IAAI,YAAY,CAAC,0BAA0B,CAAC,CAAC;AAE7D,MAAM,+BAA+B,GAAG,0BAA0B,CAAC;AACnE,MAAM,6BAA6B,GAAG,wBAAwB,CAAC;AAC/D,MAAM,uCAAuC,GAAG,kCAAkC,CAAC;AAEnF,eAAe;AACf,MAAM,CAAC,MAAM,yBAAyB,GAAG,4CAA4C,CAAC;AAEtF;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,MAAM,UAAU,+BAA+B,CAC7C,QAAuC;IAEvC,OAAO,OAAO,CAAC,WAAW,CACxB,+BAA+B,EAC/B,CAAC,YAA0B,EAAE,EAAE;QAC7B,MAAM,kBAAkB,GAAG,eAAe,CAAC,YAAY,CAAC,CAAC;QACzD,QAAQ,CAAC,kBAAkB,CAAC,CAAC;IAC/B,CAAC,CACF,CAAC;AACJ,CAAC;AAED;;;;;;;GAOG;AACH,MAAM,UAAU,+BAA+B,CAAC,QAAoB;IAClE,OAAO,OAAO,CAAC,WAAW,CAAO,6BAA6B,EAAE,QAAQ,CAAC,CAAC;AAC5E,CAAC;AAED;;;;;;;;;;;;;;;;;;;;;;;;;GAyBG;AACH,MAAM,UAAU,uCAAuC,CACrD,QAA+C;IAE/C,OAAO,OAAO,CAAC,WAAW,CACxB,uCAAuC,EACvC,CAAC,QAA8B,EAAE,EAAE;QACjC,MAAM,cAAc,GAAG,uBAAuB,CAAC,QAAQ,CAAC,CAAC;QACzD,QAAQ,CAAC,cAAc,CAAC,CAAC;IAC3B,CAAC,CACF,CAAC;AACJ,CAAC;AAED;;;;GAIG;AACH,MAAM,UAAU,8BAA8B,CAAC,YAA0B;IACvE,OAAO,CAAC,kBAAkB,CAAC,YAAY,CAAC,CAAC;AAC3C,CAAC;AAED,eAAe;AACf;;GAEG;AACH,MAAM,CAAC,KAAK,UAAU,gCAAgC;IACpD,IAAI,CAAC,0BAA0B,CAAC,gCAAgC,EAAE;QAChE,MAAM,IAAI,mBAAmB,CAAC,mBAAmB,EAAE,kCAAkC,CAAC,CAAC;KACxF;IACD,MAAM,QAAQ,GAAG,MAAM,0BAA0B,CAAC,gCAAgC,EAAE,CAAC;IACrF,MAAM,cAAc,GAAG,QAAQ,CAAC,CAAC,CAAC,uBAAuB,CAAC,QAAQ,CAAC,CAAC,CAAC,CAAC,QAAQ,CAAC;IAC/E,OAAO,cAAc,CAAC;AACxB,CAAC","sourcesContent":["import { EventEmitter, Subscription, UnavailabilityError } from 'expo-modules-core';\n\nimport { Notification, NotificationResponse } from './Notifications.types';\nimport NotificationsEmitterModule from './NotificationsEmitterModule';\nimport { mapNotification, mapNotificationResponse } from './utils/mapNotificationResponse';\n\n// Web uses SyntheticEventEmitter\nconst emitter = new EventEmitter(NotificationsEmitterModule);\n\nconst didReceiveNotificationEventName = 'onDidReceiveNotification';\nconst didDropNotificationsEventName = 'onNotificationsDeleted';\nconst didReceiveNotificationResponseEventName = 'onDidReceiveNotificationResponse';\n\n// @docsMissing\nexport const DEFAULT_ACTION_IDENTIFIER = 'expo.modules.notifications.actions.DEFAULT';\n\n/**\n * Listeners registered by this method will be called whenever a notification is received while the app is running.\n * @param listener A function accepting a notification ([`Notification`](#notification)) as an argument.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @example Registering a notification listener using a React hook:\n * ```jsx\n * import React from 'react';\n * import * as Notifications from 'expo-notifications';\n *\n * export default function App() {\n *   React.useEffect(() => {\n *     const subscription = Notifications.addNotificationReceivedListener(notification => {\n *       console.log(notification);\n *     });\n *     return () => subscription.remove();\n *   }, []);\n *\n *   return (\n *     // Your app content\n *   );\n * }\n * ```\n * @header listen\n */\nexport function addNotificationReceivedListener(\n  listener: (event: Notification) => void\n): Subscription {\n  return emitter.addListener<Notification>(\n    didReceiveNotificationEventName,\n    (notification: Notification) => {\n      const mappedNotification = mapNotification(notification);\n      listener(mappedNotification);\n    }\n  );\n}\n\n/**\n * Listeners registered by this method will be called whenever some notifications have been dropped by the server.\n * Applicable only to Firebase Cloud Messaging which we use as a notifications service on Android. It corresponds to `onDeletedMessages()` callback.\n * More information can be found in [Firebase docs](https://firebase.google.com/docs/cloud-messaging/android/receive#override-ondeletedmessages).\n * @param listener A callback function.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @header listen\n */\nexport function addNotificationsDroppedListener(listener: () => void): Subscription {\n  return emitter.addListener<void>(didDropNotificationsEventName, listener);\n}\n\n/**\n * Listeners registered by this method will be called whenever a user interacts with a notification (for example, taps on it).\n * @param listener A function accepting notification response ([`NotificationResponse`](#notificationresponse)) as an argument.\n * @return A [`Subscription`](#subscription) object represents the subscription of the provided listener.\n * @example Register a notification responder listener:\n * ```jsx\n * import React from 'react';\n * import { Linking } from 'react-native';\n * import * as Notifications from 'expo-notifications';\n *\n * export default function Container() {\n *   React.useEffect(() => {\n *     const subscription = Notifications.addNotificationResponseReceivedListener(response => {\n *       const url = response.notification.request.content.data.url;\n *       Linking.openURL(url);\n *     });\n *     return () => subscription.remove();\n *   }, []);\n *\n *   return (\n *     // Your app content\n *   );\n * }\n * ```\n * @header listen\n */\nexport function addNotificationResponseReceivedListener(\n  listener: (event: NotificationResponse) => void\n): Subscription {\n  return emitter.addListener<NotificationResponse>(\n    didReceiveNotificationResponseEventName,\n    (response: NotificationResponse) => {\n      const mappedResponse = mapNotificationResponse(response);\n      listener(mappedResponse);\n    }\n  );\n}\n\n/**\n * Removes a notification subscription returned by an `addNotificationListener` call.\n * @param subscription A subscription returned by `addNotificationListener` method.\n * @header listen\n */\nexport function removeNotificationSubscription(subscription: Subscription) {\n  emitter.removeSubscription(subscription);\n}\n\n// @docsMissing\n/**\n * @header listen\n */\nexport async function getLastNotificationResponseAsync(): Promise<NotificationResponse | null> {\n  if (!NotificationsEmitterModule.getLastNotificationResponseAsync) {\n    throw new UnavailabilityError('ExpoNotifications', 'getLastNotificationResponseAsync');\n  }\n  const response = await NotificationsEmitterModule.getLastNotificationResponseAsync();\n  const mappedResponse = response ? mapNotificationResponse(response) : response;\n  return mappedResponse;\n}\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
+index 3c8916e..7d36d83 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
+@@ -1,4 +1,4 @@
+-import { NotificationResponse } from '../Notifications.types';
++import { Notification, NotificationResponse } from '../Notifications.types';
+ /**
+  * @hidden
+  *
+@@ -9,13 +9,31 @@ import { NotificationResponse } from '../Notifications.types';
+  * @param response The raw response passed in from native code
+  * @returns the mapped response.
+  */
+-export declare const mapNotificationResponse: (response: NotificationResponse) => NotificationResponse & {
+-    notification: {
++export declare const mapNotificationResponse: (response: NotificationResponse) => {
++    notification: Notification & {
+         request: {
+             content: {
+                 dataString?: string;
+             };
+         };
+     };
++    actionIdentifier: string;
++    userText?: string | undefined;
++};
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification from native code
++ * before it is passed to a notification listener.
++ *
++ * @param response The raw notification passed in from native code
++ * @returns the mapped notification.
++ */
++export declare const mapNotification: (notification: Notification) => Notification & {
++    request: {
++        content: {
++            dataString?: string;
++        };
++    };
+ };
+ //# sourceMappingURL=mapNotificationResponse.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
+index b873283..4ae1f21 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"mapNotificationResponse.d.ts","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,oBAAoB,EAAE,MAAM,wBAAwB,CAAC;AAE9D;;;;;;;;;GASG;AACH,eAAO,MAAM,uBAAuB,aAAc,oBAAoB;kBAEpD;QAAE,OAAO,EAAE;YAAE,OAAO,EAAE;gBAAE,UAAU,CAAC,EAAE,MAAM,CAAA;aAAE,CAAA;SAAE,CAAA;KAAE;CAYlE,CAAC"}
+\ No newline at end of file
++{"version":3,"file":"mapNotificationResponse.d.ts","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,oBAAoB,EAAE,MAAM,wBAAwB,CAAC;AAE5E;;;;;;;;;GASG;AACH,eAAO,MAAM,uBAAuB,aAAc,oBAAoB;;iBAkBzD;YAAE,OAAO,EAAE;gBAAE,UAAU,CAAC,EAAE,MAAM,CAAA;aAAE,CAAA;SAAE;;;;CAbhD,CAAC;AAEF;;;;;;;;GAQG;AACH,eAAO,MAAM,eAAe,iBAAkB,YAAY;aAE7C;QAAE,OAAO,EAAE;YAAE,UAAU,CAAC,EAAE,MAAM,CAAA;SAAE,CAAA;KAAE;CAYhD,CAAC"}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
+index 4f421e3..dcf6c87 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
+@@ -9,17 +9,32 @@
+  * @returns the mapped response.
+  */
+ export const mapNotificationResponse = (response) => {
+-    const mappedResponse = { ...response };
++    return {
++        ...response,
++        notification: mapNotification(response.notification),
++    };
++};
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification from native code
++ * before it is passed to a notification listener.
++ *
++ * @param response The raw notification passed in from native code
++ * @returns the mapped notification.
++ */
++export const mapNotification = (notification) => {
++    const mappedNotification = { ...notification };
+     try {
+-        const dataString = mappedResponse?.notification?.request?.content['dataString'];
++        const dataString = mappedNotification?.request?.content['dataString'];
+         if (typeof dataString === 'string') {
+-            mappedResponse.notification.request.content.data = JSON.parse(dataString);
+-            delete mappedResponse.notification.request.content.dataString;
++            mappedNotification.request.content.data = JSON.parse(dataString);
++            delete mappedNotification.request.content.dataString;
+         }
+     }
+     catch (e) {
+-        console.log(`Error in response: ${e}`);
++        console.log(`Error in notification: ${e}`);
+     }
+-    return mappedResponse;
++    return mappedNotification;
+ };
+ //# sourceMappingURL=mapNotificationResponse.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
+index 4c49e80..3f48ac4 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"mapNotificationResponse.js","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAEA;;;;;;;;;GASG;AACH,MAAM,CAAC,MAAM,uBAAuB,GAAG,CAAC,QAA8B,EAAE,EAAE;IACxE,MAAM,cAAc,GAEhB,EAAE,GAAG,QAAQ,EAAE,CAAC;IACpB,IAAI;QACF,MAAM,UAAU,GAAG,cAAc,EAAE,YAAY,EAAE,OAAO,EAAE,OAAO,CAAC,YAAY,CAAC,CAAC;QAChF,IAAI,OAAO,UAAU,KAAK,QAAQ,EAAE;YAClC,cAAc,CAAC,YAAY,CAAC,OAAO,CAAC,OAAO,CAAC,IAAI,GAAG,IAAI,CAAC,KAAK,CAAC,UAAU,CAAC,CAAC;YAC1E,OAAO,cAAc,CAAC,YAAY,CAAC,OAAO,CAAC,OAAO,CAAC,UAAU,CAAC;SAC/D;KACF;IAAC,OAAO,CAAM,EAAE;QACf,OAAO,CAAC,GAAG,CAAC,sBAAsB,CAAC,EAAE,CAAC,CAAC;KACxC;IACD,OAAO,cAAc,CAAC;AACxB,CAAC,CAAC","sourcesContent":["import { NotificationResponse } from '../Notifications.types';\n\n/**\n * @hidden\n *\n * Does any required processing of a notification response from native code\n * before it is passed to a notification response listener, or to the\n * last notification response hook.\n *\n * @param response The raw response passed in from native code\n * @returns the mapped response.\n */\nexport const mapNotificationResponse = (response: NotificationResponse) => {\n  const mappedResponse: NotificationResponse & {\n    notification: { request: { content: { dataString?: string } } };\n  } = { ...response };\n  try {\n    const dataString = mappedResponse?.notification?.request?.content['dataString'];\n    if (typeof dataString === 'string') {\n      mappedResponse.notification.request.content.data = JSON.parse(dataString);\n      delete mappedResponse.notification.request.content.dataString;\n    }\n  } catch (e: any) {\n    console.log(`Error in response: ${e}`);\n  }\n  return mappedResponse;\n};\n"]}
+\ No newline at end of file
++{"version":3,"file":"mapNotificationResponse.js","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAEA;;;;;;;;;GASG;AACH,MAAM,CAAC,MAAM,uBAAuB,GAAG,CAAC,QAA8B,EAAE,EAAE;IACxE,OAAO;QACL,GAAG,QAAQ;QACX,YAAY,EAAE,eAAe,CAAC,QAAQ,CAAC,YAAY,CAAC;KACrD,CAAC;AACJ,CAAC,CAAC;AAEF;;;;;;;;GAQG;AACH,MAAM,CAAC,MAAM,eAAe,GAAG,CAAC,YAA0B,EAAE,EAAE;IAC5D,MAAM,kBAAkB,GAEpB,EAAE,GAAG,YAAY,EAAE,CAAC;IACxB,IAAI;QACF,MAAM,UAAU,GAAG,kBAAkB,EAAE,OAAO,EAAE,OAAO,CAAC,YAAY,CAAC,CAAC;QACtE,IAAI,OAAO,UAAU,KAAK,QAAQ,EAAE;YAClC,kBAAkB,CAAC,OAAO,CAAC,OAAO,CAAC,IAAI,GAAG,IAAI,CAAC,KAAK,CAAC,UAAU,CAAC,CAAC;YACjE,OAAO,kBAAkB,CAAC,OAAO,CAAC,OAAO,CAAC,UAAU,CAAC;SACtD;KACF;IAAC,OAAO,CAAM,EAAE;QACf,OAAO,CAAC,GAAG,CAAC,0BAA0B,CAAC,EAAE,CAAC,CAAC;KAC5C;IACD,OAAO,kBAAkB,CAAC;AAC5B,CAAC,CAAC","sourcesContent":["import { Notification, NotificationResponse } from '../Notifications.types';\n\n/**\n * @hidden\n *\n * Does any required processing of a notification response from native code\n * before it is passed to a notification response listener, or to the\n * last notification response hook.\n *\n * @param response The raw response passed in from native code\n * @returns the mapped response.\n */\nexport const mapNotificationResponse = (response: NotificationResponse) => {\n  return {\n    ...response,\n    notification: mapNotification(response.notification),\n  };\n};\n\n/**\n * @hidden\n *\n * Does any required processing of a notification from native code\n * before it is passed to a notification listener.\n *\n * @param response The raw notification passed in from native code\n * @returns the mapped notification.\n */\nexport const mapNotification = (notification: Notification) => {\n  const mappedNotification: Notification & {\n    request: { content: { dataString?: string } };\n  } = { ...notification };\n  try {\n    const dataString = mappedNotification?.request?.content['dataString'];\n    if (typeof dataString === 'string') {\n      mappedNotification.request.content.data = JSON.parse(dataString);\n      delete mappedNotification.request.content.dataString;\n    }\n  } catch (e: any) {\n    console.log(`Error in notification: ${e}`);\n  }\n  return mappedNotification;\n};\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/src/NotificationsEmitter.ts b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+index 83f9857..d071ba6 100644
+--- a/node_modules/expo-notifications/src/NotificationsEmitter.ts
++++ b/node_modules/expo-notifications/src/NotificationsEmitter.ts
+@@ -2,7 +2,7 @@ import { EventEmitter, Subscription, UnavailabilityError } from 'expo-modules-co
+ 
+ import { Notification, NotificationResponse } from './Notifications.types';
+ import NotificationsEmitterModule from './NotificationsEmitterModule';
+-import { mapNotificationResponse } from './utils/mapNotificationResponse';
++import { mapNotification, mapNotificationResponse } from './utils/mapNotificationResponse';
+ 
+ // Web uses SyntheticEventEmitter
+ const emitter = new EventEmitter(NotificationsEmitterModule);
+@@ -41,7 +41,13 @@ export const DEFAULT_ACTION_IDENTIFIER = 'expo.modules.notifications.actions.DEF
+ export function addNotificationReceivedListener(
+   listener: (event: Notification) => void
+ ): Subscription {
+-  return emitter.addListener<Notification>(didReceiveNotificationEventName, listener);
++  return emitter.addListener<Notification>(
++    didReceiveNotificationEventName,
++    (notification: Notification) => {
++      const mappedNotification = mapNotification(notification);
++      listener(mappedNotification);
++    }
++  );
+ }
+ 
+ /**
+diff --git a/node_modules/expo-notifications/src/__tests__/DevicePushTokenAutoRegistration-test.ts b/node_modules/expo-notifications/src/__tests__/DevicePushTokenAutoRegistration-test.ts
+new file mode 100644
+index 0000000..2caf407
+--- /dev/null
++++ b/node_modules/expo-notifications/src/__tests__/DevicePushTokenAutoRegistration-test.ts
+@@ -0,0 +1,56 @@
++import * as DevicePushTokenAutoRegistration from '../DevicePushTokenAutoRegistration.fx';
++import { DevicePushToken } from '../Tokens.types';
++import getDevicePushTokenAsync from '../getDevicePushTokenAsync';
++import { updateDevicePushTokenAsync } from '../utils/updateDevicePushTokenAsync';
++
++const ENABLED_REGISTRATION_FIXTURE: DevicePushTokenAutoRegistration.DevicePushTokenRegistration = {
++  isEnabled: true,
++};
++const DISABLED_REGISTRATION_FIXTURE: DevicePushTokenAutoRegistration.DevicePushTokenRegistration = {
++  isEnabled: false,
++};
++
++jest.mock('../utils/updateDevicePushTokenAsync');
++jest.mock('../ServerRegistrationModule');
++jest.mock('../getDevicePushTokenAsync');
++
++describe('__handlePersistedRegistrationInfoAsync', () => {
++  it(`doesn't fail if persisted value is empty`, async () => {
++    const spy = jest.spyOn(console, 'warn').mockImplementation();
++    await expect(
++      DevicePushTokenAutoRegistration.__handlePersistedRegistrationInfoAsync(null)
++    ).resolves.toBeUndefined();
++    await expect(
++      DevicePushTokenAutoRegistration.__handlePersistedRegistrationInfoAsync(undefined)
++    ).resolves.toBeUndefined();
++    await expect(
++      DevicePushTokenAutoRegistration.__handlePersistedRegistrationInfoAsync('{i-am-invalid-json')
++    ).resolves.toBeUndefined();
++    spy.mockRestore();
++  });
++
++  it(`doesn't try to update registration if it's not enabled`, async () => {
++    await DevicePushTokenAutoRegistration.__handlePersistedRegistrationInfoAsync(
++      JSON.stringify(DISABLED_REGISTRATION_FIXTURE)
++    );
++    expect(getDevicePushTokenAsync).not.toBeCalled();
++    expect(updateDevicePushTokenAsync).not.toBeCalled();
++  });
++
++  it(`does try to update registration if it's enabled`, async () => {
++    const mockPendingDevicePushToken: DevicePushToken = {
++      data: 'i-want-to-be-sent-to-server',
++      type: 'ios',
++    };
++    (
++      getDevicePushTokenAsync as jest.MockedFunction<typeof getDevicePushTokenAsync>
++    ).mockResolvedValue(mockPendingDevicePushToken);
++    await DevicePushTokenAutoRegistration.__handlePersistedRegistrationInfoAsync(
++      JSON.stringify(ENABLED_REGISTRATION_FIXTURE)
++    );
++    expect(updateDevicePushTokenAsync).toBeCalledWith(
++      expect.anything(),
++      mockPendingDevicePushToken
++    );
++  });
++});
+diff --git a/node_modules/expo-notifications/src/__tests__/NotificationCategories-test.ts b/node_modules/expo-notifications/src/__tests__/NotificationCategories-test.ts
+new file mode 100644
+index 0000000..0616b03
+--- /dev/null
++++ b/node_modules/expo-notifications/src/__tests__/NotificationCategories-test.ts
+@@ -0,0 +1,69 @@
++import NotificationCategoriesModule from '../NotificationCategoriesModule.native';
++import deleteNotificationCategoryAsync from '../deleteNotificationCategoryAsync';
++import getNotificationCategoriesAsync from '../getNotificationCategoriesAsync';
++import setNotificationCategoryAsync from '../setNotificationCategoryAsync';
++
++it(`setNotificationCategoryAsync accepts the expected arguments`, async () => {
++  await setNotificationCategoryAsync(
++    'my-category-id',
++    [
++      {
++        identifier: 'actionId',
++        buttonTitle: 'click me',
++        textInput: { submitButtonTitle: 'submit', placeholder: 'tests are good' },
++        options: {
++          opensAppToForeground: false,
++          isAuthenticationRequired: true,
++          isDestructive: true,
++        },
++      },
++    ],
++    {
++      previewPlaceholder: 'this is just a placeholder',
++      intentIdentifiers: ['myIntentIdentifier'],
++      categorySummaryFormat: 'formatString',
++      customDismissAction: true,
++      allowInCarPlay: true,
++      showTitle: true,
++      showSubtitle: true,
++      allowAnnouncement: true,
++    }
++  );
++  expect(NotificationCategoriesModule.setNotificationCategoryAsync).toHaveBeenLastCalledWith(
++    'my-category-id',
++    [
++      {
++        identifier: 'actionId',
++        buttonTitle: 'click me',
++        textInput: { submitButtonTitle: 'submit', placeholder: 'tests are good' },
++        options: {
++          opensAppToForeground: false,
++          isAuthenticationRequired: true,
++          isDestructive: true,
++        },
++      },
++    ],
++    {
++      previewPlaceholder: 'this is just a placeholder',
++      intentIdentifiers: ['myIntentIdentifier'],
++      categorySummaryFormat: 'formatString',
++      customDismissAction: true,
++      allowInCarPlay: true,
++      showTitle: true,
++      showSubtitle: true,
++      allowAnnouncement: true,
++    }
++  );
++});
++
++it('deleteNotificationCategoryAsync accepts the expected argument', async () => {
++  await deleteNotificationCategoryAsync('my-category-id');
++  expect(NotificationCategoriesModule.deleteNotificationCategoryAsync).toHaveBeenLastCalledWith(
++    'my-category-id'
++  );
++});
++
++it('getNotificationCategoriesAsync accepts the expected argument', async () => {
++  await getNotificationCategoriesAsync();
++  expect(NotificationCategoriesModule.getNotificationCategoriesAsync).toHaveBeenLastCalledWith();
++});
+diff --git a/node_modules/expo-notifications/src/__tests__/Notifications-test.ts b/node_modules/expo-notifications/src/__tests__/Notifications-test.ts
+new file mode 100644
+index 0000000..5576b46
+--- /dev/null
++++ b/node_modules/expo-notifications/src/__tests__/Notifications-test.ts
+@@ -0,0 +1,311 @@
++import NotificationScheduler from '../NotificationScheduler';
++import scheduleNotificationAsync from '../scheduleNotificationAsync';
++
++const notificationTriggerInputTest = {
++  identifier: 'test_id',
++  content: {
++    title: 'test',
++  },
++};
++
++it(`verifies date (as Date) trigger handling`, async () => {
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger: new Date(),
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'date',
++      timestamp: input.trigger.getTime(),
++    }
++  );
++});
++
++it(`verifies date (as time) trigger handling`, async () => {
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger: new Date().getTime(),
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'date',
++      timestamp: input.trigger,
++    }
++  );
++});
++
++it(`verifies daily trigger handling`, async () => {
++  const trigger = {
++    hour: 12,
++    minute: 30,
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'daily',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies weekly trigger handling`, async () => {
++  const trigger = {
++    weekday: 1,
++    hour: 12,
++    minute: 30,
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'weekly',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies yearly trigger handling`, async () => {
++  const trigger = {
++    day: 1,
++    month: 6,
++    hour: 12,
++    minute: 30,
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'yearly',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies daily trigger handling with channelId`, async () => {
++  const trigger = {
++    hour: 12,
++    minute: 30,
++    channelId: 'test-channel-id',
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'daily',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies weekly trigger handling with channelId`, async () => {
++  const trigger = {
++    weekday: 1,
++    hour: 12,
++    minute: 30,
++    channelId: 'test-channel-id',
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'weekly',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies yearly trigger handling with channelId`, async () => {
++  const trigger = {
++    day: 1,
++    month: 6,
++    hour: 12,
++    minute: 30,
++    channelId: 'test-channel-id',
++    repeats: true as boolean | undefined,
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  delete trigger.repeats;
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'yearly',
++      ...input.trigger,
++    }
++  );
++});
++
++it(`verifies immediate trigger handling`, async () => {
++  const trigger = null;
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    null
++  );
++});
++
++it(`verifies immediate trigger handling with channelId`, async () => {
++  const trigger = {
++    channelId: 'test-channel-id',
++  };
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger,
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    null
++  );
++});
++
++it(`verifies time interval trigger handling`, async () => {
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger: {
++      seconds: 3600,
++    },
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'timeInterval',
++      repeats: false,
++      seconds: input.trigger.seconds,
++    }
++  );
++
++  await scheduleNotificationAsync({
++    ...input,
++    trigger: {
++      ...input.trigger,
++      repeats: true,
++    },
++  });
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'timeInterval',
++      repeats: true,
++      seconds: input.trigger.seconds,
++    }
++  );
++});
++
++it(`verifies calendar trigger handling`, async () => {
++  const input = {
++    ...notificationTriggerInputTest,
++    trigger: {
++      hour: 12,
++      minute: 30,
++    },
++  };
++  await scheduleNotificationAsync(input);
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'calendar',
++      repeats: undefined,
++      value: {
++        ...input.trigger,
++      },
++    }
++  );
++
++  await scheduleNotificationAsync({
++    ...input,
++    trigger: {
++      ...input.trigger,
++      second: 10,
++    },
++  });
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'calendar',
++      repeats: undefined,
++      value: {
++        ...input.trigger,
++        second: 10,
++      },
++    }
++  );
++
++  await scheduleNotificationAsync({
++    ...input,
++    trigger: {
++      ...input.trigger,
++      repeats: true,
++      second: 10,
++    },
++  });
++  expect(NotificationScheduler.scheduleNotificationAsync).toHaveBeenLastCalledWith(
++    input.identifier,
++    input.content,
++    {
++      type: 'calendar',
++      repeats: true,
++      value: {
++        ...input.trigger,
++        second: 10,
++      },
++    }
++  );
++});
+diff --git a/node_modules/expo-notifications/src/__tests__/index-test.ts b/node_modules/expo-notifications/src/__tests__/index-test.ts
+new file mode 100644
+index 0000000..17958da
+--- /dev/null
++++ b/node_modules/expo-notifications/src/__tests__/index-test.ts
+@@ -0,0 +1,5 @@
++import * as Notifications from '..';
++
++it(`includes IosAuthorizationStatus export`, () => {
++  expect(Notifications.IosAuthorizationStatus).toBeDefined();
++});
+diff --git a/node_modules/expo-notifications/src/utils/__tests__/updateDevicePushTokenAsync-test.ts b/node_modules/expo-notifications/src/utils/__tests__/updateDevicePushTokenAsync-test.ts
+new file mode 100644
+index 0000000..74c1a32
+--- /dev/null
++++ b/node_modules/expo-notifications/src/utils/__tests__/updateDevicePushTokenAsync-test.ts
+@@ -0,0 +1,94 @@
++import 'abort-controller/polyfill';
++
++import { DevicePushToken } from '../../Tokens.types';
++import { updateDevicePushTokenAsync } from '../updateDevicePushTokenAsync';
++
++const TOKEN: DevicePushToken = { type: 'ios', data: 'i-am-token' };
++
++jest.mock('../../ServerRegistrationModule', () => ({
++  getInstallationIdAsync: () => 'abcdefg',
++}));
++
++declare const global: any;
++
++const expoEndpointUrl = 'https://exp.host/--/api/v2/push/updateDeviceToken';
++
++describe('given valid registration info', () => {
++  const successResponse = {
++    status: 200,
++    ok: true,
++  } as Response;
++
++  const failureResponse = {
++    status: 500,
++    ok: false,
++    text: async () => 'Server error',
++  } as Response;
++
++  let originalFetch: typeof fetch | undefined;
++
++  beforeAll(() => {
++    originalFetch = global.fetch;
++    global.fetch = jest.fn();
++  });
++
++  afterAll(() => {
++    global.fetch = originalFetch;
++  });
++
++  it('submits the request to proper URL', async () => {
++    global.fetch.mockResolvedValue(successResponse);
++    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
++    const abortController = new AbortController();
++    await updateDevicePushTokenAsync(abortController.signal, TOKEN);
++    warnSpy.mockRestore();
++    expect(global.fetch).toHaveBeenCalledWith(expoEndpointUrl, expect.anything());
++  });
++
++  describe('when server responds with an ok status', () => {
++    beforeAll(() => {
++      global.fetch.mockResolvedValue(successResponse);
++    });
++
++    it('submits the request only once', async () => {
++      const abortController = new AbortController();
++      await updateDevicePushTokenAsync(abortController.signal, TOKEN);
++      expect(global.fetch).toHaveBeenCalledTimes(1);
++    });
++  });
++
++  it('retries until it succeeds whilst server responds with an error status', async () => {
++    const spy = jest.spyOn(console, 'debug').mockImplementation();
++    global.fetch
++      .mockResolvedValueOnce(failureResponse)
++      .mockResolvedValueOnce(failureResponse)
++      .mockResolvedValueOnce(successResponse);
++    const abortController = new AbortController();
++    await updateDevicePushTokenAsync(abortController.signal, TOKEN);
++    expect(global.fetch).toHaveBeenCalledTimes(3);
++    spy.mockRestore();
++  });
++
++  it('retries until it succeeds if fetch throws', async () => {
++    const debugSpy = jest.spyOn(console, 'debug').mockImplementation();
++    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
++    global.fetch.mockRejectedValueOnce(new TypeError()).mockResolvedValueOnce(successResponse);
++    const abortController = new AbortController();
++    await updateDevicePushTokenAsync(abortController.signal, TOKEN);
++    expect(global.fetch).toHaveBeenCalledTimes(2);
++    warnSpy.mockRestore();
++    debugSpy.mockRestore();
++  });
++
++  it('does not retry if signal has been aborted', async () => {
++    const debugSpy = jest.spyOn(console, 'debug').mockImplementation();
++    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
++    global.fetch.mockRejectedValue(new TypeError());
++    const abortController = new AbortController();
++    setTimeout(() => abortController.abort(), 1000);
++    await updateDevicePushTokenAsync(abortController.signal, TOKEN);
++    expect(global.fetch).toHaveBeenCalledTimes(2);
++    warnSpy.mockRestore();
++    debugSpy.mockRestore();
++  });
++});
+diff --git a/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts b/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
+index 424d0f2..64e327c 100644
+--- a/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
++++ b/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
+@@ -1,4 +1,4 @@
+-import { NotificationResponse } from '../Notifications.types';
++import { Notification, NotificationResponse } from '../Notifications.types';
+ 
+ /**
+  * @hidden
+@@ -11,17 +11,33 @@ import { NotificationResponse } from '../Notifications.types';
+  * @returns the mapped response.
+  */
+ export const mapNotificationResponse = (response: NotificationResponse) => {
+-  const mappedResponse: NotificationResponse & {
+-    notification: { request: { content: { dataString?: string } } };
+-  } = { ...response };
++  return {
++    ...response,
++    notification: mapNotification(response.notification),
++  };
++};
++
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification from native code
++ * before it is passed to a notification listener.
++ *
++ * @param response The raw notification passed in from native code
++ * @returns the mapped notification.
++ */
++export const mapNotification = (notification: Notification) => {
++  const mappedNotification: Notification & {
++    request: { content: { dataString?: string } };
++  } = { ...notification };
+   try {
+-    const dataString = mappedResponse?.notification?.request?.content['dataString'];
++    const dataString = mappedNotification?.request?.content['dataString'];
+     if (typeof dataString === 'string') {
+-      mappedResponse.notification.request.content.data = JSON.parse(dataString);
+-      delete mappedResponse.notification.request.content.dataString;
++      mappedNotification.request.content.data = JSON.parse(dataString);
++      delete mappedNotification.request.content.dataString;
+     }
+   } catch (e: any) {
+-    console.log(`Error in response: ${e}`);
++    console.log(`Error in notification: ${e}`);
+   }
+-  return mappedResponse;
++  return mappedNotification;
+ };
