@@ -214,7 +214,12 @@ const Notifier = () => {
           title="getLastNotificationResponseAsync()"
           onPress={() => {
             getLastNotificationResponseAsync()
-              .then((lastResponse) => setResponseFromAsync(lastResponse))
+              .then((lastResponse) => {
+                console.log(
+                  `lastResponse = ${JSON.stringify(lastResponse, null, 2)}`,
+                );
+                setResponseFromAsync(lastResponse);
+              })
               .catch((error) => setResponseFromAsync(error));
           }}
         />
