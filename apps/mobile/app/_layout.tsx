@@ -1,35 +1,69 @@
-import { useEffect } from "react";
-import { Alert } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { Stack, router } from "expo-router";
-import { useUpdates, fetchUpdateAsync, checkForUpdateAsync, reloadAsync } from "expo-updates";
-import { useAppState } from "@react-native-community/hooks";
+import { useEffect } from 'react';
+import { Alert } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
+import { Stack, router } from 'expo-router';
+import {
+  useUpdates,
+  fetchUpdateAsync,
+  checkForUpdateAsync,
+  reloadAsync,
+} from 'expo-updates';
+import { useAppState } from '@react-native-community/hooks';
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider as ReactNavigationThemeProvider,
-} from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ThemeColors } from "~/constants/colors";
+} from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ThemeColors } from '~/constants/colors';
 import {
   useTheme,
   useAutoSetAppearanceFromSettingsEffect,
-} from "~/components/Themed";
-import { useDataIsReady } from "~/storage/PourStore";
-import { useQuickActionCallback } from "~/utils/useQuickActionCallback";
+} from '~/components/Themed';
+import { useDataIsReady } from '~/storage/PourStore';
+import { useQuickActionCallback } from '~/utils/useQuickActionCallback';
 
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from '@sentry/react-native';
+
+function useNotificationObserver() {
+  useEffect(() => {
+    let isMounted = true;
+
+    function redirect(notification: Notifications.Notification) {
+      const url = notification.request.content.data?.url;
+      if (url) {
+        router.push(url);
+      }
+    }
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (!isMounted || !response?.notification) {
+        return;
+      }
+      redirect(response?.notification);
+    });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        redirect(response.notification);
+      },
+    );
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
+}
 
 function Root() {
   useAutoSetAppearanceFromSettingsEffect();
+  useNotificationObserver();
   const theme = useTheme();
   const dataIsReady = useDataIsReady();
-  const {
-    isChecking,
-    isUpdateAvailable,
-    isUpdatePending,
-    downloadedUpdate,
-  } = useUpdates();
+  const { isChecking, isUpdateAvailable, isUpdatePending, downloadedUpdate } =
+    useUpdates();
 
   const appState = useAppState();
 
@@ -38,26 +72,26 @@ function Root() {
   }
 
   useQuickActionCallback((action) => {
-    if (action.id === "1") {
+    if (action.id === '1') {
       requestAnimationFrame(() => {
-        router.navigate("/new");
+        router.navigate('/new');
       });
     }
   });
 
   // Check for updates when app state changes to foreground
   useEffect(() => {
-    if (appState === "active" && !isUpdatePending && !isChecking && !__DEV__) {
+    if (appState === 'active' && !isUpdatePending && !isChecking && !__DEV__) {
       checkForUpdateAsync();
     }
-  }, [appState])
+  }, [appState]);
 
   // Prompt to install when an update is available
   useEffect(() => {
     if (isUpdateAvailable) {
       Alert.alert(`An update is available`, `Download and install it now?`, [
         {
-          text: "Yes",
+          text: 'Yes',
           onPress: () => {
             fetchUpdateAsync();
           },
@@ -78,7 +112,7 @@ function Root() {
         `Would you like to restart and install it now?`,
         [
           {
-            text: "Yes",
+            text: 'Yes',
             onPress: () => {
               // @ts-ignore
               reloadAsync();
@@ -88,22 +122,22 @@ function Root() {
             text: "I'll do it later",
             onPress: () => {},
           },
-        ]
+        ],
       );
     }
   }, [downloadedUpdate]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <StatusBar style={theme === 'light' ? 'dark' : 'light'} />
       <ReactNavigationThemeProvider
         value={
-          theme === "dark"
+          theme === 'dark'
             ? CustomNavigationDarkTheme
             : CustomNavigationLightTheme
         }
       >
-        <Stack screenOptions={{ presentation: "modal" }} />
+        <Stack screenOptions={{ presentation: 'modal' }} />
       </ReactNavigationThemeProvider>
     </GestureHandlerRootView>
   );
@@ -113,7 +147,7 @@ const CustomNavigationLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#000",
+    primary: '#000',
   },
 };
 
@@ -122,8 +156,8 @@ const CustomNavigationDarkTheme = {
   colors: {
     ...DarkTheme.colors,
     primary: ThemeColors.dark.tint,
-    text: "#fff",
-    notification: "#fff",
+    text: '#fff',
+    notification: '#fff',
   },
 };
 
