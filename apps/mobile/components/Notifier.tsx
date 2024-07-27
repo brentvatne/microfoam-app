@@ -207,6 +207,13 @@ export const Notifier = () => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(
+      `Last response changed:\n  Identifier = ${
+        lastResponse?.notification.request.identifier ?? ''
+      }\n  Title: ${lastResponse?.notification.request.content.title ?? ''}`,
+    );
+  }, [lastResponse]);
   return (
     <View>
       <Text>Your expo push token: {expoPushToken}</Text>
