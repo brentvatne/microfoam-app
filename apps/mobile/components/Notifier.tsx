@@ -28,14 +28,61 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { View, Text } from './Themed';
 import Button from './Button';
+import { router } from 'expo-router';
+import { sub } from 'date-fns';
 
-setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+/**
+ * Initializes notification handling
+ * Should be called at the beginning of the root layout
+ * Optionally gets and listens for user taps on notifications to open different
+ * routes in the app
+ *
+ * @param routeOnResponses If true, sets up response routing
+ */
+export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
+  const responseListener = useRef<Subscription>();
+  usePushToken();
+  useEffect(() => {
+    let isMounted = true;
+
+    setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
+
+    if (routeOnResponses) {
+      function redirect(notification: Notification) {
+        const url = notification.request.content.data?.url;
+        if (url) {
+          router.push(url);
+        }
+      }
+
+      getLastNotificationResponseAsync().then((response) => {
+        if (!isMounted || !response?.notification) {
+          return;
+        }
+        redirect(response?.notification);
+      });
+
+      const subscription = addNotificationResponseReceivedListener(
+        (response) => {
+          redirect(response.notification);
+        },
+      );
+      responseListener.current = subscription;
+    }
+
+    return () => {
+      isMounted = false;
+      responseListener.current?.remove();
+      responseListener.current = undefined;
+    };
+  }, []);
+}
 
 const STORAGE_KEY = '@notification_bg_store';
 
@@ -69,7 +116,7 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
   // setNotification(data.notification);
 });
 
-const Notifier = () => {
+export const Notifier = () => {
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notification | undefined>(
     undefined,
@@ -87,7 +134,8 @@ const Notifier = () => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  const lastResponse = useLastNotificationResponse();
+  //const lastResponse = useLastNotificationResponse();
+  const lastResponse = null;
 
   const { expoPushToken, devicePushToken } = usePushToken();
 
@@ -110,6 +158,7 @@ const Notifier = () => {
         });
     }
 
+    /*
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
@@ -135,8 +184,9 @@ const Notifier = () => {
         );
       },
     );
-
+         
     console.log(`${Platform.OS} added listeners`);
+     */
 
     AsyncStorage.getItem(STORAGE_KEY)
       .then((value) => {
@@ -320,5 +370,3 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
-
-export default Notifier;
