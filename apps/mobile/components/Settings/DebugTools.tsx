@@ -1,21 +1,21 @@
-import { Alert, StyleSheet } from "react-native";
-import * as Sharing from "expo-sharing";
-import * as FileSystem from "expo-file-system";
-import * as DocumentPicker from "expo-document-picker";
-import * as Updates from "expo-updates";
-import Insights from "expo-insights";
+import { Alert, StyleSheet } from 'react-native';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
+import * as Updates from 'expo-updates';
+import Insights from 'expo-insights';
 
-import { isLocalFile } from "~/storage/fs";
-import * as PourStore from "~/storage/PourStore";
-import Notifier from "~/components/Notifier";
-import Button from "~/components/Button";
-import { Text } from "~/components/Themed";
-import { FontSize, Margin } from "~/constants/styles";
+import { isLocalFile } from '~/storage/fs';
+import * as PourStore from '~/storage/PourStore';
+import { Notifier } from '~/components/Notifier';
+import Button from '~/components/Button';
+import { Text } from '~/components/Themed';
+import { FontSize, Margin } from '~/constants/styles';
 
 export default function DebugTools() {
   return (
     <>
-      <Text style={{ fontFamily: "Courier", textAlign: "center" }}>
+      <Text style={{ fontFamily: 'Courier', textAlign: 'center' }}>
         {/* Insights payload:{" "}
         {
           // @ts-ignore
@@ -27,7 +27,7 @@ export default function DebugTools() {
       <Button
         title="Throw error"
         onPress={() => {
-          throw new Error("Test error");
+          throw new Error('Test error');
         }}
       />
 
@@ -52,16 +52,16 @@ export default function DebugTools() {
         title="Clear data"
         onPress={() => {
           Alert.alert(
-            "Clear data?",
-            "All data will be lost. Make sure you have backed up anything important first!",
+            'Clear data?',
+            'All data will be lost. Make sure you have backed up anything important first!',
             [
               {
-                text: "Cancel",
-                style: "cancel",
+                text: 'Cancel',
+                style: 'cancel',
               },
-              { text: "OK", onPress: () => PourStore.destroyAllAsync() },
+              { text: 'OK', onPress: () => PourStore.destroyAllAsync() },
             ],
-            { cancelable: true }
+            { cancelable: true },
           );
         }}
       />
@@ -70,21 +70,21 @@ export default function DebugTools() {
         title="Drop and re-initialize database"
         onPress={() => {
           Alert.alert(
-            "Drop and re-initialize database?",
-            "All data will be lost. Make sure you have backed up anything important first!",
+            'Drop and re-initialize database?',
+            'All data will be lost. Make sure you have backed up anything important first!',
             [
               {
-                text: "Cancel",
-                style: "cancel",
+                text: 'Cancel',
+                style: 'cancel',
               },
               {
-                text: "OK",
+                text: 'OK',
                 onPress: () => {
                   PourStore.destroyAllAsync();
                 },
               },
             ],
-            { cancelable: true }
+            { cancelable: true },
           );
         }}
       />
@@ -94,20 +94,20 @@ export default function DebugTools() {
         onPress={async () => {
           const result = await Updates.fetchUpdateAsync();
           if (
-            ("isNew" in result && result.isNew) ||
-            ("isRollbackToEmbedded" in result && result.isRollbackToEmbedded)
+            ('isNew' in result && result.isNew) ||
+            ('isRollbackToEmbedded' in result && result.isRollbackToEmbedded)
           ) {
             Alert.alert(
-              "New update available",
-              "Restart the app to apply the update",
+              'New update available',
+              'Restart the app to apply the update',
               [
-                { text: "Cancel", style: "cancel" },
-                { text: "Restart", onPress: () => Updates.reloadAsync() },
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Restart', onPress: () => Updates.reloadAsync() },
               ],
-              { cancelable: true }
+              { cancelable: true },
             );
           } else {
-            alert("No update available");
+            alert('No update available');
           }
         }}
       />
@@ -135,17 +135,17 @@ async function maybeExportDatabaseAsync() {
   if (poursWithLocalPhotos.length > 0) {
     Alert.alert(
       `${poursWithLocalPhotos.length} ${
-        poursWithLocalPhotos.length === 1 ? "photo is" : "photos are"
+        poursWithLocalPhotos.length === 1 ? 'photo is' : 'photos are'
       } not uploaded yet`,
       "If you proceed with the export, these photos won't point to publicly accessible web URLs. Do you want to proceed anyways?",
       [
         {
-          text: "Cancel",
-          style: "cancel",
+          text: 'Cancel',
+          style: 'cancel',
         },
-        { text: "Proceed with export", onPress: () => exportDatabaseAsync() },
+        { text: 'Proceed with export', onPress: () => exportDatabaseAsync() },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
     return;
   } else {
@@ -158,7 +158,7 @@ async function exportDatabaseAsync() {
   const backupUri = `${FileSystem.cacheDirectory}backup.json`;
   try {
     await FileSystem.writeAsStringAsync(backupUri, data);
-    await Sharing.shareAsync(backupUri, { mimeType: "text/json" });
+    await Sharing.shareAsync(backupUri, { mimeType: 'text/json' });
   } catch (e) {
     alert(e.message);
   }
@@ -170,19 +170,19 @@ async function importDatabaseAsync() {
     const data = await FileSystem.readAsStringAsync(result.assets[0].uri);
     try {
       PourStore.loadExternalJSONAsync(data);
-      alert("Imported data successfully");
+      alert('Imported data successfully');
     } catch (e) {
-      alert("Import failed");
+      alert('Import failed');
     }
   }
 }
 
 const styles = StyleSheet.create({
   header: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: Margin[5],
     marginBottom: Margin[4],
     fontSize: FontSize.xxl,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
