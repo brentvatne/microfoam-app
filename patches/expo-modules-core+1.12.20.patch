@@ -1,0 +1,42 @@
+diff --git a/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/JSTypeConverter.kt b/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/JSTypeConverter.kt
+index a17efa5..e4f3e0f 100644
+--- a/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/JSTypeConverter.kt
++++ b/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/JSTypeConverter.kt
+@@ -23,6 +23,37 @@ object JSTypeConverter {
+     override fun createArray(): WritableArray = Arguments.createArray()
+   }
+ 
++  @JvmStatic
++  fun isConvertible(value: Any?): Boolean {
++    return when (value) {
++      null, is Unit -> true
++      is Bundle -> true
++      is Array<*> -> true
++      is IntArray -> true
++      is FloatArray -> true
++      is DoubleArray -> true
++      is BooleanArray -> true
++      is ByteArray -> true
++      is Map<*, *> -> true
++      is Enum<*> -> true
++      is Record -> true
++      is URI -> true
++      is URL -> true
++      is Uri -> true
++      is File -> true
++      is Pair<*, *> -> true
++      is Long -> true
++      is Int -> true
++      is String -> true
++      is Float -> true
++      is Double -> true
++      is Boolean -> true
++      is RawTypedArrayHolder -> true
++      is Iterable<*> -> true
++      else -> false
++    }  }
++
++  @JvmStatic
+   fun convertToJSValue(value: Any?, containerProvider: ContainerProvider = DefaultContainerProvider): Any? {
+     return when (value) {
+       null, is Unit -> null
