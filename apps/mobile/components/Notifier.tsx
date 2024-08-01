@@ -158,7 +158,6 @@ export const Notifier = () => {
         });
     }
 
-    /*
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
@@ -184,9 +183,8 @@ export const Notifier = () => {
         );
       },
     );
-         
+
     console.log(`${Platform.OS} added listeners`);
-     */
 
     AsyncStorage.getItem(STORAGE_KEY)
       .then((value) => {
