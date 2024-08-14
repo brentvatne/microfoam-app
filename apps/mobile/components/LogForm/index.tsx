@@ -307,22 +307,22 @@ function PhotoPickerForm({ onChange, photoUri }) {
   };
 
   return (
-    <DragDropContentView
-      onDropEvent={(event: { assets: OnDropEvent[] }) => {
-        if (event.assets[0]) {
-          handleDropImageAsync(event.assets[0]);
-        }
+    // <DragDropContentView
+    //   onDropEvent={(event: { assets: OnDropEvent[] }) => {
+    //     if (event.assets[0]) {
+    //       handleDropImageAsync(event.assets[0]);
+    //     }
 
-        if (event.assets.length > 1) {
-          console.warn(
-            "Multiple assets were dropped, but only the first will be used."
-          );
-        }
-      }}
-      highlightColor="#2f95dc"
-      highlightBorderRadius={20}
-      style={{ flex: 1 }}
-    >
+    //     if (event.assets.length > 1) {
+    //       console.warn(
+    //         "Multiple assets were dropped, but only the first will be used."
+    //       );
+    //     }
+    //   }}
+    //   highlightColor="#2f95dc"
+    //   highlightBorderRadius={20}
+    //   style={{ flex: 1 }}
+    // >
       <View
         darkColor={TailwindColor["zinc-800"]}
         lightColor={TailwindColor["gray-100"]}
@@ -375,7 +375,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
           </RectButton>
         )}
       </View>
-    </DragDropContentView>
+    // </DragDropContentView>
   );
 }
 

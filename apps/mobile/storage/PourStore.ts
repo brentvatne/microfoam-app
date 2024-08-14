@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { SectionListData } from "react-native";
-import { Blurhash } from "react-native-blurhash";
+import { Image } from "expo-image";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import { createStore, createCustomPersister } from "tinybase";
@@ -90,7 +90,7 @@ async function generateBlurhashAsync(
       width: 50,
       height: 50,
     });
-    const blurhash = await Blurhash.encode(thumbnail, componentsX, componentsY);
+    const blurhash = await Image.generateBlurhashAsync(thumbnail, [componentsX, componentsY]);
     return blurhash;
   } catch (e) {
     console.log(e);
@@ -108,7 +108,8 @@ async function processImageAsync(pour: { uri: string; blurhash?: string }) {
     }
 
     const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
-    const blurhash = await generateBlurhashAsync(resizedUri);
+    // const blurhash = await generateBlurhashAsync(resizedUri);
+    const blurhash = '';
     const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
     const filename = photoUrl.split("/").pop();
 
