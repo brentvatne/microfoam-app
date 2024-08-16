@@ -13,11 +13,15 @@ import {
   getNotificationChannelsAsync,
   removeNotificationSubscription,
   requestPermissionsAsync,
+  scheduleNotificationAsync,
   setNotificationChannelAsync,
   setNotificationHandler,
   useLastNotificationResponse,
   addPushTokenListener,
   NotificationContentAndroid,
+  YearlyNotificationTrigger,
+  YearlyTriggerInput,
+  TimeIntervalTriggerInput,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -124,6 +128,8 @@ export const Notifier = () => {
   const [response, setResponse] = useState<NotificationResponse | undefined>(
     undefined,
   );
+  const [scheduledNotificationIdentifier, setScheduledNotificationIdentifier] =
+    useState('');
 
   const [responseFromAsync, setResponseFromAsync] = useState<
     NotificationResponse | undefined
@@ -134,8 +140,7 @@ export const Notifier = () => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  //const lastResponse = useLastNotificationResponse();
-  const lastResponse = null;
+  const lastResponse = useLastNotificationResponse();
 
   const { expoPushToken, devicePushToken } = usePushToken();
 
@@ -259,6 +264,9 @@ export const Notifier = () => {
               2,
             )}
         </Text>
+        <Text>
+          Schedule notification result string: {scheduledNotificationIdentifier}
+        </Text>
         <Text>Background task data: {backgroundTaskString}</Text>
         <Button
           title="getLastNotificationResponseAsync()"
@@ -271,6 +279,22 @@ export const Notifier = () => {
                 setResponseFromAsync(lastResponse);
               })
               .catch((error) => setResponseFromAsync(error));
+          }}
+        />
+        <Button
+          title="Schedule time interval notification in 2 seconds"
+          onPress={() => {
+            schedulePushNotificationIn2Seconds().then((result) =>
+              setScheduledNotificationIdentifier(result),
+            );
+          }}
+        />
+        <Button
+          title="Schedule yearly notification starting in the next minute"
+          onPress={() => {
+            schedulePushNotificationYearly().then((result) =>
+              setScheduledNotificationIdentifier(result),
+            );
           }}
         />
       </View>
@@ -370,3 +394,45 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+
+const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
+  const date = new Date();
+  const trigger: TimeIntervalTriggerInput = {
+    seconds: 2,
+    repeats: false,
+  };
+  try {
+    return await scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: `Time interval notification scheduled ${date.toLocaleString()}`,
+        data: { data: 'goes here', test: { test1: 'more data' } },
+      },
+      trigger,
+    });
+  } catch (e) {
+    return `Error scheduling notification: ${e}`;
+  }
+};
+const schedulePushNotificationYearly: () => Promise<string> = async () => {
+  const date = new Date();
+  const trigger: YearlyTriggerInput = {
+    day: date.getDate(),
+    month: date.getMonth(),
+    hour: date.getHours(),
+    minute: date.getMinutes() + 1,
+    repeats: true,
+  };
+  try {
+    return await scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: `Yearly notification scheduled ${date.toLocaleString()}`,
+        data: { data: 'goes here', test: { test1: 'more data' } },
+      },
+      trigger,
+    });
+  } catch (e) {
+    return `Error scheduling notification: ${e}`;
+  }
+};
