@@ -51,3 +51,336 @@ index a47143b..4b6e04e 100644
        }
      }
      serializedRequest.putBundle("content", content);
+diff --git a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.d.ts.map b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.d.ts.map
+index fcdc7d21f7..669db498f7 100644
+--- a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.d.ts.map
++++ b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"getAllScheduledNotificationsAsync.d.ts","sourceRoot":"","sources":["../src/getAllScheduledNotificationsAsync.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,mBAAmB,EAAE,MAAM,uBAAuB,CAAC;AAE5D;;;;GAIG;AACH,wBAA8B,iCAAiC,IAAI,OAAO,CAAC,mBAAmB,EAAE,CAAC,CAMhG"}
+\ No newline at end of file
++{"version":3,"file":"getAllScheduledNotificationsAsync.d.ts","sourceRoot":"","sources":["../src/getAllScheduledNotificationsAsync.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,mBAAmB,EAAE,MAAM,uBAAuB,CAAC;AAG5D;;;;GAIG;AACH,wBAA8B,iCAAiC,IAAI,OAAO,CAAC,mBAAmB,EAAE,CAAC,CAQhG"}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js
+index d32b6d3064..1e5b6afe20 100644
+--- a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js
++++ b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js
+@@ -1,5 +1,6 @@
+ import { UnavailabilityError } from 'expo-modules-core';
+ import NotificationScheduler from './NotificationScheduler';
++import { mapNotificationRequest } from './utils/mapNotificationResponse';
+ /**
+  * Fetches information about all scheduled notifications.
+  * @return Returns a Promise resolving to an array of objects conforming to the [`Notification`](#notification) interface.
+@@ -9,6 +10,6 @@ export default async function getAllScheduledNotificationsAsync() {
+     if (!NotificationScheduler.getAllScheduledNotificationsAsync) {
+         throw new UnavailabilityError('Notifications', 'getAllScheduledNotificationsAsync');
+     }
+-    return await NotificationScheduler.getAllScheduledNotificationsAsync();
++    return (await NotificationScheduler.getAllScheduledNotificationsAsync()).map((request) => mapNotificationRequest(request));
+ }
+ //# sourceMappingURL=getAllScheduledNotificationsAsync.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js.map b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js.map
+index 39f79af800..2304156f75 100644
+--- a/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js.map
++++ b/node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"getAllScheduledNotificationsAsync.js","sourceRoot":"","sources":["../src/getAllScheduledNotificationsAsync.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAExD,OAAO,qBAAqB,MAAM,yBAAyB,CAAC;AAG5D;;;;GAIG;AACH,MAAM,CAAC,OAAO,CAAC,KAAK,UAAU,iCAAiC;IAC7D,IAAI,CAAC,qBAAqB,CAAC,iCAAiC,EAAE;QAC5D,MAAM,IAAI,mBAAmB,CAAC,eAAe,EAAE,mCAAmC,CAAC,CAAC;KACrF;IAED,OAAO,MAAM,qBAAqB,CAAC,iCAAiC,EAAE,CAAC;AACzE,CAAC","sourcesContent":["import { UnavailabilityError } from 'expo-modules-core';\n\nimport NotificationScheduler from './NotificationScheduler';\nimport { NotificationRequest } from './Notifications.types';\n\n/**\n * Fetches information about all scheduled notifications.\n * @return Returns a Promise resolving to an array of objects conforming to the [`Notification`](#notification) interface.\n * @header schedule\n */\nexport default async function getAllScheduledNotificationsAsync(): Promise<NotificationRequest[]> {\n  if (!NotificationScheduler.getAllScheduledNotificationsAsync) {\n    throw new UnavailabilityError('Notifications', 'getAllScheduledNotificationsAsync');\n  }\n\n  return await NotificationScheduler.getAllScheduledNotificationsAsync();\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"getAllScheduledNotificationsAsync.js","sourceRoot":"","sources":["../src/getAllScheduledNotificationsAsync.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAExD,OAAO,qBAAqB,MAAM,yBAAyB,CAAC;AAE5D,OAAO,EAAE,sBAAsB,EAAE,MAAM,iCAAiC,CAAC;AAEzE;;;;GAIG;AACH,MAAM,CAAC,OAAO,CAAC,KAAK,UAAU,iCAAiC;IAC7D,IAAI,CAAC,qBAAqB,CAAC,iCAAiC,EAAE;QAC5D,MAAM,IAAI,mBAAmB,CAAC,eAAe,EAAE,mCAAmC,CAAC,CAAC;KACrF;IAED,OAAO,CAAC,MAAM,qBAAqB,CAAC,iCAAiC,EAAE,CAAC,CAAC,GAAG,CAAC,CAAC,OAAO,EAAE,EAAE,CACvF,sBAAsB,CAAC,OAAO,CAAC,CAChC,CAAC;AACJ,CAAC","sourcesContent":["import { UnavailabilityError } from 'expo-modules-core';\n\nimport NotificationScheduler from './NotificationScheduler';\nimport { NotificationRequest } from './Notifications.types';\nimport { mapNotificationRequest } from './utils/mapNotificationResponse';\n\n/**\n * Fetches information about all scheduled notifications.\n * @return Returns a Promise resolving to an array of objects conforming to the [`Notification`](#notification) interface.\n * @header schedule\n */\nexport default async function getAllScheduledNotificationsAsync(): Promise<NotificationRequest[]> {\n  if (!NotificationScheduler.getAllScheduledNotificationsAsync) {\n    throw new UnavailabilityError('Notifications', 'getAllScheduledNotificationsAsync');\n  }\n\n  return (await NotificationScheduler.getAllScheduledNotificationsAsync()).map((request) =>\n    mapNotificationRequest(request)\n  );\n}\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.d.ts.map b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.d.ts.map
+index c38fea785a..dc6cc022bc 100644
+--- a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.d.ts.map
++++ b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"getPresentedNotificationsAsync.d.ts","sourceRoot":"","sources":["../src/getPresentedNotificationsAsync.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,YAAY,EAAE,MAAM,uBAAuB,CAAC;AAErD;;;;;GAKG;AACH,wBAA8B,8BAA8B,IAAI,OAAO,CAAC,YAAY,EAAE,CAAC,CAMtF"}
+\ No newline at end of file
++{"version":3,"file":"getPresentedNotificationsAsync.d.ts","sourceRoot":"","sources":["../src/getPresentedNotificationsAsync.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,YAAY,EAAE,MAAM,uBAAuB,CAAC;AAGrD;;;;;GAKG;AACH,wBAA8B,8BAA8B,IAAI,OAAO,CAAC,YAAY,EAAE,CAAC,CAQtF"}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js
+index ba9f287909..4477fda267 100644
+--- a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js
++++ b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js
+@@ -1,5 +1,6 @@
+ import { UnavailabilityError } from 'expo-modules-core';
+ import NotificationPresenter from './NotificationPresenterModule';
++import { mapNotification } from './utils/mapNotificationResponse';
+ /**
+  * Fetches information about all notifications present in the notification tray (Notification Center).
+  * > This method is not supported on Android below 6.0 (API level 23) – on these devices it will resolve to an empty array.
+@@ -10,6 +11,6 @@ export default async function getPresentedNotificationsAsync() {
+     if (!NotificationPresenter.getPresentedNotificationsAsync) {
+         throw new UnavailabilityError('Notifications', 'getPresentedNotificationsAsync');
+     }
+-    return await NotificationPresenter.getPresentedNotificationsAsync();
++    return (await NotificationPresenter.getPresentedNotificationsAsync()).map((notification) => mapNotification(notification));
+ }
+ //# sourceMappingURL=getPresentedNotificationsAsync.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js.map b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js.map
+index 635b0535a1..61f3ac216d 100644
+--- a/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js.map
++++ b/node_modules/expo-notifications/build/getPresentedNotificationsAsync.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"getPresentedNotificationsAsync.js","sourceRoot":"","sources":["../src/getPresentedNotificationsAsync.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAExD,OAAO,qBAAqB,MAAM,+BAA+B,CAAC;AAGlE;;;;;GAKG;AACH,MAAM,CAAC,OAAO,CAAC,KAAK,UAAU,8BAA8B;IAC1D,IAAI,CAAC,qBAAqB,CAAC,8BAA8B,EAAE;QACzD,MAAM,IAAI,mBAAmB,CAAC,eAAe,EAAE,gCAAgC,CAAC,CAAC;KAClF;IAED,OAAO,MAAM,qBAAqB,CAAC,8BAA8B,EAAE,CAAC;AACtE,CAAC","sourcesContent":["import { UnavailabilityError } from 'expo-modules-core';\n\nimport NotificationPresenter from './NotificationPresenterModule';\nimport { Notification } from './Notifications.types';\n\n/**\n * Fetches information about all notifications present in the notification tray (Notification Center).\n * > This method is not supported on Android below 6.0 (API level 23) – on these devices it will resolve to an empty array.\n * @return A Promise which resolves with a list of notifications ([`Notification`](#notification)) currently present in the notification tray (Notification Center).\n * @header dismiss\n */\nexport default async function getPresentedNotificationsAsync(): Promise<Notification[]> {\n  if (!NotificationPresenter.getPresentedNotificationsAsync) {\n    throw new UnavailabilityError('Notifications', 'getPresentedNotificationsAsync');\n  }\n\n  return await NotificationPresenter.getPresentedNotificationsAsync();\n}\n"]}
+\ No newline at end of file
++{"version":3,"file":"getPresentedNotificationsAsync.js","sourceRoot":"","sources":["../src/getPresentedNotificationsAsync.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAExD,OAAO,qBAAqB,MAAM,+BAA+B,CAAC;AAElE,OAAO,EAAE,eAAe,EAAE,MAAM,iCAAiC,CAAC;AAElE;;;;;GAKG;AACH,MAAM,CAAC,OAAO,CAAC,KAAK,UAAU,8BAA8B;IAC1D,IAAI,CAAC,qBAAqB,CAAC,8BAA8B,EAAE;QACzD,MAAM,IAAI,mBAAmB,CAAC,eAAe,EAAE,gCAAgC,CAAC,CAAC;KAClF;IAED,OAAO,CAAC,MAAM,qBAAqB,CAAC,8BAA8B,EAAE,CAAC,CAAC,GAAG,CAAC,CAAC,YAAY,EAAE,EAAE,CACzF,eAAe,CAAC,YAAY,CAAC,CAC9B,CAAC;AACJ,CAAC","sourcesContent":["import { UnavailabilityError } from 'expo-modules-core';\n\nimport NotificationPresenter from './NotificationPresenterModule';\nimport { Notification } from './Notifications.types';\nimport { mapNotification } from './utils/mapNotificationResponse';\n\n/**\n * Fetches information about all notifications present in the notification tray (Notification Center).\n * > This method is not supported on Android below 6.0 (API level 23) – on these devices it will resolve to an empty array.\n * @return A Promise which resolves with a list of notifications ([`Notification`](#notification)) currently present in the notification tray (Notification Center).\n * @header dismiss\n */\nexport default async function getPresentedNotificationsAsync(): Promise<Notification[]> {\n  if (!NotificationPresenter.getPresentedNotificationsAsync) {\n    throw new UnavailabilityError('Notifications', 'getPresentedNotificationsAsync');\n  }\n\n  return (await NotificationPresenter.getPresentedNotificationsAsync()).map((notification) =>\n    mapNotification(notification)\n  );\n}\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
+index 6daa8fbe1a..a6402de35f 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts
+@@ -1,4 +1,4 @@
+-import { Notification, NotificationResponse } from '../Notifications.types';
++import { Notification, NotificationContent, NotificationRequest, NotificationResponse } from '../Notifications.types';
+ /**
+  * @hidden
+  *
+@@ -10,12 +10,15 @@ import { Notification, NotificationResponse } from '../Notifications.types';
+  * @returns the mapped response.
+  */
+ export declare const mapNotificationResponse: (response: NotificationResponse) => {
+-    notification: Notification & {
++    notification: {
+         request: {
+-            content: {
+-                dataString?: string;
++            content: NotificationContent & {
++                dataString?: string | undefined;
+             };
++            identifier: string;
++            trigger: import("../Notifications.types").NotificationTrigger;
+         };
++        date: number;
+     };
+     actionIdentifier: string;
+     userText?: string | undefined;
+@@ -29,11 +32,41 @@ export declare const mapNotificationResponse: (response: NotificationResponse) =
+  * @param notification The raw notification passed in from native code
+  * @returns the mapped notification.
+  */
+-export declare const mapNotification: (notification: Notification) => Notification & {
++export declare const mapNotification: (notification: Notification) => {
+     request: {
+-        content: {
+-            dataString?: string;
++        content: NotificationContent & {
++            dataString?: string | undefined;
+         };
++        identifier: string;
++        trigger: import("../Notifications.types").NotificationTrigger;
+     };
++    date: number;
++};
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification request from native code
++ * before it is passed to other JS code.
++ *
++ * @param request The raw request passed in from native code
++ * @returns the mapped request.
++ */
++export declare const mapNotificationRequest: (request: NotificationRequest) => {
++    content: NotificationContent & {
++        dataString?: string | undefined;
++    };
++    identifier: string;
++    trigger: import("../Notifications.types").NotificationTrigger;
++};
++/**
++ * @hidden
++ * Does any required processing of notification content from native code
++ * before being passed to other JS code.
++ *
++ * @param content The raw content passed in from native code
++ * @returns the mapped content.
++ */
++export declare const mapNotificationContent: (content: NotificationContent) => NotificationContent & {
++    dataString?: string | undefined;
+ };
+ //# sourceMappingURL=mapNotificationResponse.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
+index 4ae1f21381..631c9b5249 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"mapNotificationResponse.d.ts","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,oBAAoB,EAAE,MAAM,wBAAwB,CAAC;AAE5E;;;;;;;;;GASG;AACH,eAAO,MAAM,uBAAuB,aAAc,oBAAoB;;iBAkBzD;YAAE,OAAO,EAAE;gBAAE,UAAU,CAAC,EAAE,MAAM,CAAA;aAAE,CAAA;SAAE;;;;CAbhD,CAAC;AAEF;;;;;;;;GAQG;AACH,eAAO,MAAM,eAAe,iBAAkB,YAAY;aAE7C;QAAE,OAAO,EAAE;YAAE,UAAU,CAAC,EAAE,MAAM,CAAA;SAAE,CAAA;KAAE;CAYhD,CAAC"}
+\ No newline at end of file
++{"version":3,"file":"mapNotificationResponse.d.ts","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,YAAY,EACZ,mBAAmB,EACnB,mBAAmB,EACnB,oBAAoB,EACrB,MAAM,wBAAwB,CAAC;AAEhC;;;;;;;;;GASG;AACH,eAAO,MAAM,uBAAuB,aAAc,oBAAoB;;;;;;;;;;;;;CAKrE,CAAC;AAEF;;;;;;;;GAQG;AACH,eAAO,MAAM,eAAe,iBAAkB,YAAY;;;;;;;;;CAGxD,CAAC;AAEH;;;;;;;;GAQG;AACH,eAAO,MAAM,sBAAsB,YAAa,mBAAmB;;;;;;CAGjE,CAAC;AAEH;;;;;;;GAOG;AACH,eAAO,MAAM,sBAAsB,YAAa,mBAAmB;;CAYlE,CAAC"}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
+index 1435b845d1..8c65cf31ee 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js
+@@ -23,18 +23,43 @@ export const mapNotificationResponse = (response) => {
+  * @param notification The raw notification passed in from native code
+  * @returns the mapped notification.
+  */
+-export const mapNotification = (notification) => {
+-    const mappedNotification = { ...notification };
++export const mapNotification = (notification) => ({
++    ...notification,
++    request: mapNotificationRequest(notification.request),
++});
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification request from native code
++ * before it is passed to other JS code.
++ *
++ * @param request The raw request passed in from native code
++ * @returns the mapped request.
++ */
++export const mapNotificationRequest = (request) => ({
++    ...request,
++    content: mapNotificationContent(request.content),
++});
++/**
++ * @hidden
++ * Does any required processing of notification content from native code
++ * before being passed to other JS code.
++ *
++ * @param content The raw content passed in from native code
++ * @returns the mapped content.
++ */
++export const mapNotificationContent = (content) => {
++    const mappedContent = { ...content };
+     try {
+-        const dataString = mappedNotification?.request?.content['dataString'];
++        const dataString = mappedContent['dataString'];
+         if (typeof dataString === 'string') {
+-            mappedNotification.request.content.data = JSON.parse(dataString);
+-            delete mappedNotification.request.content.dataString;
++            mappedContent.data = JSON.parse(dataString);
++            delete mappedContent.dataString;
+         }
+     }
+     catch (e) {
+         console.log(`Error in notification: ${e}`);
+     }
+-    return mappedNotification;
++    return mappedContent;
+ };
+ //# sourceMappingURL=mapNotificationResponse.js.map
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
+index 3c708bc868..ab2806bcf0 100644
+--- a/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
++++ b/node_modules/expo-notifications/build/utils/mapNotificationResponse.js.map
+@@ -1 +1 @@
+-{"version":3,"file":"mapNotificationResponse.js","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAEA;;;;;;;;;GASG;AACH,MAAM,CAAC,MAAM,uBAAuB,GAAG,CAAC,QAA8B,EAAE,EAAE;IACxE,OAAO;QACL,GAAG,QAAQ;QACX,YAAY,EAAE,eAAe,CAAC,QAAQ,CAAC,YAAY,CAAC;KACrD,CAAC;AACJ,CAAC,CAAC;AAEF;;;;;;;;GAQG;AACH,MAAM,CAAC,MAAM,eAAe,GAAG,CAAC,YAA0B,EAAE,EAAE;IAC5D,MAAM,kBAAkB,GAEpB,EAAE,GAAG,YAAY,EAAE,CAAC;IACxB,IAAI;QACF,MAAM,UAAU,GAAG,kBAAkB,EAAE,OAAO,EAAE,OAAO,CAAC,YAAY,CAAC,CAAC;QACtE,IAAI,OAAO,UAAU,KAAK,QAAQ,EAAE;YAClC,kBAAkB,CAAC,OAAO,CAAC,OAAO,CAAC,IAAI,GAAG,IAAI,CAAC,KAAK,CAAC,UAAU,CAAC,CAAC;YACjE,OAAO,kBAAkB,CAAC,OAAO,CAAC,OAAO,CAAC,UAAU,CAAC;SACtD;KACF;IAAC,OAAO,CAAM,EAAE;QACf,OAAO,CAAC,GAAG,CAAC,0BAA0B,CAAC,EAAE,CAAC,CAAC;KAC5C;IACD,OAAO,kBAAkB,CAAC;AAC5B,CAAC,CAAC","sourcesContent":["import { Notification, NotificationResponse } from '../Notifications.types';\n\n/**\n * @hidden\n *\n * Does any required processing of a notification response from native code\n * before it is passed to a notification response listener, or to the\n * last notification response hook.\n *\n * @param response The raw response passed in from native code\n * @returns the mapped response.\n */\nexport const mapNotificationResponse = (response: NotificationResponse) => {\n  return {\n    ...response,\n    notification: mapNotification(response.notification),\n  };\n};\n\n/**\n * @hidden\n *\n * Does any required processing of a notification from native code\n * before it is passed to a notification listener.\n *\n * @param notification The raw notification passed in from native code\n * @returns the mapped notification.\n */\nexport const mapNotification = (notification: Notification) => {\n  const mappedNotification: Notification & {\n    request: { content: { dataString?: string } };\n  } = { ...notification };\n  try {\n    const dataString = mappedNotification?.request?.content['dataString'];\n    if (typeof dataString === 'string') {\n      mappedNotification.request.content.data = JSON.parse(dataString);\n      delete mappedNotification.request.content.dataString;\n    }\n  } catch (e: any) {\n    console.log(`Error in notification: ${e}`);\n  }\n  return mappedNotification;\n};\n"]}
+\ No newline at end of file
++{"version":3,"file":"mapNotificationResponse.js","sourceRoot":"","sources":["../../src/utils/mapNotificationResponse.ts"],"names":[],"mappings":"AAOA;;;;;;;;;GASG;AACH,MAAM,CAAC,MAAM,uBAAuB,GAAG,CAAC,QAA8B,EAAE,EAAE;IACxE,OAAO;QACL,GAAG,QAAQ;QACX,YAAY,EAAE,eAAe,CAAC,QAAQ,CAAC,YAAY,CAAC;KACrD,CAAC;AACJ,CAAC,CAAC;AAEF;;;;;;;;GAQG;AACH,MAAM,CAAC,MAAM,eAAe,GAAG,CAAC,YAA0B,EAAE,EAAE,CAAC,CAAC;IAC9D,GAAG,YAAY;IACf,OAAO,EAAE,sBAAsB,CAAC,YAAY,CAAC,OAAO,CAAC;CACtD,CAAC,CAAC;AAEH;;;;;;;;GAQG;AACH,MAAM,CAAC,MAAM,sBAAsB,GAAG,CAAC,OAA4B,EAAE,EAAE,CAAC,CAAC;IACvE,GAAG,OAAO;IACV,OAAO,EAAE,sBAAsB,CAAC,OAAO,CAAC,OAAO,CAAC;CACjD,CAAC,CAAC;AAEH;;;;;;;GAOG;AACH,MAAM,CAAC,MAAM,sBAAsB,GAAG,CAAC,OAA4B,EAAE,EAAE;IACrE,MAAM,aAAa,GAAkD,EAAE,GAAG,OAAO,EAAE,CAAC;IACpF,IAAI;QACF,MAAM,UAAU,GAAG,aAAa,CAAC,YAAY,CAAC,CAAC;QAC/C,IAAI,OAAO,UAAU,KAAK,QAAQ,EAAE;YAClC,aAAa,CAAC,IAAI,GAAG,IAAI,CAAC,KAAK,CAAC,UAAU,CAAC,CAAC;YAC5C,OAAO,aAAa,CAAC,UAAU,CAAC;SACjC;KACF;IAAC,OAAO,CAAM,EAAE;QACf,OAAO,CAAC,GAAG,CAAC,0BAA0B,CAAC,EAAE,CAAC,CAAC;KAC5C;IACD,OAAO,aAAa,CAAC;AACvB,CAAC,CAAC","sourcesContent":["import {\n  Notification,\n  NotificationContent,\n  NotificationRequest,\n  NotificationResponse,\n} from '../Notifications.types';\n\n/**\n * @hidden\n *\n * Does any required processing of a notification response from native code\n * before it is passed to a notification response listener, or to the\n * last notification response hook.\n *\n * @param response The raw response passed in from native code\n * @returns the mapped response.\n */\nexport const mapNotificationResponse = (response: NotificationResponse) => {\n  return {\n    ...response,\n    notification: mapNotification(response.notification),\n  };\n};\n\n/**\n * @hidden\n *\n * Does any required processing of a notification from native code\n * before it is passed to a notification listener.\n *\n * @param notification The raw notification passed in from native code\n * @returns the mapped notification.\n */\nexport const mapNotification = (notification: Notification) => ({\n  ...notification,\n  request: mapNotificationRequest(notification.request),\n});\n\n/**\n * @hidden\n *\n * Does any required processing of a notification request from native code\n * before it is passed to other JS code.\n *\n * @param request The raw request passed in from native code\n * @returns the mapped request.\n */\nexport const mapNotificationRequest = (request: NotificationRequest) => ({\n  ...request,\n  content: mapNotificationContent(request.content),\n});\n\n/**\n * @hidden\n * Does any required processing of notification content from native code\n * before being passed to other JS code.\n *\n * @param content The raw content passed in from native code\n * @returns the mapped content.\n */\nexport const mapNotificationContent = (content: NotificationContent) => {\n  const mappedContent: NotificationContent & { dataString?: string } = { ...content };\n  try {\n    const dataString = mappedContent['dataString'];\n    if (typeof dataString === 'string') {\n      mappedContent.data = JSON.parse(dataString);\n      delete mappedContent.dataString;\n    }\n  } catch (e: any) {\n    console.log(`Error in notification: ${e}`);\n  }\n  return mappedContent;\n};\n"]}
+\ No newline at end of file
+diff --git a/node_modules/expo-notifications/src/getAllScheduledNotificationsAsync.ts b/node_modules/expo-notifications/src/getAllScheduledNotificationsAsync.ts
+index 76ddd6f573..3269e4f204 100644
+--- a/node_modules/expo-notifications/src/getAllScheduledNotificationsAsync.ts
++++ b/node_modules/expo-notifications/src/getAllScheduledNotificationsAsync.ts
+@@ -2,6 +2,7 @@ import { UnavailabilityError } from 'expo-modules-core';
+ 
+ import NotificationScheduler from './NotificationScheduler';
+ import { NotificationRequest } from './Notifications.types';
++import { mapNotificationRequest } from './utils/mapNotificationResponse';
+ 
+ /**
+  * Fetches information about all scheduled notifications.
+@@ -13,5 +14,7 @@ export default async function getAllScheduledNotificationsAsync(): Promise<Notif
+     throw new UnavailabilityError('Notifications', 'getAllScheduledNotificationsAsync');
+   }
+ 
+-  return await NotificationScheduler.getAllScheduledNotificationsAsync();
++  return (await NotificationScheduler.getAllScheduledNotificationsAsync()).map((request) =>
++    mapNotificationRequest(request)
++  );
+ }
+diff --git a/node_modules/expo-notifications/src/getPresentedNotificationsAsync.ts b/node_modules/expo-notifications/src/getPresentedNotificationsAsync.ts
+index 8036291077..3c63178eb3 100644
+--- a/node_modules/expo-notifications/src/getPresentedNotificationsAsync.ts
++++ b/node_modules/expo-notifications/src/getPresentedNotificationsAsync.ts
+@@ -2,6 +2,7 @@ import { UnavailabilityError } from 'expo-modules-core';
+ 
+ import NotificationPresenter from './NotificationPresenterModule';
+ import { Notification } from './Notifications.types';
++import { mapNotification } from './utils/mapNotificationResponse';
+ 
+ /**
+  * Fetches information about all notifications present in the notification tray (Notification Center).
+@@ -14,5 +15,7 @@ export default async function getPresentedNotificationsAsync(): Promise<Notifica
+     throw new UnavailabilityError('Notifications', 'getPresentedNotificationsAsync');
+   }
+ 
+-  return await NotificationPresenter.getPresentedNotificationsAsync();
++  return (await NotificationPresenter.getPresentedNotificationsAsync()).map((notification) =>
++    mapNotification(notification)
++  );
+ }
+diff --git a/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts b/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
+index 0dff7117a2..0dc3c6d7ff 100644
+--- a/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
++++ b/node_modules/expo-notifications/src/utils/mapNotificationResponse.ts
+@@ -1,4 +1,9 @@
+-import { Notification, NotificationResponse } from '../Notifications.types';
++import {
++  Notification,
++  NotificationContent,
++  NotificationRequest,
++  NotificationResponse,
++} from '../Notifications.types';
+ 
+ /**
+  * @hidden
+@@ -26,18 +31,43 @@ export const mapNotificationResponse = (response: NotificationResponse) => {
+  * @param notification The raw notification passed in from native code
+  * @returns the mapped notification.
+  */
+-export const mapNotification = (notification: Notification) => {
+-  const mappedNotification: Notification & {
+-    request: { content: { dataString?: string } };
+-  } = { ...notification };
++export const mapNotification = (notification: Notification) => ({
++  ...notification,
++  request: mapNotificationRequest(notification.request),
++});
++
++/**
++ * @hidden
++ *
++ * Does any required processing of a notification request from native code
++ * before it is passed to other JS code.
++ *
++ * @param request The raw request passed in from native code
++ * @returns the mapped request.
++ */
++export const mapNotificationRequest = (request: NotificationRequest) => ({
++  ...request,
++  content: mapNotificationContent(request.content),
++});
++
++/**
++ * @hidden
++ * Does any required processing of notification content from native code
++ * before being passed to other JS code.
++ *
++ * @param content The raw content passed in from native code
++ * @returns the mapped content.
++ */
++export const mapNotificationContent = (content: NotificationContent) => {
++  const mappedContent: NotificationContent & { dataString?: string } = { ...content };
+   try {
+-    const dataString = mappedNotification?.request?.content['dataString'];
++    const dataString = mappedContent['dataString'];
+     if (typeof dataString === 'string') {
+-      mappedNotification.request.content.data = JSON.parse(dataString);
+-      delete mappedNotification.request.content.dataString;
++      mappedContent.data = JSON.parse(dataString);
++      delete mappedContent.dataString;
+     }
+   } catch (e: any) {
+     console.log(`Error in notification: ${e}`);
+   }
+-  return mappedNotification;
++  return mappedContent;
+ };
