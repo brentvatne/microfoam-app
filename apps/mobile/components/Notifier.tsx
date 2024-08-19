@@ -22,6 +22,7 @@ import {
   YearlyNotificationTrigger,
   YearlyTriggerInput,
   TimeIntervalTriggerInput,
+  getAllScheduledNotificationsAsync,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -129,6 +130,9 @@ export const Notifier = () => {
     undefined,
   );
   const [scheduledNotificationIdentifier, setScheduledNotificationIdentifier] =
+    useState('');
+
+  const [scheduledNotificationsText, setScheduledNotificationsText] =
     useState('');
 
   const [responseFromAsync, setResponseFromAsync] = useState<
@@ -267,6 +271,7 @@ export const Notifier = () => {
         <Text>
           Schedule notification result string: {scheduledNotificationIdentifier}
         </Text>
+        <Text>All scheduled notifications: {scheduledNotificationsText}</Text>
         <Text>Background task data: {backgroundTaskString}</Text>
         <Button
           title="getLastNotificationResponseAsync()"
@@ -279,6 +284,18 @@ export const Notifier = () => {
                 setResponseFromAsync(lastResponse);
               })
               .catch((error) => setResponseFromAsync(error));
+          }}
+        />
+        <Button
+          title="getAllScheduledNotificationsAsync()"
+          onPress={() => {
+            getAllScheduledNotificationsAsync()
+              .then((notificationRequests) => {
+                const text = JSON.stringify(notificationRequests, null, 2);
+                console.log(`scheduledNotificationRequests = ${text}`);
+                setScheduledNotificationsText(text);
+              })
+              .catch((error) => setScheduledNotificationsText(error));
           }}
         />
         <Button
