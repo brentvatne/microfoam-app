@@ -1,0 +1,4 @@
+[submodule "expo"]
+	path = expo
+	url = git@github.com:expo/expo.git
+	branch = main
