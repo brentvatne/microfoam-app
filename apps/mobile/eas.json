@@ -12,20 +12,15 @@
       "android": {
         "image": "latest"
       },
-      "env": {
-        "SENTRY_ORG": "brents",
-        "SENTRY_PROJECT": "microfoam",
-        "EXPO_PUBLIC_VEXO_API_KEY": "1003c65c-f56a-4769-9ed9-8da11754b0af",
-        "EXPO_PUBLIC_SENTRY_DSN": "https://b337eed59a5f49b4ac16368fdad425f1@o261932.ingest.sentry.io/4505416115093504"
-      }
+      "channel": "base"
     },
     "update-base": {
       "config": "update.yml",
-      // "resourceClass": "large",
       "withoutCredentials": "true",
       "env": {
         "EAS_NO_VCS": "1"
-      }
+      },
+      "channel": "update-base"
     },
     "update-production": {
       "extends": "update-base",
@@ -38,12 +33,14 @@
     "test": {
       "config": "run-tests.yml",
       "withoutCredentials": "true",
-      "extends": "base"
+      "extends": "base",
+      "channel": "test"
     },
     "development": {
       "extends": "base",
       "distribution": "internal",
-      "developmentClient": true
+      "developmentClient": true,
+      "channel": "development"
     },
     "preview": {
       "extends": "base",
@@ -58,7 +55,8 @@
       "developmentClient": true,
       "ios": {
         "simulator": true
-      }
+      },
+      "channel": "development-simulator"
     },
     "preview-simulator": {
       "extends": "base",

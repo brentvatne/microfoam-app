@@ -8,8 +8,10 @@
     "userInterfaceStyle": "automatic",
     "scheme": "microfoam",
     "backgroundColor": "#1e1e1e",
-    "owner": "brents",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,7 +20,7 @@
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.brents.microfoam",
+      "bundleIdentifier": "com.douglowderexpo.microfoam",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -31,8 +33,9 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#232323"
       },
-      "package": "com.brents.microfoam"
+      "package": "com.douglowderexpo.microfoam"
     },
-    "runtimeVersion": "be975abaed5ef1ab51b8eff6c95f384a8700debe"
+    "runtimeVersion": "be975abaed5ef1ab51b8eff6c95f384a8700debe",
+    "owner": "douglowderexpo"
   }
 }
