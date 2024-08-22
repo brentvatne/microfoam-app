@@ -42,6 +42,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     [
+      "expo-font",
+      {
+        fonts: [
+          "../../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/AntDesign.ttf",
+        ],
+      },
+    ],
+    [
+      "expo-build-properties",
+      {
+        ios: {
+          deploymentTarget: "15.1",
+        },
+      },
+    ],
+    [
       "expo-document-picker",
       {
         iCloudContainerEnvironment: process.env.RELEASE
@@ -79,7 +95,9 @@ function getUpdatesUrl() {
 }
 
 function getProjectId() {
-  return process.env.EAS_BUILD_PROJECT_ID ?? "8b4d2a38-f0a5-49d0-8215-d637bf204681";
+  return (
+    process.env.EAS_BUILD_PROJECT_ID ?? "8b4d2a38-f0a5-49d0-8215-d637bf204681"
+  );
 }
 
 function getGoogleServices() {

@@ -16,19 +16,43 @@ config.watchFolders = [workspaceRoot];
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
   path.resolve(workspaceRoot, "node_modules"),
+  // path.resolve(workspaceRoot, "expo/node_modules"),
 ];
+config.resolver.extraNodeModules = {
+  "expo-modules-core": path.resolve(
+    workspaceRoot,
+    "expo/packages/expo-modules-core"
+  ),
+  "expo-notifications": path.resolve(
+    workspaceRoot,
+    "expo/packages/expo-notifications"
+  ),
+  expo: path.resolve(workspaceRoot, "expo/packages/expo"),
+};
 
-// block metro from resolving everything from workspaceRoot/expo except for expo-notifications
-const blockListRegex = new RegExp(
-  `^${escapeRegExp(workspaceRoot)}/expo/packages/(?!expo-notifications).*`
-);
-
+const modulesToLoadFromExpoMonorepo = [
+  "expo-modules-core",
+  "expo-notifications",
+  "expo/",
+];
+const regexString = modulesToLoadFromExpoMonorepo.join("|");
+const blockListRegex = [
+  // block metro from resolving everything from workspaceRoot/expo except for selected modules
+  // while it doesn't seem needed it doesn't hurt and makes stuff more predictable
+  new RegExp(
+    `^${escapeRegExp(workspaceRoot)}/expo/packages/(?!(${regexString})).*`
+  ),
+  // block metro from resolving the same modules from workspaceRoot/node_modules
+  // because they are need to be resolved from workspaceRoot/expo
+  new RegExp(
+    `^${escapeRegExp(workspaceRoot)}/node_modules/(?=(${regexString})).*`
+  ),
+];
 // Utility function to escape special characters in a string for use in a regex
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-const blockList = exclusionList([blockListRegex]);
-config.resolver.blockList = blockList;
+config.resolver.blockList = exclusionList(blockListRegex);
 
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;

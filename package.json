@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "patch-package"
+    "postinstall": "patch-package && ./setup_monorepo.sh"
   },
   "dependencies": {
     "patch-package": "^8.0.0",

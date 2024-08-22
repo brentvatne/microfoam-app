@@ -1,0 +1,12 @@
+diff --git a/node_modules/@expo/vector-icons/build/AntDesign.js b/node_modules/@expo/vector-icons/build/AntDesign.js
+index 878ed9c..1c71c44 100644
+--- a/node_modules/@expo/vector-icons/build/AntDesign.js
++++ b/node_modules/@expo/vector-icons/build/AntDesign.js
+@@ -1,5 +1,6 @@
+ import createIconSet from './createIconSet';
+ import font from './vendor/react-native-vector-icons/Fonts/AntDesign.ttf';
+ import glyphMap from './vendor/react-native-vector-icons/glyphmaps/AntDesign.json';
+-export default createIconSet(glyphMap, 'anticon', font);
++import {Platform} from "expo-modules-core";
++export default createIconSet(glyphMap, Platform.select({ios: 'anticon', android: 'AntDesign'}), font);
+ //# sourceMappingURL=AntDesign.js.map
