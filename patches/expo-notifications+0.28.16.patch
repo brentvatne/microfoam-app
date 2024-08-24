@@ -1,0 +1,16 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+index 4b6e04e..8f0311b 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+@@ -76,7 +76,10 @@ public class NotificationSerializer {
+           // and we copy the data as is
+           content.putBundle("data", toBundle(data));
+         }
+-      } else if(request.getTrigger() instanceof SchedulableNotificationTrigger) {
++      } else if(
++        request.getTrigger() instanceof SchedulableNotificationTrigger ||
++          request.getTrigger() == null
++      ) {
+         JSONObject body = request.getContent().getBody();
+         if (body != null) {
+           // Expo sends notification.body as data.message, and JSON stringifies data.body
