@@ -1,4 +1,4 @@
-import { ExpoConfig, ConfigContext } from "@expo/config";
+import { ExpoConfig, ConfigContext } from '@expo/config';
 
 const googleServicesFile = getGoogleServices();
 
@@ -6,7 +6,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   slug: config.slug, // TypeScript is upset if we don't explicitly provide a slug here
   name: getName(config),
-  icon: process.env.RELEASE ? config.icon : "./assets/icon-dev.png",
+  icon: process.env.RELEASE ? config.icon : './assets/icon-dev.png',
   ios: {
     ...config.ios,
     bundleIdentifier: getBundleIdentifier(config),
@@ -26,7 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
     url: getUpdatesUrl(),
     requestHeaders: {
-      "expo-channel-name": "main",
+      'expo-channel-name': 'main',
     },
   },
   extra: {
@@ -42,31 +42,41 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     [
-      "expo-document-picker",
+      'expo-document-picker',
       {
         iCloudContainerEnvironment: process.env.RELEASE
-          ? "Production"
-          : "Development",
+          ? 'Production'
+          : 'Development',
       },
     ],
-    ["expo-router"],
-    // ["expo-dev-client"],
+    ['expo-router'],
     [
-      "expo-notifications",
+      'expo-notifications',
       {
-        icon: "./assets/icon.png",
-        color: "#232323",
-        defaultChannel: "default",
+        icon: './assets/icon.png',
+        color: '#232323',
+        defaultChannel: 'default',
       },
     ],
     [
-      "expo-quick-actions",
+      'expo-build-properties',
+      {
+        ios: {
+          newArchEnabled: false,
+        },
+        android: {
+          newArchEnabled: false,
+        },
+      },
+    ],
+    [
+      'expo-quick-actions',
       {
         iosActions: [
           {
-            id: "1",
-            title: "Log a new pour",
-            icon: "compose",
+            id: '1',
+            title: 'Log a new pour',
+            icon: 'compose',
           },
         ],
       },
@@ -79,7 +89,9 @@ function getUpdatesUrl() {
 }
 
 function getProjectId() {
-  return process.env.EAS_BUILD_PROJECT_ID ?? "8b4d2a38-f0a5-49d0-8215-d637bf204681";
+  return (
+    process.env.EAS_BUILD_PROJECT_ID ?? '8b4d2a38-f0a5-49d0-8215-d637bf204681'
+  );
 }
 
 function getGoogleServices() {

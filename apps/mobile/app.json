@@ -18,6 +18,9 @@
       "backgroundColor": "#232323"
     },
     "ios": {
+      "infoPlist": {
+        "UIBackgroundModes": ["processing", "fetch", "remote-notification"]
+      },
       "usesIcloudStorage": true,
       "supportsTablet": true,
       "bundleIdentifier": "com.douglowderexpo.microfoam",
