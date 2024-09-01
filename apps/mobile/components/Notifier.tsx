@@ -27,11 +27,7 @@ import {
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
-import {
-  defineTask,
-  getRegisteredTasksAsync,
-  TaskManagerTask,
-} from 'expo-task-manager';
+import { defineTask } from 'expo-task-manager';
 import { useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,51 +35,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text } from './Themed';
 import Button from './Button';
 import { router } from 'expo-router';
-
-const startBackgroundTaskAsync = async () => {
-  const STORAGE_KEY = '@notification_bg_store';
-
-  // Background task
-  // https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
-  const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
-
-  const existingTasks = await getRegisteredTasksAsync();
-
-  let found = false;
-
-  existingTasks.forEach((task) => {
-    if (task.taskName === BACKGROUND_NOTIFICATION_TASK) {
-      found = true;
-    }
-  });
-
-  if (found) {
-    return; // Do not register the task twice
-  }
-
-  defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
-    console.log(
-      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`,
-    );
-
-    if (error) {
-      console.log(
-        `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: Error! ${JSON.stringify(
-          error,
-        )}`,
-      );
-
-      return;
-    }
-
-    AsyncStorage.setItem(
-      STORAGE_KEY,
-      `Background trigger: ${AppState.isAvailable} ${
-        AppState.currentState
-      } ${JSON.stringify(data)}`,
-    );
-  });
-};
 
 /**
  * Initializes notification handling
@@ -130,8 +81,6 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
       responseListener.current = subscription;
     }
 
-    startBackgroundTaskAsync();
-
     return () => {
       isMounted = false;
       responseListener.current?.remove();
@@ -139,6 +88,38 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
     };
   }, []);
 }
+
+const STORAGE_KEY = '@notification_bg_store';
+
+// Background task
+// https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
+  console.log(
+    `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`,
+  );
+
+  if (error) {
+    console.log(
+      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: Error! ${JSON.stringify(
+        error,
+      )}`,
+    );
+
+    return;
+  }
+
+  AsyncStorage.setItem(
+    STORAGE_KEY,
+    `Background trigger: ${AppState.isAvailable} ${
+      AppState.currentState
+    } ${JSON.stringify(data)}`,
+  );
+
+  // data.notification.data.data = JSON.parse(data.notification.data.body);
+  // data.notification.data.body = data.notification.data.message;
+  // setNotification(data.notification);
+});
 
 export const Notifier = () => {
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
@@ -159,8 +140,6 @@ export const Notifier = () => {
   >(undefined);
 
   const [backgroundTaskString, setBackgroundTaskString] = useState<string>('');
-
-  const [registeredTasks, setRegisteredTasks] = useState<TaskManagerTask[]>([]);
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
@@ -188,19 +167,6 @@ export const Notifier = () => {
         });
     }
 
-    getRegisteredTasksAsync()
-      .then((result) => {
-        setRegisteredTasks(result);
-      })
-      .catch((error) => {
-        setRegisteredTasks([
-          {
-            taskName: `${error}`,
-            taskType: 'error',
-            options: {},
-          },
-        ]);
-      });
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
@@ -299,9 +265,6 @@ export const Notifier = () => {
               null,
               2,
             )}
-        </Text>
-        <Text>
-          Registered tasks: {JSON.stringify(registeredTasks, null, 2)}
         </Text>
         <Text>
           Schedule notification result string: {scheduledNotificationIdentifier}
