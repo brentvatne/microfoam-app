@@ -24,6 +24,8 @@ import {
   TimeIntervalTriggerInput,
   getAllScheduledNotificationsAsync,
   cancelAllScheduledNotificationsAsync,
+  registerTaskAsync,
+  getPresentedNotificationsAsync,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -115,11 +117,9 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
       AppState.currentState
     } ${JSON.stringify(data)}`,
   );
-
-  // data.notification.data.data = JSON.parse(data.notification.data.body);
-  // data.notification.data.body = data.notification.data.message;
-  // setNotification(data.notification);
 });
+
+registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 export const Notifier = () => {
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
@@ -133,6 +133,9 @@ export const Notifier = () => {
     useState('');
 
   const [scheduledNotificationsText, setScheduledNotificationsText] =
+    useState('');
+
+  const [presentedNotificationsText, setPresentedNotificationsText] =
     useState('');
 
   const [responseFromAsync, setResponseFromAsync] = useState<
@@ -270,6 +273,7 @@ export const Notifier = () => {
           Schedule notification result string: {scheduledNotificationIdentifier}
         </Text>
         <Text>All scheduled notifications: {scheduledNotificationsText}</Text>
+        <Text>All presented notifications: {presentedNotificationsText}</Text>
         <Text>Background task data: {backgroundTaskString}</Text>
         <Button
           title="getLastNotificationResponseAsync()"
@@ -282,6 +286,18 @@ export const Notifier = () => {
                 setResponseFromAsync(lastResponse);
               })
               .catch((error) => setResponseFromAsync(error));
+          }}
+        />
+        <Button
+          title="getPresentedNotificationsAsync()"
+          onPress={() => {
+            getPresentedNotificationsAsync()
+              .then((presentedNotifications) => {
+                const text = JSON.stringify(presentedNotifications, null, 2);
+                console.log(`presentedNotifications = ${text}`);
+                setPresentedNotificationsText(text);
+              })
+              .catch((error) => setPresentedNotificationsText(error));
           }}
         />
         <Button
