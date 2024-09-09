@@ -1,16 +1,78 @@
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-index 4b6e04e..8f0311b 100644
+index 4b6e04e..34653dc 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
-@@ -76,7 +76,10 @@ public class NotificationSerializer {
-           // and we copy the data as is
-           content.putBundle("data", toBundle(data));
-         }
--      } else if(request.getTrigger() instanceof SchedulableNotificationTrigger) {
-+      } else if(
-+        request.getTrigger() instanceof SchedulableNotificationTrigger ||
-+          request.getTrigger() == null
-+      ) {
-         JSONObject body = request.getContent().getBody();
-         if (body != null) {
+@@ -82,6 +82,13 @@ public class NotificationSerializer {
            // Expo sends notification.body as data.message, and JSON stringifies data.body
+           content.putString("dataString", body.toString());
+         }
++      } else if(request.getTrigger() == null) {
++        // getPresentedNotificationsAsync() results go through this path
++        JSONObject body = request.getContent().getBody();
++        if (body != null) {
++          // Expo sends notification.body as data.message, and JSON stringifies data.body
++          content.putString("dataString", body.toString());
++        }
+       }
+     }
+     serializedRequest.putBundle("content", content);
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt
+index ec6fdcd..c5c747f 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt
+@@ -494,6 +494,7 @@ open class NotificationsService : BroadcastReceiver() {
+         }
+         intent.putExtra(EVENT_TYPE_KEY, RECEIVE_RESPONSE_TYPE)
+         intent.putExtra(NOTIFICATION_KEY, notification)
++        intent.putExtra("trigger", notification.notificationRequest.trigger)
+         intent.putExtra(NOTIFICATION_ACTION_KEY, backgroundAction as Parcelable)
+       }
+       return intent
+diff --git a/node_modules/expo-notifications/src/Notifications.types.ts b/node_modules/expo-notifications/src/Notifications.types.ts
+index d8c9cb9..421bef4 100644
+--- a/node_modules/expo-notifications/src/Notifications.types.ts
++++ b/node_modules/expo-notifications/src/Notifications.types.ts
+@@ -290,29 +289,32 @@ export interface TimeIntervalTriggerInput {
+ 
+ /**
+  * A trigger that will cause the notification to be delivered once per day.
++ * > **Note:** This trigger always has `repeats` set to true.
+  */
+ export interface DailyTriggerInput {
+   channelId?: string;
+   hour: number;
+   minute: number;
+-  repeats: true;
++  repeats?: true;
+ }
+ 
+ /**
+  * A trigger that will cause the notification to be delivered once every week.
+  * > **Note:** Weekdays are specified with a number from `1` through `7`, with `1` indicating Sunday.
++ * > **Note:** This trigger always has `repeats` set to true.
+  */
+ export interface WeeklyTriggerInput {
+   channelId?: string;
+   weekday: number;
+   hour: number;
+   minute: number;
+-  repeats: true;
++  repeats?: true;
+ }
+ 
+ /**
+  * A trigger that will cause the notification to be delivered once every year.
+  * > **Note:** all properties are specified in JavaScript Date's ranges.
++ * > **Note:** This trigger always has `repeats` set to true.
+  */
+ export interface YearlyTriggerInput {
+   channelId?: string;
+@@ -320,7 +322,7 @@ export interface YearlyTriggerInput {
+   month: number;
+   hour: number;
+   minute: number;
+-  repeats: true;
++  repeats?: true;
+ }
+ 
+ /**
