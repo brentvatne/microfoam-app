@@ -356,6 +356,17 @@ export const Notifier = () => {
             );
           }}
         />
+        <Button
+          title="Clear background data storage"
+          onPress={() => {
+            AsyncStorage.removeItem(STORAGE_KEY)
+              .then(() => setBackgroundTaskString('Async storage removed'))
+              .catch((reason) => {
+                console.log(`Error removing value for STORAGE_KEY: ${reason}`);
+                setBackgroundTaskString(reason);
+              });
+          }}
+        />
       </View>
     </View>
   );
@@ -476,11 +487,11 @@ const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
 const schedulePushNotificationYearly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger: YearlyTriggerInput = {
+    channelId: 'testApp',
     day: date.getDate(),
     month: date.getMonth(),
     hour: date.getHours(),
     minute: date.getMinutes() + 1,
-    repeats: true,
   };
   try {
     return await scheduleNotificationAsync({
@@ -498,10 +509,10 @@ const schedulePushNotificationYearly: () => Promise<string> = async () => {
 const schedulePushNotificationWeekly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger: WeeklyTriggerInput = {
+    channelId: 'testApp',
     weekday: date.getDay(),
     hour: date.getHours(),
     minute: date.getMinutes() + 1,
-    repeats: true,
   };
   try {
     return await scheduleNotificationAsync({

@@ -7,7 +7,6 @@ import Insights from 'expo-insights';
 
 import { isLocalFile } from '~/storage/fs';
 import * as PourStore from '~/storage/PourStore';
-import { Notifier } from '~/components/Notifier';
 import Button from '~/components/Button';
 import { Text } from '~/components/Themed';
 import { FontSize, Margin } from '~/constants/styles';
@@ -30,8 +29,6 @@ export default function DebugTools() {
           throw new Error('Test error');
         }}
       />
-
-      <Notifier />
 
       <Button
         title="Re-generate blurhashes"
