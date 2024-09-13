@@ -66,7 +66,8 @@ export function ListItem({
       onPress={disabled ? null : onPress}
       style={{
         paddingHorizontal: Padding[3],
-        paddingVertical: Padding[3],
+        // TODO: test this when RNGH fixes it
+        // paddingVertical: Padding[3],
       }}
     >
       <View
@@ -76,6 +77,7 @@ export function ListItem({
           paddingRight: Padding[2],
           paddingTop: 2,
           alignItems: "center",
+          marginVertical: Padding[3],
           opacity: disabled ? 0.5 : 1,
         }}
       >

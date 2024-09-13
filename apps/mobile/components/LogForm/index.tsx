@@ -13,7 +13,7 @@ import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import format from "date-fns/format";
-import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
+// import { DragDropContentView, OnDropEvent } from "expo-drag-drop-content-view";
 import {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
@@ -307,6 +307,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
   };
 
   return (
+    // TODO: investigate this
     // <DragDropContentView
     //   onDropEvent={(event: { assets: OnDropEvent[] }) => {
     //     if (event.assets[0]) {
@@ -514,13 +515,12 @@ function PatternPicker({
 
 function Option({ label, onPress, selection }) {
   return (
-    <RectButton
+    <RectButton onPress={() => onPress(label)}>
+      <View
       style={{
         paddingVertical: Padding[3],
         paddingHorizontal: Padding[5],
-      }}
-      onPress={() => onPress(label)}
-    >
+      }}>
       <Text
         style={[
           styles.option,
@@ -528,7 +528,8 @@ function Option({ label, onPress, selection }) {
         ]}
       >
         {label}
-      </Text>
+        </Text>
+      </View>
     </RectButton>
   );
 }
