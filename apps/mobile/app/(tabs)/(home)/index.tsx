@@ -57,7 +57,6 @@ export default function LogListScreen() {
         <MotiView
           from={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ type: 'timing', duration: 500 }}
           style={{ flex: 1 }}
         >
           <FlashList
@@ -91,10 +90,6 @@ function PourRow({ item }) {
 
   return (
     <RectButton
-      style={{
-        paddingVertical: Padding[3],
-        paddingHorizontal: Padding[3],
-      }}
       onPress={() => {
         async () => {
           let result = await fetch('https://expo.dev');
@@ -119,7 +114,7 @@ function PourRow({ item }) {
         );
       }}
     >
-      <UnthemedView style={{ flexDirection: 'row' }}>
+      <UnthemedView style={{ flexDirection: 'row', paddingVertical: Padding[3], paddingHorizontal: Padding[3] }}>
         <Photo
           uri={item.photoUrl}
           blurhash={item.blurhash}

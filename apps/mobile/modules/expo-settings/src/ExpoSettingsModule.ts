@@ -1,4 +1,4 @@
-import { requireNativeModule, NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
+import { requireNativeModule, Subscription } from 'expo-modules-core';
 import { ChangeEventPayload, ThemeChangeEventPayload, Theme } from './ExpoSettings.types';
 
 const ExpoSettings = requireNativeModule('ExpoSettings');
@@ -20,13 +20,11 @@ export function setTheme(theme: Theme): void {
 }
 
 export function addThemeListener(listener: (event: ThemeChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ThemeChangeEventPayload>('onChangeTheme', listener);
+  return ExpoSettings.addListener('onChangeTheme', listener);
 }
 
-const emitter = new EventEmitter(NativeModulesProxy.ExpoSettings ?? ExpoSettings);
-
 export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
+  return ExpoSettings.addListener('onChange', listener);
 }
 
 export { ChangeEventPayload, Theme };

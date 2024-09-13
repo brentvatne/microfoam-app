@@ -12,11 +12,11 @@ import {
   ScrollView as DefaultScrollView,
 } from "react-native-gesture-handler";
 
-import * as Settings from "~/modules/expo-settings";
 import DefaultAntDesign from "@expo/vector-icons/AntDesign";
 import Color from "color";
 
 import { ThemeColors } from "~/constants/colors";
+import * as Settings from "~/modules/expo-settings";
 
 export function useAutoSetAppearanceFromSettingsEffect() {
   // Set native color scheme based on the selected theme

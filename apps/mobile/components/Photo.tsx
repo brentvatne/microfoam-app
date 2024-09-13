@@ -42,7 +42,10 @@ function PhotoComponent(props: Props) {
       <Image
         onError={() => console.log(`error loading image: ${uri}`)}
         source={{ uri: maybeLocalUri }}
-        placeholder={blurhash}
+        cachePolicy="memory"
+        recyclingKey={maybeLocalUri}
+        placeholder={blurhash ? {blurhash} : {blurhash: 'L6I|~^0200OG~A?bF#^*00?H?Z~9'}}
+        placeholderContentFit="fill"
         contentFit="fill"
         transition={props.transition}
         style={[StyleSheet.absoluteFillObject, { backgroundColor: "white" }]}
