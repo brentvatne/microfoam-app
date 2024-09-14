@@ -31,7 +31,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
           size: prettyBytes(info.size),
           modificationTime: format(
             new Date(info.modificationTime * 1000),
-            "PPPPpppp"
+            "PPPPpppp",
           ),
         });
       } catch (e) {
@@ -42,7 +42,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
     if (!fileInfo) {
       getFileInfoAsync();
     }
-  }, [fileInfo]);
+  }, [fileInfo, item.photoUrl]);
 
   useEffect(() => {
     if (isUploading) {
@@ -54,7 +54,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
 
       syncPhotoAsync(item, session.user.id);
     }
-  }, [isUploading]);
+  }, [isUploading, item, session]);
 
   // Trigger uploading from the parent component
   useEffect(() => {
@@ -62,7 +62,7 @@ const PhotoRow = ({ item, uploadRequested }) => {
     if (uploadRequested && !isUploading) {
       setIsUploading(true);
     }
-  }, [uploadRequested]);
+  }, [uploadRequested, isUploading]);
 
   return (
     <RectButton
@@ -159,7 +159,7 @@ export default function Upload() {
   const [uploadAll, setUploadAll] = useState(false);
   const pours = PourStore.usePours();
   const poursWithLocalPhotos = pours.filter((pour) =>
-    isLocalFile(pour.photoUrl)
+    isLocalFile(pour.photoUrl),
   );
   const session = useAuthSession();
 

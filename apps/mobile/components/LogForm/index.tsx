@@ -1,14 +1,12 @@
 import React, {
   forwardRef,
-  useEffect,
   useState,
   useImperativeHandle,
+  useMemo,
 } from "react";
 import { Keyboard, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
-import * as ImageManipulator from "expo-image-manipulator";
 import DatePicker from "react-native-date-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
@@ -57,25 +55,28 @@ type Props = {
 function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
   const [dateTimePickerVisible, setDateTimePickerVisible] = useState(false);
   const [dateTime, setDateTime] = useState(
-    maybeDate(initialData?.dateTime) ?? new Date()
+    maybeDate(initialData?.dateTime) ?? new Date(),
   );
   const [rating, setRating] = useState(initialData?.rating ?? 3);
   const [photoUri, setPhotoUri] = useState<string | undefined>(
-    initialData?.photoUrl
+    initialData?.photoUrl,
   );
   const [notes, setNotes] = useState<string | undefined>(initialData?.notes);
   const [pattern, setPattern] = useState<string | undefined>(
-    initialData?.pattern ?? "Formless blob"
+    initialData?.pattern ?? "Formless blob",
   );
 
-  const formData = { dateTime, rating, photoUri, notes, pattern };
+  const formData = useMemo(
+    () => ({ dateTime, rating, photoUri, notes, pattern }),
+    [dateTime, rating, photoUri, notes, pattern],
+  );
 
   useImperativeHandle(
     ref,
     () => ({
       getData: () => formData,
     }),
-    [formData]
+    [formData],
   );
 
   // // https://mateusz1913.github.io/react-native-avoid-softinput/docs/guides/usage-module
@@ -151,10 +152,9 @@ function LogForm({ onSave, onDelete, onPickPhoto, initialData }, ref) {
           />
           <BorderlessButton
             onPress={() => setDateTimePickerVisible(true)}
-            style={{ paddingVertical: Padding[2] }}
             borderless={false}
           >
-            <View>
+            <View style={{ paddingVertical: Padding[2] }}>
               <Text style={{ fontSize: FontSize.lg }}>
                 {format(dateTime, "PPPP")}
               </Text>
@@ -274,7 +274,7 @@ function PhotoPickerForm({ onChange, photoUri }) {
         }
       } catch (e) {
         console.warn(
-          `Unable to get asset info for ID "${asset.assetId}": ${e.message}`
+          `Unable to get asset info for ID "${asset.assetId}": ${e.message}`,
         );
       }
     }
@@ -288,23 +288,24 @@ function PhotoPickerForm({ onChange, photoUri }) {
     });
   };
 
-  const handleDropImageAsync = async (asset: OnDropEvent) => {
-    if (!asset.type?.startsWith("image")) {
-      alert("Oops, that's not an image");
-    }
+  // Add back when we fix the drop event
+  // const handleDropImageAsync = async (asset: OnDropEvent) => {
+  //   if (!asset.type?.startsWith("image")) {
+  //     alert("Oops, that's not an image");
+  //   }
 
-    const image = await ImageManipulator.manipulateAsync(
-      asset.uri,
-      [{ crop: cropCover(asset.width, asset.height) }],
-      { compress: 0.6, format: ImageManipulator.SaveFormat.PNG }
-    );
+  //   const image = await ImageManipulator.manipulateAsync(
+  //     asset.uri,
+  //     [{ crop: cropCover(asset.width, asset.height) }],
+  //     { compress: 0.6, format: ImageManipulator.SaveFormat.PNG },
+  //   );
 
-    onChange({
-      ...image,
-      // We don't have the following data in a drop event
-      exif: {},
-    });
-  };
+  //   onChange({
+  //     ...image,
+  //     // We don't have the following data in a drop event
+  //     exif: {},
+  //   });
+  // };
 
   return (
     // TODO: investigate this
@@ -324,85 +325,85 @@ function PhotoPickerForm({ onChange, photoUri }) {
     //   highlightBorderRadius={20}
     //   style={{ flex: 1 }}
     // >
-      <View
-        darkColor={TailwindColor["zinc-800"]}
-        lightColor={TailwindColor["gray-100"]}
-        style={{
-          flex: 1,
-          borderRadius: 10,
-          padding: Padding[5],
-          margin: Margin[2],
-          alignItems: "center",
-        }}
-      >
-        {photoUri ? (
-          <BorderlessButton
-            onPress={() => launchPickerAsync()}
-            borderless={false}
-          >
-            <Photo
-              uri={photoUri}
-              resizeMode="cover"
-              containerStyle={{
-                width: 200,
-                height: 200,
-                borderRadius: 5,
-                overflow: "hidden",
-              }}
-            />
-          </BorderlessButton>
-        ) : (
-          <RectButton
-            style={{
+    <View
+      darkColor={TailwindColor["zinc-800"]}
+      lightColor={TailwindColor["gray-100"]}
+      style={{
+        flex: 1,
+        borderRadius: 10,
+        padding: Padding[5],
+        margin: Margin[2],
+        alignItems: "center",
+      }}
+    >
+      {photoUri ? (
+        <BorderlessButton
+          onPress={() => launchPickerAsync()}
+          borderless={false}
+        >
+          <Photo
+            uri={photoUri}
+            resizeMode="cover"
+            containerStyle={{
               width: 200,
               height: 200,
-              backgroundColor:
-                colorScheme === "light"
-                  ? TailwindColor["gray-200"]
-                  : TailwindColor["zinc-700"],
               borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
+              overflow: "hidden",
             }}
-            onPress={() => launchPickerAsync()}
+          />
+        </BorderlessButton>
+      ) : (
+        <RectButton
+          style={{
+            width: 200,
+            height: 200,
+            backgroundColor:
+              colorScheme === "light"
+                ? TailwindColor["gray-200"]
+                : TailwindColor["zinc-700"],
+            borderRadius: 5,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => launchPickerAsync()}
+        >
+          <Text
+            darkColor={TailwindColor["gray-200"]}
+            lightColor={TailwindColor["gray-700"]}
+            style={{ fontSize: FontSize.lg }}
           >
-            <Text
-              darkColor={TailwindColor["gray-200"]}
-              lightColor={TailwindColor["gray-700"]}
-              style={{ fontSize: FontSize.lg }}
-            >
-              {photoUri ? "Select a different photo " : "Select a photo"}
-            </Text>
-          </RectButton>
-        )}
-      </View>
+            {photoUri ? "Select a different photo " : "Select a photo"}
+          </Text>
+        </RectButton>
+      )}
+    </View>
     // </DragDropContentView>
   );
 }
 
 // Thanks ChatGPT
-function cropCover(originalWidth: number, originalHeight: number) {
-  let newDimension: number, startX: number, startY: number;
+// function cropCover(originalWidth: number, originalHeight: number) {
+//   let newDimension: number, startX: number, startY: number;
 
-  if (originalWidth < originalHeight) {
-    // Width is smaller than height
-    newDimension = originalWidth;
-    startX = 0;
-    startY = (originalHeight - originalWidth) / 2;
-  } else {
-    // Height is smaller than width or they are equal
-    newDimension = originalHeight;
-    startX = (originalWidth - originalHeight) / 2;
-    startY = 0;
-  }
+//   if (originalWidth < originalHeight) {
+//     // Width is smaller than height
+//     newDimension = originalWidth;
+//     startX = 0;
+//     startY = (originalHeight - originalWidth) / 2;
+//   } else {
+//     // Height is smaller than width or they are equal
+//     newDimension = originalHeight;
+//     startX = (originalWidth - originalHeight) / 2;
+//     startY = 0;
+//   }
 
-  return {
-    width: newDimension,
-    height: newDimension,
-    originX: startX,
-    originY: startY,
-  };
-}
+//   return {
+//     width: newDimension,
+//     height: newDimension,
+//     originX: startX,
+//     originY: startY,
+//   };
+// }
 
 function PatternPicker({
   pattern,
@@ -440,7 +441,7 @@ function PatternPicker({
     (props) => (
       <BottomSheetBackdrop {...props} opacity={0.2} pressBehavior="close" />
     ),
-    []
+    [],
   );
 
   const selectOption = (option: string) => {
@@ -450,12 +451,8 @@ function PatternPicker({
 
   return (
     <>
-      <BorderlessButton
-        onPress={handlePresentModalPress}
-        style={{ paddingVertical: Padding[2] }}
-        borderless={false}
-      >
-        <View>
+      <BorderlessButton onPress={handlePresentModalPress} borderless={false}>
+        <View style={{ paddingVertical: Padding[2] }}>
           <Text style={{ fontSize: FontSize.lg }}>{pattern}</Text>
         </View>
       </BorderlessButton>
@@ -517,17 +514,19 @@ function Option({ label, onPress, selection }) {
   return (
     <RectButton onPress={() => onPress(label)}>
       <View
-      style={{
-        paddingVertical: Padding[3],
-        paddingHorizontal: Padding[5],
-      }}>
-      <Text
-        style={[
-          styles.option,
-          selection === label ? { fontWeight: "900" } : null,
-        ]}
+        darkColor={ThemeColors.dark.viewAccent}
+        style={{
+          paddingVertical: Padding[3],
+          paddingHorizontal: Padding[5],
+        }}
       >
-        {label}
+        <Text
+          style={[
+            styles.option,
+            selection === label ? { fontWeight: "900" } : null,
+          ]}
+        >
+          {label}
         </Text>
       </View>
     </RectButton>

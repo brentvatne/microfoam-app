@@ -14,14 +14,14 @@ import {
   setNotificationChannelAsync,
   setNotificationHandler,
   useLastNotificationResponse,
-} from 'expo-notifications';
-import Constants from 'expo-constants';
-import { isDevice } from 'expo-device';
-import { defineTask } from 'expo-task-manager';
-import { useEffect, useRef, useState } from 'react';
-import { AppState, Platform } from 'react-native';
+} from "expo-notifications";
+import Constants from "expo-constants";
+import { isDevice } from "expo-device";
+import { defineTask } from "expo-task-manager";
+import { useEffect, useRef, useState } from "react";
+import { AppState, Platform } from "react-native";
 
-import { View, Text } from './Themed';
+import { View, Text } from "./Themed";
 
 setNotificationHandler({
   handleNotification: async () => ({
@@ -33,7 +33,7 @@ setNotificationHandler({
 
 // Background task
 // https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
-const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
   console.log(
     `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`,
@@ -73,7 +73,7 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
 });
 
 const Notifier = () => {
-  const [expoPushToken, setExpoPushToken] = useState('');
+  const [expoPushToken, setExpoPushToken] = useState("");
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notification | undefined>(
     undefined,
@@ -92,9 +92,9 @@ const Notifier = () => {
       (token) => token && setExpoPushToken(token),
     );
 
-    if (Platform.OS === 'android') {
-      setNotificationChannelAsync('Miscellaneous', {
-        name: 'Miscellaneous',
+    if (Platform.OS === "android") {
+      setNotificationChannelAsync("Miscellaneous", {
+        name: "Miscellaneous",
         importance: AndroidImportance.HIGH,
       })
         .then((value) => {
@@ -147,23 +147,23 @@ const Notifier = () => {
       )}`}</Text>
       <View>
         <Text>
-          Title: {notification && notification.request.content.title}{' '}
+          Title: {notification && notification.request.content.title}{" "}
         </Text>
         <Text>Body: {notification && notification.request.content.body}</Text>
         <Text>
-          Data:{' '}
+          Data:{" "}
           {notification && JSON.stringify(notification.request.content.data)}
         </Text>
         <Text>
-          Response received for:{' '}
+          Response received for:{" "}
           {response && response.notification.request.content.title}
         </Text>
         <Text>
-          Last response:{' '}
+          Last response:{" "}
           {lastResponse && lastResponse.notification.request.content.title}
         </Text>
         <Text>
-          Last response data:{' '}
+          Last response data:{" "}
           {lastResponse &&
             JSON.stringify(
               lastResponse.notification.request.content.data,
@@ -179,24 +179,24 @@ const Notifier = () => {
 async function registerForPushNotificationsAsync() {
   let token: string;
 
-  if (Platform.OS === 'android') {
-    await setNotificationChannelAsync('default', {
-      name: 'default',
+  if (Platform.OS === "android") {
+    await setNotificationChannelAsync("default", {
+      name: "default",
       importance: AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: "#FF231F7C",
     });
   }
 
   if (isDevice) {
     const { status: existingStatus } = await getPermissionsAsync();
     let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
+    if (existingStatus !== "granted") {
       const { status } = await requestPermissionsAsync();
       finalStatus = status;
     }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
       return;
     }
     // Learn more about projectId:
@@ -207,7 +207,7 @@ async function registerForPushNotificationsAsync() {
         Constants?.expoConfig?.extra?.eas?.projectId ??
         Constants?.easConfig?.projectId;
       if (!projectId) {
-        throw new Error('Project ID not found');
+        throw new Error("Project ID not found");
       }
       token = (
         await getExpoPushTokenAsync({
@@ -219,7 +219,7 @@ async function registerForPushNotificationsAsync() {
       token = `${e}`;
     }
   } else {
-    alert('Must use physical device for Push Notifications');
+    alert("Must use physical device for Push Notifications");
   }
 
   return token;

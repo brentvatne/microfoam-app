@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 import * as QuickActions from "expo-quick-actions";
 
 export function useQuickActionCallback(
-  callback?: (data: QuickActions.Action) => void | Promise<void>
+  callback?: (data: QuickActions.Action) => void | Promise<void>,
 ) {
   React.useEffect(() => {
     let isMounted = true;
@@ -20,5 +20,5 @@ export function useQuickActionCallback(
       isMounted = false;
       sub.remove();
     };
-  }, [QuickActions.initial, callback]);
+  }, [callback]);
 }

@@ -3,7 +3,6 @@ import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as Updates from "expo-updates";
-import Insights from "expo-insights";
 
 import { isLocalFile } from "~/storage/fs";
 import * as PourStore from "~/storage/PourStore";
@@ -15,13 +14,6 @@ import { FontSize, Margin } from "~/constants/styles";
 export default function DebugTools() {
   return (
     <>
-      <Text style={{ fontFamily: "Courier", textAlign: "center" }}>
-        {/* Insights payload:{" "}
-        {
-          // @ts-ignore
-          JSON.stringify(Insights.getDebugConfig(), null, 2)
-        } */}
-      </Text>
       <Text style={styles.header}>Debug tools</Text>
 
       <Button
@@ -61,7 +53,7 @@ export default function DebugTools() {
               },
               { text: "OK", onPress: () => PourStore.destroyAllAsync() },
             ],
-            { cancelable: true }
+            { cancelable: true },
           );
         }}
       />
@@ -84,7 +76,7 @@ export default function DebugTools() {
                 },
               },
             ],
-            { cancelable: true }
+            { cancelable: true },
           );
         }}
       />
@@ -104,7 +96,7 @@ export default function DebugTools() {
                 { text: "Cancel", style: "cancel" },
                 { text: "Restart", onPress: () => Updates.reloadAsync() },
               ],
-              { cancelable: true }
+              { cancelable: true },
             );
           } else {
             alert("No update available");
@@ -145,7 +137,7 @@ async function maybeExportDatabaseAsync() {
         },
         { text: "Proceed with export", onPress: () => exportDatabaseAsync() },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
     return;
   } else {
@@ -172,6 +164,7 @@ async function importDatabaseAsync() {
       PourStore.loadExternalJSONAsync(data);
       alert("Imported data successfully");
     } catch (e) {
+      console.log(e.message);
       alert("Import failed");
     }
   }

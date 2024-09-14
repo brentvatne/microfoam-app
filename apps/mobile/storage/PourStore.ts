@@ -73,7 +73,7 @@ export async function updateAsync(id: string, pour: PourRecord) {
 async function generateBlurhashAsync(
   imageUri: string,
   componentsX = 4,
-  componentsY = 3
+  componentsY = 3,
 ) {
   try {
     let localUri = imageUri;
@@ -81,7 +81,7 @@ async function generateBlurhashAsync(
     if (!imageUri.startsWith(FileSystem.cacheDirectory)) {
       const { uri } = await FileSystem.downloadAsync(
         imageUri,
-        `${FileSystem.cacheDirectory}/${uuid()})`
+        `${FileSystem.cacheDirectory}/${uuid()})`,
       );
       localUri = uri;
     }
@@ -90,7 +90,10 @@ async function generateBlurhashAsync(
       width: 50,
       height: 50,
     });
-    const blurhash = await Image.generateBlurhashAsync(thumbnail, [componentsX, componentsY]);
+    const blurhash = await Image.generateBlurhashAsync(thumbnail, [
+      componentsX,
+      componentsY,
+    ]);
     return blurhash;
   } catch (e) {
     console.log(e);
@@ -109,7 +112,7 @@ async function processImageAsync(pour: { uri: string; blurhash?: string }) {
 
     const resizedUri = await maybeShrinkImageAsync(uri, { width: 1000 });
     // const blurhash = await generateBlurhashAsync(resizedUri);
-    const blurhash = '';
+    const blurhash = "";
     const photoUrl = await maybeCopyPhotoToDocumentsAsync(resizedUri);
     const filename = photoUrl.split("/").pop();
 
@@ -208,7 +211,7 @@ const persister = createCustomPersister(
   },
   async (getContent) => await persistJsonAsync(JSON.stringify(getContent()[0])),
   (didChange) => {},
-  () => {}
+  () => {},
 );
 
 export function usePours() {

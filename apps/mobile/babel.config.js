@@ -3,19 +3,22 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      ["transform-inline-environment-variables", {
-        "include": [
-          "VEXO_API_KEY"
-        ]
-      }],
-      ["babel-plugin-module-resolver",
+      [
+        "transform-inline-environment-variables",
+        {
+          include: ["VEXO_API_KEY"],
+        },
+      ],
+      [
+        "babel-plugin-module-resolver",
         {
           root: ["./"],
           alias: {
-            "~": "./"
-          }
-        }],
-      'react-native-reanimated/plugin',
+            "~": "./",
+          },
+        },
+      ],
+      "react-native-reanimated/plugin",
     ],
   };
 };

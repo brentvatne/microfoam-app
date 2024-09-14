@@ -1,20 +1,20 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect } from "react";
 import {
   Alert,
   StyleSheet,
   Platform,
   View as UnthemedView,
-} from 'react-native';
-import { Stack, useRouter } from 'expo-router';
-import { RectButton, BorderlessButton } from 'react-native-gesture-handler';
-import { useScrollToTop } from '@react-navigation/native';
-import { MotiView } from 'moti';
-import { FlashList } from '@shopify/flash-list';
+} from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { RectButton, BorderlessButton } from "react-native-gesture-handler";
+import { useScrollToTop } from "@react-navigation/native";
+import { MotiView } from "moti";
+import { FlashList } from "@shopify/flash-list";
 
-import { TailwindColor, FontSize, Margin, Padding } from '~/constants/styles';
-import * as PourStore from '~/storage/PourStore';
-import Photo from '~/components/Photo';
-import { AntDesign, Text, View } from '~/components/Themed';
+import { TailwindColor, FontSize, Margin, Padding } from "~/constants/styles";
+import * as PourStore from "~/storage/PourStore";
+import Photo from "~/components/Photo";
+import { AntDesign, Text, View } from "~/components/Themed";
 
 export default function LogListScreen() {
   const data = PourStore.usePoursInFlashList();
@@ -23,7 +23,7 @@ export default function LogListScreen() {
 
   useEffect(() => {
     updateStickyHeaders();
-  }, [data]);
+  }, [data, updateStickyHeaders]);
 
   const router = useRouter();
   const ref = useRef(null);
@@ -33,11 +33,11 @@ export default function LogListScreen() {
     <BorderlessButton
       hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
       onPress={() => {
-        router.navigate('/new');
+        router.navigate("/new");
       }}
     >
       <AntDesign
-        name={Platform.select({ ios: 'plus', default: 'pluscircleo' })}
+        name={Platform.select({ ios: "plus", default: "pluscircleo" })}
         size={24}
       />
     </BorderlessButton>
@@ -47,8 +47,8 @@ export default function LogListScreen() {
     <>
       <Stack.Screen
         options={{
-          title: 'Pours',
-          ...(Platform.OS === 'ios'
+          title: "Pours",
+          ...(Platform.OS === "ios"
             ? { headerLeft: headerButton }
             : { headerRight: headerButton }),
         }}
@@ -64,7 +64,7 @@ export default function LogListScreen() {
             renderItem={renderItem}
             stickyHeaderIndices={stickyHeaderIndices}
             ref={ref}
-            keyExtractor={(item) => (typeof item === 'string' ? item : item.id)}
+            keyExtractor={(item) => (typeof item === "string" ? item : item.id)}
             estimatedItemSize={85}
             ItemSeparatorComponent={ItemSeparatorComponent}
             ListEmptyComponent={EmptyState}
@@ -78,8 +78,8 @@ export default function LogListScreen() {
 function ItemSeparatorComponent() {
   return (
     <View
-      darkColor={TailwindColor['zinc-700']}
-      lightColor={TailwindColor['gray-100']}
+      darkColor={TailwindColor["zinc-700"]}
+      lightColor={TailwindColor["gray-100"]}
       style={{ height: StyleSheet.hairlineWidth, marginLeft: 10 }}
     />
   );
@@ -91,30 +91,31 @@ function PourRow({ item }) {
   return (
     <RectButton
       onPress={() => {
-        async () => {
-          let result = await fetch('https://expo.dev');
-          let text = await result.text();
-          console.log(text);
-        };
         router.navigate(`/details/${item.id}`);
       }}
       onLongPress={() => {
         // TODO: bottom sheet with view / share / edit / delete options
         Alert.alert(
-          'Delete pour?',
-          'Are you sure you want to delete this?',
+          "Delete pour?",
+          "Are you sure you want to delete this?",
           [
             {
-              text: 'Cancel',
-              style: 'cancel',
+              text: "Cancel",
+              style: "cancel",
             },
-            { text: 'OK', onPress: () => PourStore.destroy(item) },
+            { text: "OK", onPress: () => PourStore.destroy(item) },
           ],
           { cancelable: true },
         );
       }}
     >
-      <UnthemedView style={{ flexDirection: 'row', paddingVertical: Padding[3], paddingHorizontal: Padding[3] }}>
+      <UnthemedView
+        style={{
+          flexDirection: "row",
+          paddingVertical: Padding[3],
+          paddingHorizontal: Padding[3],
+        }}
+      >
         <Photo
           uri={item.photoUrl}
           blurhash={item.blurhash}
@@ -123,20 +124,20 @@ function PourRow({ item }) {
             width: 100,
             borderRadius: 5,
             marginRight: Margin[3],
-            overflow: 'hidden',
-            backgroundColor: 'transparent',
+            overflow: "hidden",
+            backgroundColor: "transparent",
           }}
         />
 
         <UnthemedView
-          style={{ flexDirection: 'column', paddingTop: Padding[2], flex: 1 }}
+          style={{ flexDirection: "column", paddingTop: Padding[2], flex: 1 }}
         >
           <UnthemedView style={{ flex: 1 }}>
             <Text numberOfLines={2} style={{ flex: 1, fontSize: FontSize.lg }}>
               {item.notes ?? (
                 <Text
-                  darkColor={TailwindColor['gray-100']}
-                  lightColor={TailwindColor['gray-400']}
+                  darkColor={TailwindColor["gray-100"]}
+                  lightColor={TailwindColor["gray-400"]}
                 >
                   No notes
                 </Text>
@@ -146,17 +147,17 @@ function PourRow({ item }) {
 
           <UnthemedView style={{ paddingBottom: Padding[2] }}>
             <Text
-              darkColor={TailwindColor['gray-300']}
-              lightColor={TailwindColor['gray-600']}
+              darkColor={TailwindColor["gray-300"]}
+              lightColor={TailwindColor["gray-600"]}
               style={{
                 fontSize: FontSize.base,
               }}
             >
-              {item.pattern ?? 'Formless blob'}
+              {item.pattern ?? "Formless blob"}
             </Text>
             <Text
-              darkColor={TailwindColor['gray-300']}
-              lightColor={TailwindColor['gray-600']}
+              darkColor={TailwindColor["gray-300"]}
+              lightColor={TailwindColor["gray-600"]}
               style={{ fontSize: FontSize.base }}
             >
               Rating: {item.rating} / 5
@@ -169,7 +170,7 @@ function PourRow({ item }) {
 }
 
 const renderItem = ({ item }) => {
-  if (typeof item === 'string') {
+  if (typeof item === "string") {
     return <SectionHeader title={item} />;
   }
 
@@ -184,12 +185,12 @@ const SectionHeader = ({ title }) => (
       paddingBottom: 7,
       opacity: 0.95,
     }}
-    lightColor={TailwindColor['zinc-100']}
-    darkColor={TailwindColor['zinc-800']}
+    lightColor={TailwindColor["zinc-100"]}
+    darkColor={TailwindColor["zinc-800"]}
   >
     <Text
-      lightColor={TailwindColor['zinc-600']}
-      darkColor={TailwindColor['zinc-300']}
+      lightColor={TailwindColor["zinc-600"]}
+      darkColor={TailwindColor["zinc-300"]}
     >
       {title}
     </Text>
@@ -203,17 +204,17 @@ function EmptyState() {
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
         paddingTop: 40,
       }}
     >
       <Text
-        darkColor={TailwindColor['gray-100']}
-        lightColor={TailwindColor['gray-800']}
+        darkColor={TailwindColor["gray-100"]}
+        lightColor={TailwindColor["gray-800"]}
         style={{
           fontSize: FontSize.xl,
-          textAlign: 'center',
+          textAlign: "center",
           marginBottom: Margin[5],
           marginTop: Margin[3],
         }}
@@ -224,21 +225,21 @@ function EmptyState() {
       <BorderlessButton
         borderless={false}
         onPress={() => {
-          router.navigate('/new');
+          router.navigate("/new");
         }}
       >
         <View
           style={{
-            width: '100%',
+            width: "100%",
             padding: Padding[4],
-            backgroundColor: TailwindColor['blue-100'],
+            backgroundColor: TailwindColor["blue-100"],
             borderRadius: 10,
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
           <Text
             style={{
-              color: TailwindColor['blue-500'],
+              color: TailwindColor["blue-500"],
               fontSize: FontSize.xl,
             }}
           >
@@ -262,7 +263,7 @@ const useUpdateStickyHeaders = (data: any[]) => {
 
   actualStickyHeaderIndices.current = data
     .map((item, index) => {
-      if (typeof item === 'string') {
+      if (typeof item === "string") {
         return index;
       } else {
         return null;

@@ -62,13 +62,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-build-properties",
       {
-        "ios": {
-          "newArchEnabled": true
+        ios: {
+          newArchEnabled: true,
         },
-        "android": {
-          "newArchEnabled": true
-        }
-      }
+        android: {
+          newArchEnabled: true,
+        },
+      },
     ],
     [
       "expo-notifications",

@@ -30,7 +30,7 @@ export function useAutoSetAppearanceFromSettingsEffect() {
     const subscription = Settings.addThemeListener(({ theme: newTheme }) => {
       // If the selected theme setting changes, we need to update the color scheme
       Appearance.setColorScheme(
-        newTheme === Settings.Theme.System ? null : newTheme
+        newTheme === Settings.Theme.System ? null : newTheme,
       );
     });
 
@@ -63,7 +63,7 @@ export function useTheme(): "light" | "dark" {
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  colorName?: keyof typeof ThemeColors.light & keyof typeof ThemeColors.dark
+  colorName?: keyof typeof ThemeColors.light & keyof typeof ThemeColors.dark,
 ) {
   const theme = useTheme();
   const colorFromProps = props[theme];
@@ -107,7 +107,7 @@ export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "view"
+    "view",
   );
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
@@ -125,7 +125,7 @@ const ScrollView = forwardRef<DefaultScrollView, ScrollViewProps>(
     const { style, lightColor, darkColor, ...otherProps } = props;
     const backgroundColor = useThemeColor(
       { light: lightColor, dark: darkColor },
-      "view"
+      "view",
     );
 
     return (
@@ -135,14 +135,16 @@ const ScrollView = forwardRef<DefaultScrollView, ScrollViewProps>(
         ref={ref}
       />
     );
-  }
+  },
 );
+
+ScrollView.displayName = "ScrollView";
 
 const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "view"
+    "view",
   );
 
   return (
@@ -154,12 +156,14 @@ const FlatList = forwardRef<DefaultFlatList, FlatListProps>((props, ref) => {
   );
 });
 
+FlatList.displayName = "FlatList";
+
 const SectionList = forwardRef<DefaultSectionList, SectionListProps>(
   (props, ref) => {
     const { style, lightColor, darkColor, ...otherProps } = props;
     const backgroundColor = useThemeColor(
       { light: lightColor, dark: darkColor },
-      "view"
+      "view",
     );
 
     return (
@@ -169,8 +173,10 @@ const SectionList = forwardRef<DefaultSectionList, SectionListProps>(
         ref={ref}
       />
     );
-  }
+  },
 );
+
+SectionList.displayName = "SectionList";
 
 const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   const {
@@ -183,12 +189,12 @@ const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
   } = props;
   const backgroundColor = useThemeColor(
     { light: lightBackgroundColor, dark: darkBackgroundColor },
-    "textInputBackground"
+    "textInputBackground",
   );
 
   const color = useThemeColor(
     { light: lightTextColor, dark: darkTextColor },
-    "textInputText"
+    "textInputText",
   );
 
   const placeholderTextColor = Color(color).alpha(0.3).toString();
@@ -202,5 +208,7 @@ const TextInput = forwardRef<DefaultTextInput, TextInputProps>((props, ref) => {
     />
   );
 });
+
+TextInput.displayName = "TextInput";
 
 export { FlatList, SectionList, ScrollView, TextInput };

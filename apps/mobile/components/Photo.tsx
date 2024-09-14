@@ -23,9 +23,14 @@ export default class Photo extends React.Component<Props> {
 }
 
 function PhotoComponent(props: Props) {
-  const { blurhash, uri, resizeMode, containerStyle } = props;
+  const { blurhash, uri, containerStyle } = props;
 
   let maybeLocalUri = uri;
+
+  // Not sure this is actually useful? Probably if we get here something else is wrong
+  if (!maybeLocalUri) {
+    return <View style={containerStyle} darkColor="black" lightColor="white" />;
+  }
 
   if (isLocalFile(uri) && !uri.startsWith(FileSystem.cacheDirectory)) {
     let filename = uri;
@@ -44,7 +49,9 @@ function PhotoComponent(props: Props) {
         source={{ uri: maybeLocalUri }}
         cachePolicy="memory"
         recyclingKey={maybeLocalUri}
-        placeholder={blurhash ? {blurhash} : {blurhash: 'L6I|~^0200OG~A?bF#^*00?H?Z~9'}}
+        placeholder={
+          blurhash ? { blurhash } : { blurhash: "L6I|~^0200OG~A?bF#^*00?H?Z~9" }
+        }
         placeholderContentFit="fill"
         contentFit="fill"
         transition={props.transition}

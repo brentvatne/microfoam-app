@@ -13,7 +13,8 @@
     "prebuild:android": "expo prebuild -p android --clean",
     "fingerprint:validate": "ts-node scripts/validate-fingerprint.ts",
     "fingerprint:set": "ts-node scripts/set-fingerprint.ts",
-    "prettier:fix": "prettier app components constants storage index.js -w"
+    "prettier:fix": "prettier app components constants storage index.js -w",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@expo/fingerprint": "^0.6.0",
@@ -85,8 +86,12 @@
     "@types/react": "~18.2.79",
     "babel-plugin-module-resolver": "^5.0.0",
     "chalk": "^4.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-expo": "^7.1.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "fs-extra": "^11.2.0",
-    "prettier": "^2.7.1",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   },

@@ -75,7 +75,7 @@ export default function Settings() {
             renderIcon={() => <AntDesign name="iconfontdesktop" size={24} />}
             onPress={() => {
               setTheme(
-                unresolvedTheme === Theme.System ? Theme.Light : Theme.System
+                unresolvedTheme === Theme.System ? Theme.Light : Theme.System,
               );
             }}
           />
@@ -95,7 +95,7 @@ function UploadPhotosButton({ disabled }: { disabled: boolean }) {
   const router = useRouter();
   const pours = PourStore.usePours();
   const numPoursWithLocalPhotos = pours.filter((p) =>
-    isLocalFile(p.photoUrl)
+    isLocalFile(p.photoUrl),
   ).length;
 
   const word = numPoursWithLocalPhotos === 1 ? "photo" : "photos";

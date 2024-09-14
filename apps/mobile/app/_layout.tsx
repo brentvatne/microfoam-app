@@ -2,7 +2,12 @@ import { useEffect } from "react";
 import { Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack, router } from "expo-router";
-import { useUpdates, fetchUpdateAsync, checkForUpdateAsync, reloadAsync } from "expo-updates";
+import {
+  useUpdates,
+  fetchUpdateAsync,
+  checkForUpdateAsync,
+  reloadAsync,
+} from "expo-updates";
 import { useAppState } from "@react-native-community/hooks";
 import {
   DarkTheme,
@@ -24,19 +29,12 @@ function Root() {
   useAutoSetAppearanceFromSettingsEffect();
   const theme = useTheme();
   const dataIsReady = useDataIsReady();
-  const {
-    isChecking,
-    isUpdateAvailable,
-    isUpdatePending,
-    downloadedUpdate,
-  } = useUpdates();
+  const { isChecking, isUpdateAvailable, isUpdatePending, downloadedUpdate } =
+    useUpdates();
 
   const appState = useAppState();
 
-  if (!dataIsReady) {
-    return null;
-  }
-
+  // TODO: this won't work properly if data isn't ready
   useQuickActionCallback((action) => {
     if (action.id === "1") {
       requestAnimationFrame(() => {
@@ -50,7 +48,7 @@ function Root() {
     if (appState === "active" && !isUpdatePending && !isChecking && !__DEV__) {
       checkForUpdateAsync();
     }
-  }, [appState])
+  }, [appState, isChecking, isUpdatePending]);
 
   // Prompt to install when an update is available
   useEffect(() => {
@@ -88,10 +86,14 @@ function Root() {
             text: "I'll do it later",
             onPress: () => {},
           },
-        ]
+        ],
       );
     }
   }, [downloadedUpdate]);
+
+  if (!dataIsReady) {
+    return null;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

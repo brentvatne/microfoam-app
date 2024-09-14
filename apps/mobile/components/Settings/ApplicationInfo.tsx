@@ -32,9 +32,7 @@ export default function ApplicationInfo({
 
         <DebugText>Channel: {currentlyRunningUpdate.channel}</DebugText>
 
-        <DebugText>
-          ID: {currentlyRunningUpdate.updateId ?? "n/a"}
-        </DebugText>
+        <DebugText>ID: {currentlyRunningUpdate.updateId ?? "n/a"}</DebugText>
 
         {currentlyRunningUpdate.createdAt ? (
           <DebugText>

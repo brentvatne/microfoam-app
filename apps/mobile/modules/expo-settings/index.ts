@@ -1,1 +1,1 @@
-export * from './src/ExpoSettingsModule';
+export * from "./src/ExpoSettingsModule";
