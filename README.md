@@ -29,3 +29,8 @@ steps taken to do this:
 ### Notes
 - As development takes place on `main` we might need to ignore updates in `expo` and `expo-modules-core` because they might "run away" from the app's code. Just something to keep in mind when doing `git pull` in the `expo` submodule.
 - `expo-notifications` requires code to be built into the `build` folder, keep that in mind when developing in TS files. 
+
+
+### Android native dep issues
+
+`cd apps/mobile/android && ./gradlew :app:dependencies`

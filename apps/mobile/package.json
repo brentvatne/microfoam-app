@@ -14,7 +14,11 @@
     "fingerprint:validate": "ts-node scripts/validate-fingerprint.ts",
     "fingerprint:set": "ts-node scripts/set-fingerprint.ts",
     "prettier:fix": "prettier app components constants storage index.js -w",
-    "fix-deps": "npx expo install --check"
+    "fix-deps": "npx expo install --check",
+    "spotlessCore": "cd ../../expo/apps/bare-expo/android && ./gradlew :expo-modules-core:spotlessApply",
+    "spotlessCoreTests": "cd ../../expo/apps/bare-expo/android && ./gradlew :expo-modules-test-core:spotlessApply",
+    "spotlessNotif": "cd ../../expo/apps/bare-expo/android && ./gradlew :expo-notifications:spotlessApply",
+    "spotlessAll": "cd ../../expo/apps/bare-expo/android && ./gradlew spotlessApply"
   },
   "dependencies": {
     "@expo/fingerprint": "^0.6.0",
@@ -29,7 +33,7 @@
     "burnt": "^0.12.2",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
-    "expo": "~51.0.28",
+    "expo": "*",
     "expo-application": "~5.9.1",
     "expo-atlas": "^0.1.1",
     "expo-build-properties": "~0.12.5",
@@ -46,6 +50,7 @@
     "expo-linking": "~6.3.1",
     "expo-media-library": "~16.0.4",
     "expo-modules-core": "*",
+    "expo-modules-test-core": "*",
     "expo-notifications": "*",
     "expo-quick-actions": "^0.2.3",
     "expo-router": "~3.5.23",
@@ -55,7 +60,7 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "expo-task-manager": "~11.8.2",
-    "expo-updates": "~0.25.23",
+    "expo-updates": "*",
     "jest": "^29.2.1",
     "jest-expo": "~51.0.4",
     "lodash": "^4.17.21",
@@ -92,6 +97,8 @@
   "expo": {
     "install": {
       "exclude": [
+        "expo",
+        "expo-modules-core",
         "expo-notifications",
         "react-native@~0.74.0",
         "react-native-reanimated@~3.10.0",

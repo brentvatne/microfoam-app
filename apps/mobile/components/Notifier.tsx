@@ -23,18 +23,18 @@ import {
   YearlyTriggerInput,
   TimeIntervalTriggerInput,
   getAllScheduledNotificationsAsync,
-} from 'expo-notifications';
-import Constants from 'expo-constants';
-import { isDevice } from 'expo-device';
-import { defineTask } from 'expo-task-manager';
-import { useEffect, useRef, useState } from 'react';
-import { AppState, Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+} from "expo-notifications";
+import Constants from "expo-constants";
+import { isDevice } from "expo-device";
+import { defineTask } from "expo-task-manager";
+import { useEffect, useRef, useState } from "react";
+import { AppState, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { View, Text } from './Themed';
-import Button from './Button';
-import { router } from 'expo-router';
-import { sub } from 'date-fns';
+import { View, Text } from "./Themed";
+import Button from "./Button";
+import { router } from "expo-router";
+import { sub } from "date-fns";
 
 /**
  * Initializes notification handling
@@ -51,11 +51,19 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
     let isMounted = true;
 
     setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-      }),
+      handleNotification: async (notification) => {
+        console.log({
+          handleNotification: JSON.stringify(notification),
+        });
+        return {
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        };
+      },
+      handleSuccess: (id) => {
+        console.log(`Notification handled successfully: ${id}`);
+      },
     });
 
     if (routeOnResponses) {
@@ -76,7 +84,7 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
       const subscription = addNotificationResponseReceivedListener(
         (response) => {
           redirect(response.notification);
-        },
+        }
       );
       responseListener.current = subscription;
     }
@@ -89,21 +97,21 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
   }, []);
 }
 
-const STORAGE_KEY = '@notification_bg_store';
+const STORAGE_KEY = "@notification_bg_store";
 
 // Background task
 // https://github.com/expo/expo/tree/main/packages/expo-notifications#handling-incoming-notifications-when-the-app-is-not-in-the-foreground-not-supported-in-expo-go
-const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
   console.log(
-    `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`,
+    `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`
   );
 
   if (error) {
     console.log(
       `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: Error! ${JSON.stringify(
-        error,
-      )}`,
+        error
+      )}`
     );
 
     return;
@@ -113,33 +121,33 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
     STORAGE_KEY,
     `Background trigger: ${AppState.isAvailable} ${
       AppState.currentState
-    } ${JSON.stringify(data)}`,
+    } ${JSON.stringify(data)}`
   );
 
   // data.notification.data.data = JSON.parse(data.notification.data.body);
   // data.notification.data.body = data.notification.data.message;
   // setNotification(data.notification);
 });
-
+import { Image } from "expo-image";
 export const Notifier = () => {
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notification | undefined>(
-    undefined,
+    undefined
   );
   const [response, setResponse] = useState<NotificationResponse | undefined>(
-    undefined,
+    undefined
   );
   const [scheduledNotificationIdentifier, setScheduledNotificationIdentifier] =
-    useState('');
+    useState("");
 
   const [scheduledNotificationsText, setScheduledNotificationsText] =
-    useState('');
+    useState("");
 
   const [responseFromAsync, setResponseFromAsync] = useState<
     NotificationResponse | undefined
   >(undefined);
 
-  const [backgroundTaskString, setBackgroundTaskString] = useState<string>('');
+  const [backgroundTaskString, setBackgroundTaskString] = useState<string>("");
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
@@ -149,17 +157,18 @@ export const Notifier = () => {
   const { expoPushToken, devicePushToken } = usePushToken();
 
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      setNotificationChannelAsync('testApp', {
-        name: 'testApp',
+    if (Platform.OS === "android") {
+      setNotificationChannelAsync("testAppWithSound2", {
+        name: "testAppWithSound",
         importance: AndroidImportance.HIGH,
+        sound: "pop_sound.wav",
         enableVibrate: true,
-        vibrationPattern: [0, 250, 250, 250],
+        vibrationPattern: [0, 3000, 250, 250],
       })
         .then((value) => {
-          console.log(`Set channel ${value.name}`);
+          console.log(`Set channel ${JSON.stringify(value, null, 2)}`);
           getNotificationChannelsAsync().then((value) =>
-            setChannels(value ?? []),
+            setChannels(value ?? [])
           );
         })
         .catch((error) => {
@@ -193,7 +202,7 @@ export const Notifier = () => {
         );
       },
     );
-         
+
     console.log(`${Platform.OS} added listeners`);
      */
 
@@ -218,54 +227,61 @@ export const Notifier = () => {
 
   return (
     <View>
-      <Text>Your expo push token: {expoPushToken}</Text>
-      <Text>Your device push token: {devicePushToken}</Text>
+      <Text>Your expo push token:</Text>
+      <Text selectable style={{ color: "blue" }}>
+        {expoPushToken}
+      </Text>
+
+      <Text>Your device push token</Text>
+      <Text selectable style={{ color: "blue" }}>
+        {devicePushToken}
+      </Text>
       <Text>{`Channels: ${JSON.stringify(
         channels.map((c: { id: string }) => c.id),
         null,
-        2,
+        2
       )}`}</Text>
       <View>
         <Text>
-          Title: {notification && notification.request.content.title}{' '}
+          Title: {notification && notification.request.content.title}{" "}
         </Text>
         <Text>Body: {notification && notification.request.content.body}</Text>
         <Text>
-          Vibration:{' '}
+          Vibration:{" "}
           {notification &&
             JSON.stringify(
               (notification.request.content as NotificationContentAndroid)
-                .vibrationPattern ?? 'null',
+                .vibrationPattern ?? "null"
             )}
         </Text>
         <Text>
-          Data:{' '}
+          Data:{" "}
           {notification && JSON.stringify(notification.request.content.data)}
         </Text>
         <Text>
-          Response received for:{' '}
+          Response received for:{" "}
           {response && response.notification.request.content.title}
         </Text>
         <Text>
-          Last response:{' '}
+          Last response:{" "}
           {lastResponse && lastResponse.notification.request.content.title}
         </Text>
         <Text>
-          Last response data:{' '}
+          Last response data:{" "}
           {lastResponse &&
             JSON.stringify(
               lastResponse.notification.request.content.data,
               null,
-              2,
+              2
             )}
         </Text>
         <Text>
-          Last response data from getLastNotificationResponseAsync:{' '}
+          Last response data from getLastNotificationResponseAsync:{" "}
           {responseFromAsync &&
             JSON.stringify(
               responseFromAsync.notification.request.content.data,
               null,
-              2,
+              2
             )}
         </Text>
         <Text>
@@ -279,7 +295,7 @@ export const Notifier = () => {
             getLastNotificationResponseAsync()
               .then((lastResponse) => {
                 console.log(
-                  `lastResponse = ${JSON.stringify(lastResponse, null, 2)}`,
+                  `lastResponse = ${JSON.stringify(lastResponse, null, 2)}`
                 );
                 setResponseFromAsync(lastResponse);
               })
@@ -302,7 +318,7 @@ export const Notifier = () => {
           title="Schedule time interval notification in 2 seconds"
           onPress={() => {
             schedulePushNotificationIn2Seconds().then((result) =>
-              setScheduledNotificationIdentifier(result),
+              setScheduledNotificationIdentifier(result)
             );
           }}
         />
@@ -310,7 +326,7 @@ export const Notifier = () => {
           title="Schedule yearly notification starting in the next minute"
           onPress={() => {
             schedulePushNotificationYearly().then((result) =>
-              setScheduledNotificationIdentifier(result),
+              setScheduledNotificationIdentifier(result)
             );
           }}
         />
@@ -321,10 +337,10 @@ export const Notifier = () => {
 
 function usePushToken() {
   const [expoPushToken, setExpoPushToken] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [devicePushToken, setDevicePushToken] = useState<string | undefined>(
-    undefined,
+    undefined
   );
 
   useEffect(() => {
@@ -335,7 +351,7 @@ function usePushToken() {
         })
         .catch((error) => {
           console.error(error);
-          setExpoPushToken('error');
+          setExpoPushToken("error");
         });
     }
     if (expoPushToken) {
@@ -346,7 +362,7 @@ function usePushToken() {
           setDevicePushToken(tokenString);
         });
       }
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         const subscription = addPushTokenListener((token) => {
           setExpoPushToken(token as unknown as string);
         });
@@ -366,24 +382,24 @@ function usePushToken() {
 async function registerForPushNotificationsAsync() {
   let token: string;
 
-  if (Platform.OS === 'android') {
-    await setNotificationChannelAsync('default', {
-      name: 'default',
+  if (Platform.OS === "android") {
+    await setNotificationChannelAsync("default", {
+      name: "default",
       importance: AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: "#FF231F7C",
     });
   }
 
   if (isDevice) {
     const { status: existingStatus } = await getPermissionsAsync();
     let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
+    if (existingStatus !== "granted") {
       const { status } = await requestPermissionsAsync();
       finalStatus = status;
     }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
       return;
     }
     // Learn more about projectId:
@@ -394,7 +410,7 @@ async function registerForPushNotificationsAsync() {
         Constants?.expoConfig?.extra?.eas?.projectId ??
         Constants?.easConfig?.projectId;
       if (!projectId) {
-        throw new Error('Project ID not found');
+        throw new Error("Project ID not found");
       }
       token = (
         await getExpoPushTokenAsync({
@@ -406,7 +422,7 @@ async function registerForPushNotificationsAsync() {
       token = `${e}`;
     }
   } else {
-    alert('Must use physical device for Push Notifications');
+    alert("Must use physical device for Push Notifications");
   }
 
   return token;
@@ -423,7 +439,8 @@ const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
       content: {
         title: "You've got mail! 📬",
         body: `Time interval notification scheduled ${date.toLocaleString()}`,
-        data: { data: 'goes here', test: { test1: 'more data' } },
+        data: { data: "goes here", test: { test1: "more data" } },
+        // channelId: "testAppWithSound",
       },
       trigger,
     });
@@ -445,7 +462,7 @@ const schedulePushNotificationYearly: () => Promise<string> = async () => {
       content: {
         title: "You've got mail! 📬",
         body: `Yearly notification scheduled ${date.toLocaleString()}`,
-        data: { data: 'goes here', test: { test1: 'more data' } },
+        data: { data: "goes here", test: { test1: "more data" } },
       },
       trigger,
     });

@@ -27,12 +27,14 @@ config.resolver.extraNodeModules = {
     workspaceRoot,
     "expo/packages/expo-notifications"
   ),
+  "expo-updates": path.resolve(workspaceRoot, "expo/packages/expo-updates"),
   expo: path.resolve(workspaceRoot, "expo/packages/expo"),
 };
 
 const modulesToLoadFromExpoMonorepo = [
   "expo-modules-core",
   "expo-notifications",
+  "expo-updates",
   "expo/",
 ];
 const regexString = modulesToLoadFromExpoMonorepo.join("|");

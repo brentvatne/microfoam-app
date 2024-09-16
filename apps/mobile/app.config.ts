@@ -73,6 +73,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         icon: "./assets/icon.png",
         color: "#232323",
         defaultChannel: "default",
+        sounds: ["./assets/pop_sound.wav", "./assets/bells_sound.wav"],
       },
     ],
     [
