@@ -68,7 +68,7 @@
     "pretty-bytes": "^6.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "~0.75.0",
+    "react-native": "~0.75.3",
     "react-native-blurhash": "^1.1.10",
     "react-native-date-picker": "^4.2.5",
     "react-native-gesture-handler": "~2.18.1",

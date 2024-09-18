@@ -18,26 +18,31 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, "node_modules"),
   // path.resolve(workspaceRoot, "expo/node_modules"),
 ];
-config.resolver.extraNodeModules = {
-  "expo-modules-core": path.resolve(
-    workspaceRoot,
-    "expo/packages/expo-modules-core"
-  ),
-  "expo-notifications": path.resolve(
-    workspaceRoot,
-    "expo/packages/expo-notifications"
-  ),
-  "expo-updates": path.resolve(workspaceRoot, "expo/packages/expo-updates"),
-  expo: path.resolve(workspaceRoot, "expo/packages/expo"),
-};
-
 const modulesToLoadFromExpoMonorepo = [
   "expo-modules-core",
   "expo-notifications",
   "expo-updates",
-  "expo/",
+  "expo-updates-interface",
+  // expo/ is also added below
 ];
-const regexString = modulesToLoadFromExpoMonorepo.join("|");
+const extraNodeModules = modulesToLoadFromExpoMonorepo.reduce(
+  (acc, moduleName) => {
+    acc[moduleName] = path.resolve(
+      workspaceRoot,
+      `expo/packages/${moduleName}`
+    );
+    return acc;
+  },
+  {
+    expo: path.resolve(workspaceRoot, "expo/packages/expo"),
+  }
+);
+
+config.resolver.extraNodeModules = {
+  ...extraNodeModules,
+};
+
+const regexString = modulesToLoadFromExpoMonorepo.concat(["expo/"]).join("|");
 const blockListRegex = [
   // block metro from resolving everything from workspaceRoot/expo except for selected modules
   // while it doesn't seem needed it doesn't hurt and makes stuff more predictable
