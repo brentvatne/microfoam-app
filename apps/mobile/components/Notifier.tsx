@@ -26,6 +26,7 @@ import {
   cancelAllScheduledNotificationsAsync,
   registerTaskAsync,
   getPresentedNotificationsAsync,
+  CalendarTriggerInput,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -333,6 +334,14 @@ export const Notifier = () => {
           }}
         />
         <Button
+          title="Schedule calendar notification starting in the next minute"
+          onPress={() => {
+            scheduleCalendarNotification().then((result) =>
+              setScheduledNotificationIdentifier(result),
+            );
+          }}
+        />
+        <Button
           title="Schedule yearly notification starting in the next minute"
           onPress={() => {
             schedulePushNotificationYearly().then((result) =>
@@ -510,7 +519,7 @@ const schedulePushNotificationWeekly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger: WeeklyTriggerInput = {
     channelId: 'testApp',
-    weekday: date.getDay(),
+    weekday: date.getDay() + 1,
     hour: date.getHours(),
     minute: date.getMinutes() + 1,
   };
@@ -519,6 +528,28 @@ const schedulePushNotificationWeekly: () => Promise<string> = async () => {
       content: {
         title: "You've got mail! 📬",
         body: `Weekly notification scheduled ${date.toLocaleString()}`,
+        data: { data: 'goes here', test: { test1: 'more data' } },
+      },
+      trigger,
+    });
+  } catch (e) {
+    return `Error scheduling notification: ${e}`;
+  }
+};
+const scheduleCalendarNotification: () => Promise<string> = async () => {
+  const date = new Date();
+  const trigger: CalendarTriggerInput = {
+    channelId: 'testApp',
+    weekday: date.getDay(),
+    hour: date.getHours(),
+    minute: date.getMinutes() + 1,
+    repeats: false,
+  };
+  try {
+    return await scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: `Calendar notification scheduled ${date.toLocaleString()}`,
         data: { data: 'goes here', test: { test1: 'more data' } },
       },
       trigger,
