@@ -19,14 +19,11 @@ import {
   useLastNotificationResponse,
   addPushTokenListener,
   NotificationContentAndroid,
-  WeeklyTriggerInput,
-  YearlyTriggerInput,
-  TimeIntervalTriggerInput,
   getAllScheduledNotificationsAsync,
   cancelAllScheduledNotificationsAsync,
   registerTaskAsync,
   getPresentedNotificationsAsync,
-  CalendarTriggerInput,
+  CalendarTriggerTypes,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -358,6 +355,14 @@ export const Notifier = () => {
           }}
         />
         <Button
+          title="Schedule daily notification starting in the next minute"
+          onPress={() => {
+            schedulePushNotificationDaily().then((result) =>
+              setScheduledNotificationIdentifier(result),
+            );
+          }}
+        />
+        <Button
           title="Schedule notification with null trigger"
           onPress={() => {
             schedulePushNotificationWithNullTrigger().then((result) =>
@@ -476,7 +481,8 @@ async function registerForPushNotificationsAsync() {
 
 const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
   const date = new Date();
-  const trigger: TimeIntervalTriggerInput = {
+  const trigger = {
+    type: CalendarTriggerTypes.TIME_INTERVAL,
     seconds: 2,
     repeats: false,
   };
@@ -495,7 +501,8 @@ const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
 };
 const schedulePushNotificationYearly: () => Promise<string> = async () => {
   const date = new Date();
-  const trigger: YearlyTriggerInput = {
+  const trigger = {
+    type: CalendarTriggerTypes.YEARLY,
     channelId: 'testApp',
     day: date.getDate(),
     month: date.getMonth(),
@@ -517,7 +524,8 @@ const schedulePushNotificationYearly: () => Promise<string> = async () => {
 };
 const schedulePushNotificationWeekly: () => Promise<string> = async () => {
   const date = new Date();
-  const trigger: WeeklyTriggerInput = {
+  const trigger = {
+    type: CalendarTriggerTypes.WEEKLY,
     channelId: 'testApp',
     weekday: date.getDay() + 1,
     hour: date.getHours(),
@@ -536,9 +544,31 @@ const schedulePushNotificationWeekly: () => Promise<string> = async () => {
     return `Error scheduling notification: ${e}`;
   }
 };
+const schedulePushNotificationDaily: () => Promise<string> = async () => {
+  const date = new Date();
+  const trigger = {
+    type: CalendarTriggerTypes.DAILY,
+    channelId: 'testApp',
+    hour: date.getHours(),
+    minute: date.getMinutes() + 1,
+  };
+  try {
+    return await scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: `Daily notification scheduled ${date.toLocaleString()}`,
+        data: { data: 'goes here', test: { test1: 'more data' } },
+      },
+      trigger,
+    });
+  } catch (e) {
+    return `Error scheduling notification: ${e}`;
+  }
+};
 const scheduleCalendarNotification: () => Promise<string> = async () => {
   const date = new Date();
-  const trigger: CalendarTriggerInput = {
+  const trigger = {
+    type: CalendarTriggerTypes.CALENDAR,
     channelId: 'testApp',
     weekday: date.getDay(),
     hour: date.getHours(),
