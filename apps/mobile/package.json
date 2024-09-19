@@ -10,7 +10,9 @@
     "update:production": "yarn fingerprint:validate && eas update --channel production",
     "update:preview": "yarn fingerprint:validate && eas update --channel preview",
     "prebuild:android": "./scripts/prebuild-android.sh",
+    "prebuild:android:nativedebug": "./scripts/prebuild-android-nativedebug.sh",
     "prebuild:ios": "./scripts/prebuild-ios.sh",
+    "prebuild:ios:nativedebug": "./scripts/prebuild-ios-nativedebug.sh",
     "fingerprint:validate": "ts-node scripts/validate-fingerprint.ts",
     "fingerprint:set": "ts-node scripts/set-fingerprint.ts",
     "prettier:fix": "prettier app components constants storage index.js -w"
