@@ -24,6 +24,7 @@ import {
   registerTaskAsync,
   getPresentedNotificationsAsync,
   CalendarTriggerTypes,
+  clearLastNotificationResponseAsync,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -282,6 +283,17 @@ export const Notifier = () => {
                   `lastResponse = ${JSON.stringify(lastResponse, null, 2)}`,
                 );
                 setResponseFromAsync(lastResponse);
+              })
+              .catch((error) => setResponseFromAsync(error));
+          }}
+        />
+        <Button
+          title="clearLastNotificationResponseAsync()"
+          onPress={() => {
+            clearLastNotificationResponseAsync()
+              .then(() => {
+                setResponseFromAsync(undefined);
+                console.log(`Successfully cleared last response`);
               })
               .catch((error) => setResponseFromAsync(error));
           }}
