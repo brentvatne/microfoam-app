@@ -1,3 +1,19 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
+index 7f526f9..08569c7 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/emitting/NotificationsEmitter.kt
+@@ -41,6 +41,11 @@ open class NotificationsEmitter : Module(), NotificationListener {
+     AsyncFunction<Bundle?>("getLastNotificationResponseAsync") {
+       lastNotificationResponseBundle
+     }
++
++    AsyncFunction("clearLastNotificationResponseAsync") {
++      lastNotificationResponseBundle = null
++      null
++    }
+   }
+ 
+   /**
 diff --git a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts b/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
 index b01ef92..3e07181 100644
 --- a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
