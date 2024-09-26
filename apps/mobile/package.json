@@ -59,7 +59,7 @@
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
-    "expo-task-manager": "~11.8.2",
+    "expo-task-manager": "*",
     "expo-updates": "*",
     "jest": "^29.2.1",
     "jest-expo": "~51.0.4",

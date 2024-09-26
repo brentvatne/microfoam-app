@@ -22,6 +22,7 @@ const modulesToLoadFromExpoMonorepo = [
   "expo-modules-core",
   "expo-notifications",
   "expo-updates",
+  "expo-task-manager",
   "expo-updates-interface",
   // expo/ is also added below
 ];

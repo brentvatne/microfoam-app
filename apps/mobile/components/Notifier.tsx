@@ -19,11 +19,14 @@ import {
   useLastNotificationResponse,
   addPushTokenListener,
   NotificationContentAndroid,
-  YearlyNotificationTrigger,
-  YearlyTriggerInput,
-  TimeIntervalTriggerInput,
   getAllScheduledNotificationsAsync,
+  getPresentedNotificationsAsync,
+  YearlyTriggerInput,
+  SchedulableTriggerInputTypes,
+  TimeIntervalTriggerInput,
 } from "expo-notifications";
+import * as Notifications from "expo-notifications";
+
 import Constants from "expo-constants";
 import { isDevice } from "expo-device";
 import { defineTask } from "expo-task-manager";
@@ -34,7 +37,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text } from "./Themed";
 import Button from "./Button";
 import { router } from "expo-router";
-import { sub } from "date-fns";
 
 /**
  * Initializes notification handling
@@ -52,7 +54,22 @@ export function useNotificationObserverInRootLayout(routeOnResponses: boolean) {
 
     setNotificationHandler({
       handleNotification: async (notification) => {
+        const trigger = notification.request.trigger;
+        if (trigger.type === "push") {
+          const isDataOnly = trigger.remoteMessage.notification === null;
+          if (isDataOnly) {
+            console.log(
+              "Data only notification - you can see this message in LogCat android tool"
+            );
+            // return {
+            //   shouldShowAlert: false,
+            //   shouldPlaySound: false,
+            //   shouldSetBadge: false,
+            // };
+          }
+        }
         console.log({
+          request: JSON.stringify(trigger),
           handleNotification: JSON.stringify(notification),
         });
         return {
@@ -104,12 +121,14 @@ const STORAGE_KEY = "@notification_bg_store";
 const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
   console.log(
-    `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: App in ${AppState.currentState} state.`
+    `${Platform.OS} ${BACKGROUND_NOTIFICATION_TASK}: App in ${
+      AppState.currentState
+    } state. data: ${JSON.stringify(data)}`
   );
 
   if (error) {
     console.log(
-      `${Platform.OS} BACKGROUND-NOTIFICATION-TASK: Error! ${JSON.stringify(
+      `${Platform.OS} ${BACKGROUND_NOTIFICATION_TASK}: Error! ${JSON.stringify(
         error
       )}`
     );
@@ -128,7 +147,19 @@ defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
   // data.notification.data.body = data.notification.data.message;
   // setNotification(data.notification);
 });
-import { Image } from "expo-image";
+
+Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK)
+  .then(() => {
+    console.log(
+      `${Platform.OS} Registered task ${BACKGROUND_NOTIFICATION_TASK}`
+    );
+  })
+  .catch((error) => {
+    console.log(
+      `${Platform.OS} Error registering task ${BACKGROUND_NOTIFICATION_TASK}: ${error}`
+    );
+  });
+
 export const Notifier = () => {
   const [channels, setChannels] = useState<NotificationChannel[]>([]);
   const [notification, setNotification] = useState<Notification | undefined>(
@@ -176,7 +207,6 @@ export const Notifier = () => {
         });
     }
 
-    /*
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
@@ -184,27 +214,22 @@ export const Notifier = () => {
           `${Platform.OS} saw notification ${JSON.stringify(
             notification,
             null,
-            2,
-          )}`,
+            2
+          )}`
         );
-      },
+      }
     );
 
     responseListener.current = addNotificationResponseReceivedListener(
       (response) => {
         setResponse(response);
         console.log(
-          `${Platform.OS} saw response for ${JSON.stringify(
-            response,
-            null,
-            2,
-          )}`,
+          `${Platform.OS} saw response for ${JSON.stringify(response, null, 2)}`
         );
-      },
+      }
     );
 
     console.log(`${Platform.OS} added listeners`);
-     */
 
     AsyncStorage.getItem(STORAGE_KEY)
       .then((value) => {
@@ -323,6 +348,16 @@ export const Notifier = () => {
           }}
         />
         <Button
+          title="getPresentedNotificationsAsync"
+          onPress={() => {
+            getPresentedNotificationsAsync().then((result) =>
+              console.log(
+                `Presented notifications: ${JSON.stringify(result, null, 2)}`
+              )
+            );
+          }}
+        />
+        <Button
           title="Schedule yearly notification starting in the next minute"
           onPress={() => {
             schedulePushNotificationYearly().then((result) =>
@@ -431,6 +466,7 @@ async function registerForPushNotificationsAsync() {
 const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
   const date = new Date();
   const trigger: TimeIntervalTriggerInput = {
+    type: SchedulableTriggerInputTypes.TIME_INTERVAL,
     seconds: 2,
     repeats: false,
   };
@@ -451,11 +487,11 @@ const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
 const schedulePushNotificationYearly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger: YearlyTriggerInput = {
+    type: SchedulableTriggerInputTypes.YEARLY,
     day: date.getDate(),
     month: date.getMonth(),
     hour: date.getHours(),
     minute: date.getMinutes() + 1,
-    repeats: true,
   };
   try {
     return await scheduleNotificationAsync({

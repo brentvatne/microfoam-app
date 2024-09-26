@@ -4,7 +4,7 @@ The idea about how developing expo-notifications can be done is: use the `expo` 
 
 Why this is a good idea: we'll be able to push changes in the `expo-notifications` package to the `expo` monorepo and test them in the `microfoam` app.
 
-Why this is a bad idea: it turns out, making `expo-notifications` an exception in how it's handled is not enough. `expo-notifications` depends on `expo-modules-core` so you might need to make that package also "exceptional" and also `expo`. I stopped at that as it covers our needs here but the better approach might be to use the same setup as `bare-expo` has in the `expo` monorepo, also because it doesn't require manual changes. Anyway, I (Vojta) spent time on this and got it working so I'll use it as it unless there's issues.
+Why this is a bad idea: it turns out, making `expo-notifications` an exception in how it's handled is not enough. `expo-notifications` depends on `expo-modules-core` so you might need to make that package also "exceptional" and also `expo`, `expo-task-manager`, `expo-updates` and `expo-updates-interface`. These cover the "core deps" of any app. The better approach might be to use the same setup as `bare-expo` has in the `expo` monorepo, also because it doesn't require manual changes. Anyway, I (Vojta) spent time on this and got it working so I'll use it as it unless there's issues.
 
 steps taken to do this:
 
