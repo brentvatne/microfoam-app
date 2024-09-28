@@ -1,14 +1,6 @@
-import { useEffect } from "react";
-import { Alert } from "react-native";
+import { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Stack, router } from "expo-router";
-import {
-  useUpdates,
-  fetchUpdateAsync,
-  checkForUpdateAsync,
-  reloadAsync,
-} from "expo-updates";
-import { useAppState } from "@react-native-community/hooks";
 import {
   DarkTheme,
   DefaultTheme,
@@ -22,6 +14,7 @@ import {
 } from "~/components/Themed";
 import { useDataIsReady } from "~/storage/PourStore";
 import { useQuickActionCallback } from "~/utils/useQuickActionCallback";
+import CheckForLatestUpdateOnceOnLaunch from "~/utils/CheckForUpdateOnceOnLaunch";
 
 import * as Sentry from "@sentry/react-native";
 
@@ -29,67 +22,44 @@ function Root() {
   useAutoSetAppearanceFromSettingsEffect();
   const theme = useTheme();
   const dataIsReady = useDataIsReady();
-  const { isChecking, isUpdateAvailable, isUpdatePending, downloadedUpdate } =
-    useUpdates();
+  const [initialUpdateCheckCompleted, setInitialUpdateCheckCompleted] =
+    useState(false);
+  const [delayedQuickAction, setDelayedQuickAction] = useState(undefined);
 
-  const appState = useAppState();
+  const handleQuickAction = useCallback(
+    (action: { id: string }) => {
+      if (dataIsReady && initialUpdateCheckCompleted) {
+        if (action.id === "1") {
+          requestAnimationFrame(() => {
+            router.navigate("/new");
+          });
+        }
+      } else {
+        setDelayedQuickAction(action);
+      }
+    },
+    [dataIsReady, initialUpdateCheckCompleted],
+  );
 
-  // TODO: this won't work properly if data isn't ready
-  useQuickActionCallback((action) => {
-    if (action.id === "1") {
-      requestAnimationFrame(() => {
-        router.navigate("/new");
-      });
-    }
-  });
-
-  // Check for updates when app state changes to foreground
+  // Deal with the app not being ready to fire a quick action on launch
   useEffect(() => {
-    if (appState === "active" && !isUpdatePending && !isChecking && !__DEV__) {
-      checkForUpdateAsync();
+    if (delayedQuickAction) {
+      handleQuickAction(delayedQuickAction);
+      setDelayedQuickAction(undefined);
     }
-  }, [appState, isChecking, isUpdatePending]);
+  }, [handleQuickAction, delayedQuickAction]);
 
-  // Prompt to install when an update is available
-  useEffect(() => {
-    if (isUpdateAvailable) {
-      Alert.alert(`An update is available`, `Download and install it now?`, [
-        {
-          text: "Yes",
-          onPress: () => {
-            fetchUpdateAsync();
-          },
-        },
-        {
-          text: "I'll do it later",
-          onPress: () => {},
-        },
-      ]);
-    }
-  }, [isUpdateAvailable]);
+  useQuickActionCallback(handleQuickAction);
 
-  // Prompt to install when an update is downloaded
-  useEffect(() => {
-    if (downloadedUpdate) {
-      Alert.alert(
-        `An update is ready to install`,
-        `Would you like to restart and install it now?`,
-        [
-          {
-            text: "Yes",
-            onPress: () => {
-              // @ts-ignore
-              reloadAsync();
-            },
-          },
-          {
-            text: "I'll do it later",
-            onPress: () => {},
-          },
-        ],
-      );
-    }
-  }, [downloadedUpdate]);
+  if (!initialUpdateCheckCompleted) {
+    return (
+      <CheckForLatestUpdateOnceOnLaunch
+        onComplete={() => setInitialUpdateCheckCompleted(true)}
+        manifestTimeout={2000}
+        timeout={10000}
+      />
+    );
+  }
 
   if (!dataIsReady) {
     return null;
