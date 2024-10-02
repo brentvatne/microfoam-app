@@ -1,4 +1,5 @@
 import {
+  AndroidNotificationVisibility,
   AndroidImportance,
   Notification,
   NotificationChannel,
@@ -163,23 +164,9 @@ export const Notifier = () => {
   };
 
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      setNotificationChannelAsync('testApp', {
-        name: 'testApp',
-        importance: AndroidImportance.HIGH,
-        enableVibrate: true,
-        vibrationPattern: [0, 250, 250, 250],
-      })
-        .then((value) => {
-          console.log(`Set channel ${value.name}`);
-          getNotificationChannelsAsync().then((value) =>
-            setChannels(value ?? []),
-          );
-        })
-        .catch((error) => {
-          console.log(`Error in setting channel: ${error}`);
-        });
-    }
+    setNotificationChannel().then((channels) => {
+      setChannels(channels);
+    });
 
     notificationListener.current = addNotificationReceivedListener(
       (notification) => {
@@ -454,17 +441,29 @@ function usePushToken() {
   };
 }
 
+async function setNotificationChannel(): Promise<NotificationChannel[]> {
+  try {
+    if (Platform.OS === 'android') {
+      const value = await setNotificationChannelAsync('testApp', {
+        name: 'testApp',
+        importance: AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+        enableLights: true,
+        enableVibrate: true,
+        lockscreenVisibility: AndroidNotificationVisibility.PUBLIC,
+      });
+      console.log(`Set channel ${value.name}`);
+      return await getNotificationChannelsAsync();
+    }
+  } catch (e) {
+    console.log(`Error in setNotificationChannel(): ${e}`);
+  }
+  return [];
+}
+
 async function registerForPushNotificationsAsync() {
   let token: string;
-
-  if (Platform.OS === 'android') {
-    await setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
 
   if (isDevice) {
     const { status: existingStatus } = await getPermissionsAsync();
