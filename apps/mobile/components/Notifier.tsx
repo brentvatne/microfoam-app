@@ -150,6 +150,18 @@ export const Notifier = () => {
 
   const { expoPushToken, devicePushToken } = usePushToken();
 
+  const retrieveBackgroundData = () => {
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((value) => {
+        console.log(`Retrieved value for STORAGE_KEY: ${value}`);
+        setBackgroundTaskString(value);
+      })
+      .catch((reason) => {
+        console.log(`Error retrieving value for STORAGE_KEY: ${reason}`);
+        setBackgroundTaskString(reason);
+      });
+  };
+
   useEffect(() => {
     if (Platform.OS === 'android') {
       setNotificationChannelAsync('testApp', {
@@ -197,15 +209,7 @@ export const Notifier = () => {
 
     console.log(`${Platform.OS} added listeners`);
 
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then((value) => {
-        console.log(`Retrieved value for STORAGE_KEY: ${value}`);
-        setBackgroundTaskString(value);
-      })
-      .catch((reason) => {
-        console.log(`Error retrieving value for STORAGE_KEY: ${reason}`);
-        setBackgroundTaskString(reason);
-      });
+    retrieveBackgroundData();
 
     return () => {
       console.log(`${Platform.OS} removed listeners`);
@@ -297,6 +301,14 @@ export const Notifier = () => {
               })
               .catch((error) => setResponseFromAsync(error));
           }}
+        />
+        <Button
+          title="retrieveBackgroundData()"
+          onPress={() => retrieveBackgroundData()}
+        />
+        <Button
+          title="clearBackgroundData()"
+          onPress={() => setBackgroundTaskString('')}
         />
         <Button
           title="getPresentedNotificationsAsync()"
