@@ -58,97 +58,916 @@ index 4604ddf..753865d 100644
        "yearly" -> {
          val day = params["day"] as? Number
          val month = params["month"] as? Number
-diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/ChannelAwareTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/ChannelAwareTrigger.java
+deleted file mode 100644
+index 5c9bd43..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/ChannelAwareTrigger.java
++++ /dev/null
+@@ -1,49 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.io.Serializable;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.NotificationTrigger;
+-
+-public class ChannelAwareTrigger implements NotificationTrigger, Serializable {
+-  @Nullable
+-  private String mChannelId;
+-
+-  public ChannelAwareTrigger(@Nullable String channelId) {
+-    mChannelId = channelId;
+-  }
+-
+-  public ChannelAwareTrigger(Parcel in) {
+-    mChannelId = in.readString();
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel parcel, int i) {
+-    parcel.writeString(mChannelId);
+-  }
+-
+-  @Nullable
+-  @Override
+-  public String getNotificationChannel() {
+-    return mChannelId;
+-  }
+-
+-  public static final Creator<ChannelAwareTrigger> CREATOR = new Creator<ChannelAwareTrigger>() {
+-    @Override
+-    public ChannelAwareTrigger createFromParcel(Parcel in) {
+-      return new ChannelAwareTrigger(in);
+-    }
+-
+-    @Override
+-    public ChannelAwareTrigger[] newArray(int size) {
+-      return new ChannelAwareTrigger[size];
+-    }
+-  };
+-}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DailyTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DailyTrigger.java
+deleted file mode 100644
+index 9d0e2c3..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DailyTrigger.java
++++ /dev/null
+@@ -1,76 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.util.Calendar;
+-import java.util.Date;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
+-
+-/**
+- * A schedulable trigger representing a notification to be scheduled once per day.
+- */
+-public class DailyTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
+-  private int mHour;
+-  private int mMinute;
+-
+-  public DailyTrigger(int hour, int minute, @Nullable String channelId) {
+-    super(channelId);
+-    mHour = hour;
+-    mMinute = minute;
+-  }
+-
+-  private DailyTrigger(Parcel in) {
+-    super(in);
+-    mHour = in.readInt();
+-    mMinute = in.readInt();
+-  }
+-
+-  public int getHour() {
+-    return mHour;
+-  }
+-
+-  public int getMinute() {
+-    return mMinute;
+-  }
+-
+-  @Nullable
+-  @Override
+-  public Date nextTriggerDate() {
+-    Calendar nextTriggerDate = Calendar.getInstance();
+-    nextTriggerDate.set(Calendar.HOUR_OF_DAY, mHour);
+-    nextTriggerDate.set(Calendar.MINUTE, mMinute);
+-    nextTriggerDate.set(Calendar.SECOND, 0);
+-    nextTriggerDate.set(Calendar.MILLISECOND, 0);
+-    Calendar rightNow = Calendar.getInstance();
+-    if (nextTriggerDate.before(rightNow)) {
+-      nextTriggerDate.add(Calendar.DATE, 1);
+-    }
+-    return nextTriggerDate.getTime();
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel dest, int flags) {
+-    super.writeToParcel(dest, flags);
+-    dest.writeInt(mHour);
+-    dest.writeInt(mMinute);
+-  }
+-
+-  public static final Creator<DailyTrigger> CREATOR = new Creator<DailyTrigger>() {
+-    @Override
+-    public DailyTrigger createFromParcel(Parcel in) {
+-      return new DailyTrigger(in);
+-    }
+-
+-    @Override
+-    public DailyTrigger[] newArray(int size) {
+-      return new DailyTrigger[size];
+-    }
+-  };
+-}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DateTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DateTrigger.java
+deleted file mode 100644
+index ab28d01..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/DateTrigger.java
++++ /dev/null
+@@ -1,64 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.util.Date;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
+-
+-/**
+- * A schedulable trigger representing notification to be scheduled only once at a given moment of time.
+- */
+-public class DateTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
+-  private Date mTriggerDate;
+-
+-  public DateTrigger(long timestamp, @Nullable String channelId) {
+-    super(channelId);
+-    mTriggerDate = new Date(timestamp);
+-  }
+-
+-  private DateTrigger(Parcel in) {
+-    super(in);
+-    mTriggerDate = new Date(in.readLong());
+-  }
+-
+-  public Date getTriggerDate() {
+-    return mTriggerDate;
+-  }
+-
+-  @Nullable
+-  @Override
+-  public Date nextTriggerDate() {
+-    Date now = new Date();
+-
+-    if (mTriggerDate.before(now)) {
+-      return null;
+-    }
+-
+-    return mTriggerDate;
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel dest, int flags) {
+-    super.writeToParcel(dest, flags);
+-    dest.writeLong(mTriggerDate.getTime());
+-  }
+-
+-  public static final Creator<DateTrigger> CREATOR = new Creator<DateTrigger>() {
+-    @Override
+-    public DateTrigger createFromParcel(Parcel in) {
+-      return new DateTrigger(in);
+-    }
+-
+-    @Override
+-    public DateTrigger[] newArray(int size) {
+-      return new DateTrigger[size];
+-    }
+-  };
+-}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt
 new file mode 100644
-index 0000000..4381845
+index 0000000..03d7054
 --- /dev/null
-+++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java
-@@ -0,0 +1,85 @@
-+package expo.modules.notifications.notifications.triggers;
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt
+@@ -0,0 +1,413 @@
++package expo.modules.notifications.notifications.triggers
 +
-+import android.os.Parcel;
++import android.os.Parcel
++import android.os.Parcelable
++import expo.modules.notifications.notifications.interfaces.NotificationTrigger
++import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger
++import java.io.Serializable
++import java.util.Calendar
++import java.util.Date
 +
-+import java.util.Calendar;
-+import java.util.Date;
++open class ChannelAwareTrigger : NotificationTrigger, Serializable {
++  private var mChannelId: String?
 +
-+import androidx.annotation.Nullable;
-+import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
++  constructor(channelId: String?) {
++    mChannelId = channelId
++  }
++
++  constructor(`in`: Parcel) {
++    mChannelId = `in`.readString()
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    dest.writeString(mChannelId)
++  }
++
++  override fun getNotificationChannel(): String? {
++    return mChannelId
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<ChannelAwareTrigger?> =
++      object : Parcelable.Creator<ChannelAwareTrigger?> {
++        override fun createFromParcel(`in`: Parcel): ChannelAwareTrigger {
++          return ChannelAwareTrigger(`in`)
++        }
++
++        override fun newArray(size: Int): Array<ChannelAwareTrigger?> {
++          return arrayOfNulls(size)
++        }
++      }
++  }
++}
++
++/**
++ * A schedulable trigger representing a notification to be scheduled once per day.
++ */
++class DailyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  var hour: Int
++    private set
++  var minute: Int
++    private set
++
++  constructor(hour: Int, minute: Int, channelId: String?) : super(channelId) {
++    this.hour = hour
++    this.minute = minute
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    hour = `in`.readInt()
++    minute = `in`.readInt()
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val nextTriggerDate = Calendar.getInstance()
++    nextTriggerDate[Calendar.HOUR_OF_DAY] = hour
++    nextTriggerDate[Calendar.MINUTE] = minute
++    nextTriggerDate[Calendar.SECOND] = 0
++    nextTriggerDate[Calendar.MILLISECOND] = 0
++    val rightNow = Calendar.getInstance()
++    if (nextTriggerDate.before(rightNow)) {
++      nextTriggerDate.add(Calendar.DATE, 1)
++    }
++    return nextTriggerDate.time
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeInt(hour)
++    dest.writeInt(minute)
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<DailyTrigger?> = object : Parcelable.Creator<DailyTrigger?> {
++      override fun createFromParcel(`in`: Parcel): DailyTrigger {
++        return DailyTrigger(`in`)
++      }
++
++      override fun newArray(size: Int): Array<DailyTrigger?> {
++        return arrayOfNulls(size)
++      }
++    }
++  }
++}
++
++/**
++ * A schedulable trigger representing notification to be scheduled only once at a given moment of time.
++ */
++class DateTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  var triggerDate: Date
++    private set
++
++  constructor(timestamp: Long, channelId: String?) : super(channelId) {
++    triggerDate = Date(timestamp)
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    triggerDate = Date(`in`.readLong())
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val now = Date()
++
++    if (triggerDate.before(now)) {
++      return null
++    }
++
++    return triggerDate
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeLong(triggerDate.time)
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<DateTrigger?> = object : Parcelable.Creator<DateTrigger?> {
++      override fun createFromParcel(`in`: Parcel): DateTrigger {
++        return DateTrigger(`in`)
++      }
++
++      override fun newArray(size: Int): Array<DateTrigger?> {
++        return arrayOfNulls(size)
++      }
++    }
++  }
++}
 +
 +/**
 + * A schedulable trigger representing a notification to be scheduled once per month.
 + */
-+public class MonthlyTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
-+    private int mDay;
-+    private int mHour;
-+    private int mMinute;
++class MonthlyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  var day: Int
++    private set
++  var hour: Int
++    private set
++  var minute: Int
++    private set
 +
-+    public MonthlyTrigger(int day, int hour, int minute, @Nullable String channelId) {
-+        super(channelId);
-+        mDay = day;
-+        mHour = hour;
-+        mMinute = minute;
++  constructor(day: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
++    this.day = day
++    this.hour = hour
++    this.minute = minute
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    day = `in`.readInt()
++    hour = `in`.readInt()
++    minute = `in`.readInt()
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val nextTriggerDate = Calendar.getInstance()
++    nextTriggerDate[Calendar.DATE] = day
++    nextTriggerDate[Calendar.HOUR_OF_DAY] = hour
++    nextTriggerDate[Calendar.MINUTE] = minute
++    nextTriggerDate[Calendar.SECOND] = 0
++    nextTriggerDate[Calendar.MILLISECOND] = 0
++    val rightNow = Calendar.getInstance()
++    if (nextTriggerDate.before(rightNow)) {
++      nextTriggerDate.add(Calendar.MONTH, 1)
 +    }
++    return nextTriggerDate.time
++  }
 +
-+    private MonthlyTrigger(Parcel in) {
-+        super(in);
-+        mDay = in.readInt();
-+        mHour = in.readInt();
-+        mMinute = in.readInt();
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeInt(day)
++    dest.writeInt(hour)
++    dest.writeInt(minute)
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<MonthlyTrigger?> = object : Parcelable.Creator<MonthlyTrigger?> {
++      override fun createFromParcel(`in`: Parcel): MonthlyTrigger {
++        return MonthlyTrigger(`in`)
++      }
++
++      override fun newArray(size: Int): Array<MonthlyTrigger?> {
++        return arrayOfNulls(size)
++      }
 +    }
-+
-+    public int getDay() {
-+        return mDay;
-+    }
-+
-+    public int getHour() {
-+        return mHour;
-+    }
-+
-+    public int getMinute() {
-+        return mMinute;
-+    }
-+
-+    @Nullable
-+    @Override
-+    public Date nextTriggerDate() {
-+        Calendar nextTriggerDate = Calendar.getInstance();
-+        nextTriggerDate.set(Calendar.DATE, mDay);
-+        nextTriggerDate.set(Calendar.HOUR_OF_DAY, mHour);
-+        nextTriggerDate.set(Calendar.MINUTE, mMinute);
-+        nextTriggerDate.set(Calendar.SECOND, 0);
-+        nextTriggerDate.set(Calendar.MILLISECOND, 0);
-+        Calendar rightNow = Calendar.getInstance();
-+        if (nextTriggerDate.before(rightNow)) {
-+            nextTriggerDate.add(Calendar.MONTH, 1);
-+        }
-+        return nextTriggerDate.getTime();
-+    }
-+
-+    @Override
-+    public int describeContents() {
-+        return 0;
-+    }
-+
-+    @Override
-+    public void writeToParcel(Parcel dest, int flags) {
-+        super.writeToParcel(dest, flags);
-+        dest.writeInt(mDay);
-+        dest.writeInt(mHour);
-+        dest.writeInt(mMinute);
-+    }
-+
-+    public static final Creator<MonthlyTrigger> CREATOR = new Creator<MonthlyTrigger>() {
-+        @Override
-+        public MonthlyTrigger createFromParcel(Parcel in) {
-+            return new MonthlyTrigger(in);
-+        }
-+
-+        @Override
-+        public MonthlyTrigger[] newArray(int size) {
-+            return new MonthlyTrigger[size];
-+        }
-+    };
++  }
 +}
++
++/**
++ * A schedulable trigger representing notification to be scheduled after X milliseconds,
++ * optionally repeating.
++ *
++ *
++ * *Note: The implementation ensures that the trigger times do not drift away too much from the
++ * * initial time, so eg. a trigger started at 11111000 time repeated every 1000 ms should always
++ * * trigger around …000 timestamp.*
++ */
++class TimeIntervalTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  private var mTriggerDate: Date
++  var timeInterval: Long
++    private set
++  var isRepeating: Boolean
++    private set
++
++  constructor(timeInterval: Long, repeats: Boolean, channelId: String?) : super(channelId) {
++    this.timeInterval = timeInterval
++    mTriggerDate = Date(Date().time + this.timeInterval * 1000)
++    isRepeating = repeats
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    mTriggerDate = Date(`in`.readLong())
++    timeInterval = `in`.readLong()
++    isRepeating = `in`.readByte().toInt() == 1
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val now = Date()
++
++    if (isRepeating) {
++      while (mTriggerDate.before(now)) {
++        mTriggerDate.time += timeInterval * 1000
++      }
++    }
++
++    if (mTriggerDate.before(now)) {
++      return null
++    }
++
++    return mTriggerDate
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeLong(mTriggerDate.time)
++    dest.writeLong(timeInterval)
++    dest.writeByte((if (isRepeating) 1 else 0).toByte())
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<TimeIntervalTrigger?> =
++      object : Parcelable.Creator<TimeIntervalTrigger?> {
++        override fun createFromParcel(`in`: Parcel): TimeIntervalTrigger {
++          return TimeIntervalTrigger(`in`)
++        }
++
++        override fun newArray(size: Int): Array<TimeIntervalTrigger?> {
++          return arrayOfNulls(size)
++        }
++      }
++  }
++}
++
++/**
++ * A schedulable trigger representing a notification to be scheduled once per week.
++ */
++class WeeklyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  var weekday: Int
++    private set
++  var hour: Int
++    private set
++  var minute: Int
++    private set
++
++  constructor(weekday: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
++    this.weekday = weekday
++    this.hour = hour
++    this.minute = minute
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    weekday = `in`.readInt()
++    hour = `in`.readInt()
++    minute = `in`.readInt()
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val nextTriggerDate = Calendar.getInstance()
++    nextTriggerDate[Calendar.DAY_OF_WEEK] = weekday
++    nextTriggerDate[Calendar.HOUR_OF_DAY] = hour
++    nextTriggerDate[Calendar.MINUTE] = minute
++    nextTriggerDate[Calendar.SECOND] = 0
++    nextTriggerDate[Calendar.MILLISECOND] = 0
++    val rightNow = Calendar.getInstance()
++    if (nextTriggerDate.before(rightNow)) {
++      nextTriggerDate.add(Calendar.DAY_OF_WEEK_IN_MONTH, 1)
++    }
++    return nextTriggerDate.time
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeInt(weekday)
++    dest.writeInt(hour)
++    dest.writeInt(minute)
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<WeeklyTrigger?> = object : Parcelable.Creator<WeeklyTrigger?> {
++      override fun createFromParcel(`in`: Parcel): WeeklyTrigger {
++        return WeeklyTrigger(`in`)
++      }
++
++      override fun newArray(size: Int): Array<WeeklyTrigger?> {
++        return arrayOfNulls(size)
++      }
++    }
++  }
++}
++
++/**
++ * A schedulable trigger representing a notification to be scheduled once per year.
++ */
++class YearlyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
++  var day: Int
++    private set
++  var month: Int
++    private set
++  var hour: Int
++    private set
++  var minute: Int
++    private set
++
++  constructor(day: Int, month: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
++    this.day = day
++    this.month = month
++    this.hour = hour
++    this.minute = minute
++  }
++
++  private constructor(`in`: Parcel) : super(`in`) {
++    day = `in`.readInt()
++    month = `in`.readInt()
++    hour = `in`.readInt()
++    minute = `in`.readInt()
++  }
++
++  override fun nextTriggerDate(): Date? {
++    val nextTriggerDate = Calendar.getInstance()
++    nextTriggerDate[Calendar.DATE] = day
++    nextTriggerDate[Calendar.MONTH] = month
++    nextTriggerDate[Calendar.HOUR_OF_DAY] = hour
++    nextTriggerDate[Calendar.MINUTE] = minute
++    nextTriggerDate[Calendar.SECOND] = 0
++    nextTriggerDate[Calendar.MILLISECOND] = 0
++    val rightNow = Calendar.getInstance()
++    if (nextTriggerDate.before(rightNow)) {
++      nextTriggerDate.add(Calendar.YEAR, 1)
++    }
++    return nextTriggerDate.time
++  }
++
++  override fun describeContents(): Int {
++    return 0
++  }
++
++  override fun writeToParcel(dest: Parcel, flags: Int) {
++    super.writeToParcel(dest, flags)
++    dest.writeInt(day)
++    dest.writeInt(month)
++    dest.writeInt(hour)
++    dest.writeInt(minute)
++  }
++
++  companion object {
++    @JvmField
++    val CREATOR: Parcelable.Creator<YearlyTrigger?> = object : Parcelable.Creator<YearlyTrigger?> {
++      override fun createFromParcel(`in`: Parcel): YearlyTrigger {
++        return YearlyTrigger(`in`)
++      }
++
++      override fun newArray(size: Int): Array<YearlyTrigger?> {
++        return arrayOfNulls(size)
++      }
++    }
++  }
++}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/TimeIntervalTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/TimeIntervalTrigger.java
+deleted file mode 100644
+index f3d0702..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/TimeIntervalTrigger.java
++++ /dev/null
+@@ -1,87 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.util.Date;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
+-
+-/**
+- * A schedulable trigger representing notification to be scheduled after X milliseconds,
+- * optionally repeating.
+- * <p>
+- * <i>Note: The implementation ensures that the trigger times do not drift away too much from the
+- * * initial time, so eg. a trigger started at 11111000 time repeated every 1000 ms should always
+- * * trigger around …000 timestamp.</i>
+- */
+-public class TimeIntervalTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
+-  private Date mTriggerDate;
+-  private long mTimeInterval;
+-  private boolean mRepeats;
+-
+-  public TimeIntervalTrigger(long timeInterval, boolean repeats, @Nullable String channelId) {
+-    super(channelId);
+-    mTimeInterval = timeInterval;
+-    mTriggerDate = new Date(new Date().getTime() + mTimeInterval * 1000);
+-    mRepeats = repeats;
+-  }
+-
+-  private TimeIntervalTrigger(Parcel in) {
+-    super(in);
+-    mTriggerDate = new Date(in.readLong());
+-    mTimeInterval = in.readLong();
+-    mRepeats = in.readByte() == 1;
+-  }
+-
+-  public boolean isRepeating() {
+-    return mRepeats;
+-  }
+-
+-  public long getTimeInterval() {
+-    return mTimeInterval;
+-  }
+-
+-  @Nullable
+-  @Override
+-  public Date nextTriggerDate() {
+-    Date now = new Date();
+-
+-    if (mRepeats) {
+-      while (mTriggerDate.before(now)) {
+-        mTriggerDate.setTime(mTriggerDate.getTime() + mTimeInterval * 1000);
+-      }
+-    }
+-
+-    if (mTriggerDate.before(now)) {
+-      return null;
+-    }
+-
+-    return mTriggerDate;
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel dest, int flags) {
+-    super.writeToParcel(dest, flags);
+-    dest.writeLong(mTriggerDate.getTime());
+-    dest.writeLong(mTimeInterval);
+-    dest.writeByte((byte) (mRepeats ? 1 : 0));
+-  }
+-
+-  public static final Creator<TimeIntervalTrigger> CREATOR = new Creator<TimeIntervalTrigger>() {
+-    @Override
+-    public TimeIntervalTrigger createFromParcel(Parcel in) {
+-      return new TimeIntervalTrigger(in);
+-    }
+-
+-    @Override
+-    public TimeIntervalTrigger[] newArray(int size) {
+-      return new TimeIntervalTrigger[size];
+-    }
+-  };
+-}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/WeeklyTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/WeeklyTrigger.java
+deleted file mode 100644
+index f5d47ea..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/WeeklyTrigger.java
++++ /dev/null
+@@ -1,85 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.util.Calendar;
+-import java.util.Date;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
+-
+-/**
+- * A schedulable trigger representing a notification to be scheduled once per week.
+- */
+-public class WeeklyTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
+-  private int mWeekday;
+-  private int mHour;
+-  private int mMinute;
+-
+-  public WeeklyTrigger(int weekday, int hour, int minute, @Nullable String channelId) {
+-    super(channelId);
+-    mWeekday = weekday;
+-    mHour = hour;
+-    mMinute = minute;
+-  }
+-
+-  private WeeklyTrigger(Parcel in) {
+-    super(in);
+-    mWeekday = in.readInt();
+-    mHour = in.readInt();
+-    mMinute = in.readInt();
+-  }
+-
+-  public int getWeekday() {
+-    return mWeekday;
+-  }
+-
+-  public int getHour() {
+-    return mHour;
+-  }
+-
+-  public int getMinute() {
+-    return mMinute;
+-  }
+-
+-  @Nullable
+-  @Override
+-  public Date nextTriggerDate() {
+-    Calendar nextTriggerDate = Calendar.getInstance();
+-    nextTriggerDate.set(Calendar.DAY_OF_WEEK, mWeekday);
+-    nextTriggerDate.set(Calendar.HOUR_OF_DAY, mHour);
+-    nextTriggerDate.set(Calendar.MINUTE, mMinute);
+-    nextTriggerDate.set(Calendar.SECOND, 0);
+-    nextTriggerDate.set(Calendar.MILLISECOND, 0);
+-    Calendar rightNow = Calendar.getInstance();
+-    if (nextTriggerDate.before(rightNow)) {
+-      nextTriggerDate.add(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
+-    }
+-    return nextTriggerDate.getTime();
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel dest, int flags) {
+-    super.writeToParcel(dest, flags);
+-    dest.writeInt(mWeekday);
+-    dest.writeInt(mHour);
+-    dest.writeInt(mMinute);
+-  }
+-
+-  public static final Creator<WeeklyTrigger> CREATOR = new Creator<WeeklyTrigger>() {
+-    @Override
+-    public WeeklyTrigger createFromParcel(Parcel in) {
+-      return new WeeklyTrigger(in);
+-    }
+-
+-    @Override
+-    public WeeklyTrigger[] newArray(int size) {
+-      return new WeeklyTrigger[size];
+-    }
+-  };
+-}
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/YearlyTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/YearlyTrigger.java
+deleted file mode 100644
+index 896206a..0000000
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/YearlyTrigger.java
++++ /dev/null
+@@ -1,94 +0,0 @@
+-package expo.modules.notifications.notifications.triggers;
+-
+-import android.os.Parcel;
+-
+-import java.util.Calendar;
+-import java.util.Date;
+-
+-import androidx.annotation.Nullable;
+-import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
+-
+-/**
+- * A schedulable trigger representing a notification to be scheduled once per year.
+- */
+-public class YearlyTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
+-  private int mDay;
+-  private int mMonth;
+-  private int mHour;
+-  private int mMinute;
+-
+-  public YearlyTrigger(int day, int month, int hour, int minute, @Nullable String channelId) {
+-    super(channelId);
+-    mDay = day;
+-    mMonth = month;
+-    mHour = hour;
+-    mMinute = minute;
+-  }
+-
+-  private YearlyTrigger(Parcel in) {
+-    super(in);
+-    mDay = in.readInt();
+-    mMonth = in.readInt();
+-    mHour = in.readInt();
+-    mMinute = in.readInt();
+-  }
+-
+-  public int getDay() {
+-    return mDay;
+-  }
+-
+-  public int getMonth() {
+-    return mMonth;
+-  }
+-
+-  public int getHour() {
+-    return mHour;
+-  }
+-
+-  public int getMinute() {
+-    return mMinute;
+-  }
+-
+-  @Nullable
+-  @Override
+-  public Date nextTriggerDate() {
+-    Calendar nextTriggerDate = Calendar.getInstance();
+-    nextTriggerDate.set(Calendar.DATE, mDay);
+-    nextTriggerDate.set(Calendar.MONTH, mMonth);
+-    nextTriggerDate.set(Calendar.HOUR_OF_DAY, mHour);
+-    nextTriggerDate.set(Calendar.MINUTE, mMinute);
+-    nextTriggerDate.set(Calendar.SECOND, 0);
+-    nextTriggerDate.set(Calendar.MILLISECOND, 0);
+-    Calendar rightNow = Calendar.getInstance();
+-    if (nextTriggerDate.before(rightNow)) {
+-      nextTriggerDate.add(Calendar.YEAR, 1);
+-    }
+-    return nextTriggerDate.getTime();
+-  }
+-
+-  @Override
+-  public int describeContents() {
+-    return 0;
+-  }
+-
+-  @Override
+-  public void writeToParcel(Parcel dest, int flags) {
+-    super.writeToParcel(dest, flags);
+-    dest.writeInt(mDay);
+-    dest.writeInt(mMonth);
+-    dest.writeInt(mHour);
+-    dest.writeInt(mMinute);
+-  }
+-
+-  public static final Creator<YearlyTrigger> CREATOR = new Creator<YearlyTrigger>() {
+-    @Override
+-    public YearlyTrigger createFromParcel(Parcel in) {
+-      return new YearlyTrigger(in);
+-    }
+-
+-    @Override
+-    public YearlyTrigger[] newArray(int size) {
+-      return new YearlyTrigger[size];
+-    }
+-  };
+-}
 diff --git a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts b/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
 index b01ef92..be6a417 100644
 --- a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
