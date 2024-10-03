@@ -24,8 +24,9 @@ import {
   cancelAllScheduledNotificationsAsync,
   registerTaskAsync,
   getPresentedNotificationsAsync,
-  CalendarTriggerTypes,
+  SchedulableTriggerInputTypes,
   clearLastNotificationResponseAsync,
+  NotificationTriggerInput,
 } from 'expo-notifications';
 import Constants from 'expo-constants';
 import { isDevice } from 'expo-device';
@@ -350,6 +351,14 @@ export const Notifier = () => {
           }}
         />
         <Button
+          title="Schedule monthly notification starting in the next minute"
+          onPress={() => {
+            schedulePushNotificationMonthly().then((result) =>
+              setScheduledNotificationIdentifier(result),
+            );
+          }}
+        />
+        <Button
           title="Schedule yearly notification starting in the next minute"
           onPress={() => {
             schedulePushNotificationYearly().then((result) =>
@@ -504,8 +513,8 @@ async function registerForPushNotificationsAsync() {
 
 const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
   const date = new Date();
-  const trigger = {
-    type: CalendarTriggerTypes.TIME_INTERVAL,
+  const trigger: NotificationTriggerInput = {
+    type: SchedulableTriggerInputTypes.TIME_INTERVAL,
     seconds: 2,
     repeats: false,
   };
@@ -522,10 +531,32 @@ const schedulePushNotificationIn2Seconds: () => Promise<string> = async () => {
     return `Error scheduling notification: ${e}`;
   }
 };
+const schedulePushNotificationMonthly: () => Promise<string> = async () => {
+  const date = new Date();
+  const trigger = {
+    type: SchedulableTriggerInputTypes.MONTHLY,
+    channelId: 'testApp',
+    day: date.getDate(),
+    hour: date.getHours(),
+    minute: date.getMinutes() + 1,
+  };
+  try {
+    return await scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: `Monthly notification scheduled ${date.toLocaleString()}`,
+        data: { data: 'goes here', test: { test1: 'more data' } },
+      },
+      trigger,
+    });
+  } catch (e) {
+    return `Error scheduling notification: ${e}`;
+  }
+};
 const schedulePushNotificationYearly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger = {
-    type: CalendarTriggerTypes.YEARLY,
+    type: SchedulableTriggerInputTypes.YEARLY,
     channelId: 'testApp',
     day: date.getDate(),
     month: date.getMonth(),
@@ -548,7 +579,7 @@ const schedulePushNotificationYearly: () => Promise<string> = async () => {
 const schedulePushNotificationWeekly: () => Promise<string> = async () => {
   const date = new Date();
   const trigger = {
-    type: CalendarTriggerTypes.WEEKLY,
+    type: SchedulableTriggerInputTypes.WEEKLY,
     channelId: 'testApp',
     weekday: date.getDay() + 1,
     hour: date.getHours(),
@@ -570,7 +601,7 @@ const schedulePushNotificationWeekly: () => Promise<string> = async () => {
 const schedulePushNotificationDaily: () => Promise<string> = async () => {
   const date = new Date();
   const trigger = {
-    type: CalendarTriggerTypes.DAILY,
+    type: SchedulableTriggerInputTypes.DAILY,
     channelId: 'testApp',
     hour: date.getHours(),
     minute: date.getMinutes() + 1,
@@ -591,7 +622,7 @@ const schedulePushNotificationDaily: () => Promise<string> = async () => {
 const scheduleCalendarNotification: () => Promise<string> = async () => {
   const date = new Date();
   const trigger = {
-    type: CalendarTriggerTypes.CALENDAR,
+    type: SchedulableTriggerInputTypes.CALENDAR,
     channelId: 'testApp',
     weekday: date.getDay(),
     hour: date.getHours(),
