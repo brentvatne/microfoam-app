@@ -1,3 +1,154 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+index 30a67ab..e0065ac 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
+@@ -32,6 +32,7 @@ import expo.modules.notifications.notifications.model.triggers.FirebaseNotificat
+ 
+ import expo.modules.notifications.notifications.triggers.DailyTrigger;
+ import expo.modules.notifications.notifications.triggers.DateTrigger;
++import expo.modules.notifications.notifications.triggers.MonthlyTrigger;
+ import expo.modules.notifications.notifications.triggers.TimeIntervalTrigger;
+ import expo.modules.notifications.notifications.triggers.WeeklyTrigger;
+ import expo.modules.notifications.notifications.triggers.YearlyTrigger;
+@@ -211,6 +212,11 @@ public class NotificationSerializer {
+       bundle.putInt("weekday", ((WeeklyTrigger) trigger).getWeekday());
+       bundle.putInt("hour", ((WeeklyTrigger) trigger).getHour());
+       bundle.putInt("minute", ((WeeklyTrigger) trigger).getMinute());
++    } else if (trigger instanceof MonthlyTrigger) {
++      bundle.putString("type", "monthly");
++      bundle.putInt("day", ((MonthlyTrigger) trigger).getDay());
++      bundle.putInt("hour", ((MonthlyTrigger) trigger).getHour());
++      bundle.putInt("minute", ((MonthlyTrigger) trigger).getMinute());
+     } else if (trigger instanceof YearlyTrigger) {
+       bundle.putString("type", "yearly");
+       bundle.putInt("day", ((YearlyTrigger) trigger).getDay());
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
+index 4604ddf..753865d 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
+@@ -21,6 +21,7 @@ import expo.modules.notifications.notifications.model.NotificationRequest
+ import expo.modules.notifications.notifications.triggers.ChannelAwareTrigger
+ import expo.modules.notifications.notifications.triggers.DailyTrigger
+ import expo.modules.notifications.notifications.triggers.DateTrigger
++import expo.modules.notifications.notifications.triggers.MonthlyTrigger
+ import expo.modules.notifications.notifications.triggers.TimeIntervalTrigger
+ import expo.modules.notifications.notifications.triggers.WeeklyTrigger
+ import expo.modules.notifications.notifications.triggers.YearlyTrigger
+@@ -197,6 +198,23 @@ open class NotificationScheduler : Module() {
+         )
+       }
+ 
++      "monthly" -> {
++        val day = params["day"] as? Number
++        val hour = params["hour"] as? Number
++        val minute = params["minute"] as? Number
++
++        if (day == null || hour == null || minute == null) {
++          throw InvalidArgumentException("Invalid value(s) provided for yearly trigger.")
++        }
++
++        MonthlyTrigger(
++          day.toInt(),
++          hour.toInt(),
++          minute.toInt(),
++          channelId
++        )
++      }
++
+       "yearly" -> {
+         val day = params["day"] as? Number
+         val month = params["month"] as? Number
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java
+new file mode 100644
+index 0000000..4381845
+--- /dev/null
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/MonthlyTrigger.java
+@@ -0,0 +1,85 @@
++package expo.modules.notifications.notifications.triggers;
++
++import android.os.Parcel;
++
++import java.util.Calendar;
++import java.util.Date;
++
++import androidx.annotation.Nullable;
++import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger;
++
++/**
++ * A schedulable trigger representing a notification to be scheduled once per month.
++ */
++public class MonthlyTrigger extends ChannelAwareTrigger implements SchedulableNotificationTrigger {
++    private int mDay;
++    private int mHour;
++    private int mMinute;
++
++    public MonthlyTrigger(int day, int hour, int minute, @Nullable String channelId) {
++        super(channelId);
++        mDay = day;
++        mHour = hour;
++        mMinute = minute;
++    }
++
++    private MonthlyTrigger(Parcel in) {
++        super(in);
++        mDay = in.readInt();
++        mHour = in.readInt();
++        mMinute = in.readInt();
++    }
++
++    public int getDay() {
++        return mDay;
++    }
++
++    public int getHour() {
++        return mHour;
++    }
++
++    public int getMinute() {
++        return mMinute;
++    }
++
++    @Nullable
++    @Override
++    public Date nextTriggerDate() {
++        Calendar nextTriggerDate = Calendar.getInstance();
++        nextTriggerDate.set(Calendar.DATE, mDay);
++        nextTriggerDate.set(Calendar.HOUR_OF_DAY, mHour);
++        nextTriggerDate.set(Calendar.MINUTE, mMinute);
++        nextTriggerDate.set(Calendar.SECOND, 0);
++        nextTriggerDate.set(Calendar.MILLISECOND, 0);
++        Calendar rightNow = Calendar.getInstance();
++        if (nextTriggerDate.before(rightNow)) {
++            nextTriggerDate.add(Calendar.MONTH, 1);
++        }
++        return nextTriggerDate.getTime();
++    }
++
++    @Override
++    public int describeContents() {
++        return 0;
++    }
++
++    @Override
++    public void writeToParcel(Parcel dest, int flags) {
++        super.writeToParcel(dest, flags);
++        dest.writeInt(mDay);
++        dest.writeInt(mHour);
++        dest.writeInt(mMinute);
++    }
++
++    public static final Creator<MonthlyTrigger> CREATOR = new Creator<MonthlyTrigger>() {
++        @Override
++        public MonthlyTrigger createFromParcel(Parcel in) {
++            return new MonthlyTrigger(in);
++        }
++
++        @Override
++        public MonthlyTrigger[] newArray(int size) {
++            return new MonthlyTrigger[size];
++        }
++    };
++}
 diff --git a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts b/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
 index b01ef92..be6a417 100644
 --- a/node_modules/expo-notifications/build/NotificationScheduler.types.d.ts
