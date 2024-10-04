@@ -55,7 +55,6 @@ function Root() {
     return (
       <CheckForLatestUpdateOnceOnLaunch
         onComplete={() => setInitialUpdateCheckCompleted(true)}
-        manifestTimeout={2000}
         timeout={10000}
       />
     );

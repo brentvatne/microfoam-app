@@ -57,6 +57,7 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
           Current state:{" "}
           {JSON.stringify(
             {
+              state,
               isChecking,
               isDownloading,
               isUpdatePending,
