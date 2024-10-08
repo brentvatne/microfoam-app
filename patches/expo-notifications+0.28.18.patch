@@ -1,3 +1,13 @@
+diff --git a/node_modules/expo-notifications/android/build.gradle b/node_modules/expo-notifications/android/build.gradle
+index 5e51ddb..8f7b638 100644
+--- a/node_modules/expo-notifications/android/build.gradle
++++ b/node_modules/expo-notifications/android/build.gradle
+@@ -1,4 +1,5 @@
+ apply plugin: 'com.android.library'
++apply plugin: 'kotlin-parcelize'
+ 
+ group = 'host.exp.exponent'
+ version = '0.28.18'
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
 index 30a67ab..e0065ac 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/NotificationSerializer.java
@@ -23,7 +33,7 @@ index 30a67ab..e0065ac 100644
        bundle.putString("type", "yearly");
        bundle.putInt("day", ((YearlyTrigger) trigger).getDay());
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
-index 4604ddf..753865d 100644
+index 4604ddf..8abc97a 100644
 --- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/scheduling/NotificationScheduler.kt
 @@ -21,6 +21,7 @@ import expo.modules.notifications.notifications.model.NotificationRequest
@@ -34,10 +44,48 @@ index 4604ddf..753865d 100644
  import expo.modules.notifications.notifications.triggers.TimeIntervalTrigger
  import expo.modules.notifications.notifications.triggers.WeeklyTrigger
  import expo.modules.notifications.notifications.triggers.YearlyTrigger
-@@ -197,6 +198,23 @@ open class NotificationScheduler : Module() {
+@@ -156,14 +157,14 @@ open class NotificationScheduler : Module() {
+         val seconds = params["seconds"] as? Number
+           ?: throw InvalidArgumentException("Invalid value provided as interval of trigger.")
+ 
+-        TimeIntervalTrigger(seconds.toLong(), params.getBoolean("repeats"), channelId)
++        TimeIntervalTrigger(channelId, seconds.toLong(), params.getBoolean("repeats"))
+       }
+ 
+       "date" -> {
+         val timestamp = params["timestamp"] as? Number
+           ?: throw InvalidArgumentException("Invalid value provided as date of trigger.")
+ 
+-        DateTrigger(timestamp.toLong(), channelId)
++        DateTrigger(channelId, timestamp.toLong())
+       }
+ 
+       "daily" -> {
+@@ -175,9 +176,9 @@ open class NotificationScheduler : Module() {
+         }
+ 
+         DailyTrigger(
++          channelId,
+           hour.toInt(),
+-          minute.toInt(),
+-          channelId
++          minute.toInt()
          )
        }
  
+@@ -190,10 +191,27 @@ open class NotificationScheduler : Module() {
+           throw InvalidArgumentException("Invalid value(s) provided for weekly trigger.")
+         }
+         WeeklyTrigger(
++          channelId,
+           weekday.toInt(),
+           hour.toInt(),
+-          minute.toInt(),
+-          channelId
++          minute.toInt()
++        )
++      }
++
 +      "monthly" -> {
 +        val day = params["day"] as? Number
 +        val hour = params["hour"] as? Number
@@ -48,16 +96,27 @@ index 4604ddf..753865d 100644
 +        }
 +
 +        MonthlyTrigger(
++          channelId,
 +          day.toInt(),
 +          hour.toInt(),
-+          minute.toInt(),
-+          channelId
-+        )
-+      }
-+
-       "yearly" -> {
-         val day = params["day"] as? Number
-         val month = params["month"] as? Number
++          minute.toInt()
+         )
+       }
+ 
+@@ -208,11 +226,11 @@ open class NotificationScheduler : Module() {
+         }
+ 
+         YearlyTrigger(
++          channelId,
+           day.toInt(),
+           month.toInt(),
+           hour.toInt(),
+-          minute.toInt(),
+-          channelId
++          minute.toInt()
+         )
+       }
+ 
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/ChannelAwareTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/ChannelAwareTrigger.java
 deleted file mode 100644
 index 5c9bd43..0000000
@@ -267,76 +326,38 @@ index ab28d01..0000000
 -}
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt
 new file mode 100644
-index 0000000..03d7054
+index 0000000..e414c77
 --- /dev/null
 +++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/NotificationTriggers.kt
-@@ -0,0 +1,413 @@
+@@ -0,0 +1,168 @@
 +package expo.modules.notifications.notifications.triggers
 +
 +import android.os.Parcel
-+import android.os.Parcelable
 +import expo.modules.notifications.notifications.interfaces.NotificationTrigger
 +import expo.modules.notifications.notifications.interfaces.SchedulableNotificationTrigger
++import kotlinx.parcelize.IgnoredOnParcel
++import kotlinx.parcelize.Parceler
++import kotlinx.parcelize.Parcelize
 +import java.io.Serializable
 +import java.util.Calendar
 +import java.util.Date
 +
-+open class ChannelAwareTrigger : NotificationTrigger, Serializable {
-+  private var mChannelId: String?
++@Parcelize
++open class ChannelAwareTrigger(open val channelId: String?) :
++  NotificationTrigger, Serializable {
 +
-+  constructor(channelId: String?) {
-+    mChannelId = channelId
-+  }
-+
-+  constructor(`in`: Parcel) {
-+    mChannelId = `in`.readString()
-+  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    dest.writeString(mChannelId)
-+  }
++  override fun describeContents(): Int = 0
 +
 +  override fun getNotificationChannel(): String? {
-+    return mChannelId
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<ChannelAwareTrigger?> =
-+      object : Parcelable.Creator<ChannelAwareTrigger?> {
-+        override fun createFromParcel(`in`: Parcel): ChannelAwareTrigger {
-+          return ChannelAwareTrigger(`in`)
-+        }
-+
-+        override fun newArray(size: Int): Array<ChannelAwareTrigger?> {
-+          return arrayOfNulls(size)
-+        }
-+      }
++    return channelId
 +  }
 +}
 +
 +/**
 + * A schedulable trigger representing a notification to be scheduled once per day.
 + */
-+class DailyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  var hour: Int
-+    private set
-+  var minute: Int
-+    private set
-+
-+  constructor(hour: Int, minute: Int, channelId: String?) : super(channelId) {
-+    this.hour = hour
-+    this.minute = minute
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    hour = `in`.readInt()
-+    minute = `in`.readInt()
-+  }
++@Parcelize
++class DailyTrigger(override val channelId: String?, val hour: Int, val minute: Int) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
 +
 +  override fun nextTriggerDate(): Date? {
 +    val nextTriggerDate = Calendar.getInstance()
@@ -350,45 +371,16 @@ index 0000000..03d7054
 +    }
 +    return nextTriggerDate.time
 +  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeInt(hour)
-+    dest.writeInt(minute)
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<DailyTrigger?> = object : Parcelable.Creator<DailyTrigger?> {
-+      override fun createFromParcel(`in`: Parcel): DailyTrigger {
-+        return DailyTrigger(`in`)
-+      }
-+
-+      override fun newArray(size: Int): Array<DailyTrigger?> {
-+        return arrayOfNulls(size)
-+      }
-+    }
-+  }
 +}
 +
 +/**
 + * A schedulable trigger representing notification to be scheduled only once at a given moment of time.
 + */
-+class DateTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  var triggerDate: Date
-+    private set
++@Parcelize
++class DateTrigger(override val channelId: String?, val timestamp: Long) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
++  val triggerDate = Date(timestamp)
 +
-+  constructor(timestamp: Long, channelId: String?) : super(channelId) {
-+    triggerDate = Date(timestamp)
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    triggerDate = Date(`in`.readLong())
-+  }
++  constructor(parcel: Parcel) : this(parcel.readString(), parcel.readLong())
 +
 +  override fun nextTriggerDate(): Date? {
 +    val now = Date()
@@ -400,25 +392,14 @@ index 0000000..03d7054
 +    return triggerDate
 +  }
 +
-+  override fun describeContents(): Int {
-+    return 0
-+  }
++  companion object : Parceler<DateTrigger> {
++    override fun DateTrigger.write(parcel: Parcel, flags: Int) {
++      parcel.writeString(channelId)
++      parcel.writeLong(triggerDate.time)
++    }
 +
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeLong(triggerDate.time)
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<DateTrigger?> = object : Parcelable.Creator<DateTrigger?> {
-+      override fun createFromParcel(`in`: Parcel): DateTrigger {
-+        return DateTrigger(`in`)
-+      }
-+
-+      override fun newArray(size: Int): Array<DateTrigger?> {
-+        return arrayOfNulls(size)
-+      }
++    override fun create(parcel: Parcel): DateTrigger {
++      return DateTrigger(parcel)
 +    }
 +  }
 +}
@@ -426,25 +407,8 @@ index 0000000..03d7054
 +/**
 + * A schedulable trigger representing a notification to be scheduled once per month.
 + */
-+class MonthlyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  var day: Int
-+    private set
-+  var hour: Int
-+    private set
-+  var minute: Int
-+    private set
-+
-+  constructor(day: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
-+    this.day = day
-+    this.hour = hour
-+    this.minute = minute
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    day = `in`.readInt()
-+    hour = `in`.readInt()
-+    minute = `in`.readInt()
-+  }
++@Parcelize
++class MonthlyTrigger(override val channelId: String?, val day: Int, val hour: Int, val minute: Int) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
 +
 +  override fun nextTriggerDate(): Date? {
 +    val nextTriggerDate = Calendar.getInstance()
@@ -459,30 +423,6 @@ index 0000000..03d7054
 +    }
 +    return nextTriggerDate.time
 +  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeInt(day)
-+    dest.writeInt(hour)
-+    dest.writeInt(minute)
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<MonthlyTrigger?> = object : Parcelable.Creator<MonthlyTrigger?> {
-+      override fun createFromParcel(`in`: Parcel): MonthlyTrigger {
-+        return MonthlyTrigger(`in`)
-+      }
-+
-+      override fun newArray(size: Int): Array<MonthlyTrigger?> {
-+        return arrayOfNulls(size)
-+      }
-+    }
-+  }
 +}
 +
 +/**
@@ -494,89 +434,33 @@ index 0000000..03d7054
 + * * initial time, so eg. a trigger started at 11111000 time repeated every 1000 ms should always
 + * * trigger around …000 timestamp.*
 + */
-+class TimeIntervalTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  private var mTriggerDate: Date
-+  var timeInterval: Long
-+    private set
-+  var isRepeating: Boolean
-+    private set
-+
-+  constructor(timeInterval: Long, repeats: Boolean, channelId: String?) : super(channelId) {
-+    this.timeInterval = timeInterval
-+    mTriggerDate = Date(Date().time + this.timeInterval * 1000)
-+    isRepeating = repeats
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    mTriggerDate = Date(`in`.readLong())
-+    timeInterval = `in`.readLong()
-+    isRepeating = `in`.readByte().toInt() == 1
-+  }
++@Parcelize
++class TimeIntervalTrigger(override val channelId: String?, val timeInterval: Long, val isRepeating: Boolean) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
++  @IgnoredOnParcel
++  private var triggerDate = Date(Date().time + timeInterval * 1000)
 +
 +  override fun nextTriggerDate(): Date? {
 +    val now = Date()
 +
 +    if (isRepeating) {
-+      while (mTriggerDate.before(now)) {
-+        mTriggerDate.time += timeInterval * 1000
++      while (triggerDate.before(now)) {
++        triggerDate.time += timeInterval * 1000
 +      }
 +    }
 +
-+    if (mTriggerDate.before(now)) {
++    if (triggerDate.before(now)) {
 +      return null
 +    }
 +
-+    return mTriggerDate
-+  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeLong(mTriggerDate.time)
-+    dest.writeLong(timeInterval)
-+    dest.writeByte((if (isRepeating) 1 else 0).toByte())
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<TimeIntervalTrigger?> =
-+      object : Parcelable.Creator<TimeIntervalTrigger?> {
-+        override fun createFromParcel(`in`: Parcel): TimeIntervalTrigger {
-+          return TimeIntervalTrigger(`in`)
-+        }
-+
-+        override fun newArray(size: Int): Array<TimeIntervalTrigger?> {
-+          return arrayOfNulls(size)
-+        }
-+      }
++    return triggerDate
 +  }
 +}
 +
 +/**
 + * A schedulable trigger representing a notification to be scheduled once per week.
 + */
-+class WeeklyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  var weekday: Int
-+    private set
-+  var hour: Int
-+    private set
-+  var minute: Int
-+    private set
-+
-+  constructor(weekday: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
-+    this.weekday = weekday
-+    this.hour = hour
-+    this.minute = minute
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    weekday = `in`.readInt()
-+    hour = `in`.readInt()
-+    minute = `in`.readInt()
-+  }
++@Parcelize
++class WeeklyTrigger(override val channelId: String?, val weekday: Int, val hour: Int, val minute: Int) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
 +
 +  override fun nextTriggerDate(): Date? {
 +    val nextTriggerDate = Calendar.getInstance()
@@ -591,58 +475,13 @@ index 0000000..03d7054
 +    }
 +    return nextTriggerDate.time
 +  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeInt(weekday)
-+    dest.writeInt(hour)
-+    dest.writeInt(minute)
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<WeeklyTrigger?> = object : Parcelable.Creator<WeeklyTrigger?> {
-+      override fun createFromParcel(`in`: Parcel): WeeklyTrigger {
-+        return WeeklyTrigger(`in`)
-+      }
-+
-+      override fun newArray(size: Int): Array<WeeklyTrigger?> {
-+        return arrayOfNulls(size)
-+      }
-+    }
-+  }
 +}
 +
 +/**
 + * A schedulable trigger representing a notification to be scheduled once per year.
 + */
-+class YearlyTrigger : ChannelAwareTrigger, SchedulableNotificationTrigger {
-+  var day: Int
-+    private set
-+  var month: Int
-+    private set
-+  var hour: Int
-+    private set
-+  var minute: Int
-+    private set
-+
-+  constructor(day: Int, month: Int, hour: Int, minute: Int, channelId: String?) : super(channelId) {
-+    this.day = day
-+    this.month = month
-+    this.hour = hour
-+    this.minute = minute
-+  }
-+
-+  private constructor(`in`: Parcel) : super(`in`) {
-+    day = `in`.readInt()
-+    month = `in`.readInt()
-+    hour = `in`.readInt()
-+    minute = `in`.readInt()
-+  }
++@Parcelize
++class YearlyTrigger(override val channelId: String?, val day: Int, val month: Int, val hour: Int, val minute: Int) : ChannelAwareTrigger(channelId), SchedulableNotificationTrigger {
 +
 +  override fun nextTriggerDate(): Date? {
 +    val nextTriggerDate = Calendar.getInstance()
@@ -657,31 +496,6 @@ index 0000000..03d7054
 +      nextTriggerDate.add(Calendar.YEAR, 1)
 +    }
 +    return nextTriggerDate.time
-+  }
-+
-+  override fun describeContents(): Int {
-+    return 0
-+  }
-+
-+  override fun writeToParcel(dest: Parcel, flags: Int) {
-+    super.writeToParcel(dest, flags)
-+    dest.writeInt(day)
-+    dest.writeInt(month)
-+    dest.writeInt(hour)
-+    dest.writeInt(minute)
-+  }
-+
-+  companion object {
-+    @JvmField
-+    val CREATOR: Parcelable.Creator<YearlyTrigger?> = object : Parcelable.Creator<YearlyTrigger?> {
-+      override fun createFromParcel(`in`: Parcel): YearlyTrigger {
-+        return YearlyTrigger(`in`)
-+      }
-+
-+      override fun newArray(size: Int): Array<YearlyTrigger?> {
-+        return arrayOfNulls(size)
-+      }
-+    }
 +  }
 +}
 diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/TimeIntervalTrigger.java b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/triggers/TimeIntervalTrigger.java
