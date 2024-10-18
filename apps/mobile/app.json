@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Microfoam",
+    "name": "Microfoam (Notifications Test)",
     "slug": "microfoam",
     "version": "1.0.2",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
-      "bundleIdentifier": "com.brents.microfoam",
+      "bundleIdentifier": "com.vonovak.microfoam",
       "config": {
         "usesNonExemptEncryption": false
       }
