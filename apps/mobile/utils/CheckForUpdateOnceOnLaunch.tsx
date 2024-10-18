@@ -12,15 +12,6 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
   timeout?: number;
 }) {
   const state = useInitialUpdateState({ timeout: props.timeout });
-  const {
-    isChecking,
-    isDownloading,
-    isUpdatePending,
-    isUpdateAvailable,
-    downloadError,
-    checkError,
-    lastCheckForUpdateTimeSinceRestart,
-  } = useUpdates();
 
   useEffect(() => {
     if (state === UpdateCheckState.UpdateReady) {
@@ -33,6 +24,7 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
         UpdateCheckState.NoUpdateAvailable,
         UpdateCheckState.Error,
         UpdateCheckState.NoEventsAfterInitialized,
+        UpdateCheckState.NativeStateInitialized,
       ].includes(state)
     ) {
       props.onComplete();
@@ -50,27 +42,7 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
         backgroundColor: "#fff",
       }}
     >
-      <>
-        <ActivityIndicator size="large" color="#ccc" />
-        <Text style={{ fontSize: 20, marginTop: 10 }}>Preparing the app</Text>
-        <Text>
-          Current state:{" "}
-          {JSON.stringify(
-            {
-              state,
-              isChecking,
-              isDownloading,
-              isUpdatePending,
-              isUpdateAvailable,
-              downloadError,
-              checkError,
-              lastCheckForUpdateTimeSinceRestart,
-            },
-            null,
-            2,
-          )}
-        </Text>
-      </>
+      <ActivityIndicator size="large" color="#ccc" />
       <StatusBar style="auto" />
     </View>
   );
