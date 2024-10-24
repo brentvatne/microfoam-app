@@ -10,6 +10,7 @@
     "backgroundColor": "#1e1e1e",
     "owner": "brents",
     "platforms": ["ios", "android"],
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
