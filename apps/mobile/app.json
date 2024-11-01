@@ -11,11 +11,6 @@
     "owner": "brents",
     "platforms": ["ios", "android"],
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#232323"
-    },
     "ios": {
       "usesIcloudStorage": true,
       "supportsTablet": true,
@@ -24,13 +19,10 @@
         "usesNonExemptEncryption": false
       }
     },
-    "assetBundlePatterns": [
-      "node_modules/expo-router/**/*"
-    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#232323"
+        "backgroundColor": "#ffffff"
       },
       "package": "com.brents.microfoam"
     },
