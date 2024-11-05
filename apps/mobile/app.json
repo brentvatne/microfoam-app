@@ -7,7 +7,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "microfoam",
-    "backgroundColor": "#1e1e1e",
     "owner": "brents",
     "platforms": ["ios", "android"],
     "newArchEnabled": true,

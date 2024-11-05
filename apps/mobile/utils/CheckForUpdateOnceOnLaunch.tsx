@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { reloadAsync } from "expo-updates";
 import { StatusBar } from "expo-status-bar";
-import Constants from "expo-constants";
+import { View } from "../components/Themed";
 import {
   useInitialUpdateState,
   UpdateCheckState,
@@ -40,7 +40,6 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: Constants.expoConfig.splash?.backgroundColor ?? "#fff",
       }}
     >
       <ActivityIndicator size="large" color="#ccc" />
