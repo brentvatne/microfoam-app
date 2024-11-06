@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.ios,
     bundleIdentifier: getBundleIdentifier(config),
     icon: {
-      any: "./assets/ios-icon-light.png",
+      light: "./assets/ios-icon-light.png",
       dark: "./assets/ios-icon-dark.png",
       // Skip the tinted icon for now
       // tinted: "./assets/ios-icon-tinted.png",
