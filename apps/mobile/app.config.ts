@@ -10,6 +10,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...config.ios,
     bundleIdentifier: getBundleIdentifier(config),
+    icon: {
+      any: "./assets/ios-icon-light.png",
+      dark: "./assets/ios-icon-dark.png",
+      // Skip the tinted icon for now
+      // tinted: "./assets/ios-icon-tinted.png",
+    },
   },
   android: {
     ...config.android,
@@ -85,13 +91,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: "#ffffff",
         image: "./assets/splash.png",
         resizeMode: "contain",
-        logoWidth: 300,
         ios: {
+          logoWidth: 300,
           dark: {
             backgroundColor: "#232323",
           },
         },
         android: {
+          logoWidth: 200,
           dark: {
             backgroundColor: "#232323",
           },
