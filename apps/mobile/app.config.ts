@@ -91,14 +91,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: "#ffffff",
         image: "./assets/splash.png",
         resizeMode: "contain",
+        imageWidth: 300,
         ios: {
-          logoWidth: 300,
           dark: {
             backgroundColor: "#232323",
           },
         },
         android: {
-          logoWidth: 200,
+          imageWidth: 200,
           dark: {
             backgroundColor: "#232323",
           },
