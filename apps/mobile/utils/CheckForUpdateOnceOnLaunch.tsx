@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { ActivityIndicator } from "react-native";
 import { reloadAsync } from "expo-updates";
-import { StatusBar } from "expo-status-bar";
+import { SystemBars } from "react-native-edge-to-edge";
 import { View } from "../components/Themed";
 import {
   useInitialUpdateState,
@@ -43,7 +43,7 @@ export default function CheckForLatestUpdateOnceOnLaunch(props: {
       }}
     >
       <ActivityIndicator size="large" color="#ccc" />
-      <StatusBar style="auto" />
+      <SystemBars style="auto" />
     </View>
   );
 }

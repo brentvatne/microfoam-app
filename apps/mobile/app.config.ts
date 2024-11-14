@@ -49,6 +49,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   plugins: [
+    ...config.plugins,
     [
       "expo-document-picker",
       {

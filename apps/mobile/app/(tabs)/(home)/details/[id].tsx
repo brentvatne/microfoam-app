@@ -1,5 +1,5 @@
 import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import { SystemBars } from "react-native-edge-to-edge";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 import Animated, {
@@ -71,7 +71,7 @@ export default function ShowPour() {
           ),
         }}
       />
-      <StatusBar style="light" />
+      <SystemBars style="light" />
 
       <Animated.View
         style={[

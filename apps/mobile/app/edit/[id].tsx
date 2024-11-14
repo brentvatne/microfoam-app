@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Platform } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { SystemBars } from "react-native-edge-to-edge";
 import { useRouter, Stack, useLocalSearchParams } from "expo-router";
 import { BorderlessButton } from "react-native-gesture-handler";
 
@@ -78,7 +78,7 @@ export default function EditPourScreen() {
         }}
       />
 
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      <SystemBars style={Platform.OS === "ios" ? "light" : "auto"} />
     </>
   );
 }

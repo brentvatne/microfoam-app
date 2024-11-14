@@ -2,7 +2,6 @@
 import { LogBox } from "react-native";
 import "./storage/PourStore";
 import "react-native-url-polyfill/auto";
-// import { vexo } from "vexo-analytics";
 import "react-native-get-random-values";
 
 // Register app entry through Expo Router
@@ -16,7 +15,3 @@ Sentry.init({
 });
 
 LogBox.ignoreLogs(["@supabase/gotrue-js: Stack guards"]);
-
-if (!__DEV__) {
-  // vexo(process.env.EXPO_PUBLIC_VEXO_API_KEY);
-}

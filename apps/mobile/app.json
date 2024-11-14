@@ -25,6 +25,9 @@
       },
       "package": "com.brents.microfoam"
     },
-    "runtimeVersion": "be975abaed5ef1ab51b8eff6c95f384a8700debe"
+    "runtimeVersion": "be975abaed5ef1ab51b8eff6c95f384a8700debe",
+    "plugins": [
+      "react-native-edge-to-edge"
+    ]
   }
 }

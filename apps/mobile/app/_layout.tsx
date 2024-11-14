@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { StatusBar } from "expo-status-bar";
+import { SystemBars } from "react-native-edge-to-edge";
 import { Stack, router } from "expo-router";
 import {
   DarkTheme,
@@ -66,7 +66,7 @@ function Root() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <SystemBars style={theme === "light" ? "dark" : "light"} />
       <ReactNavigationThemeProvider
         value={
           theme === "dark"
