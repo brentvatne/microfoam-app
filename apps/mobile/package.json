@@ -26,7 +26,6 @@
     "@shopify/flash-list": "1.7.1",
     "@supabase/supabase-js": "^2.0.0-rc.10",
     "assert": "^2.0.0",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "burnt": "^0.12.2",
     "color": "^4.2.3",
     "date-fns": "^2.29.3",
