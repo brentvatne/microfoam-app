@@ -7,9 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "patch-package",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "patch-package": "^8.0.0",
