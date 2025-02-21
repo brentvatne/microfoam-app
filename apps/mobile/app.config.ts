@@ -118,6 +118,8 @@ function getUpdatesUrl() {
 }
 
 function getGoogleServices() {
+  return null;
+
   if (process.env.RELEASE) {
     return process.env.GOOGLE_SERVICES_JSON;
   } else if (process.env.PREVIEW) {
