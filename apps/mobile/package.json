@@ -101,6 +101,11 @@
           "expo-quick-actions"
         ]
       }
+    },
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
     }
   },
   "jest": {
